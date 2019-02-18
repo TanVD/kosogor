@@ -1,6 +1,6 @@
 @file:Suppress("FunctionName", "ObjectPropertyName", "SpellCheckingInspection", "UnstableApiUsage")
 
-package tanvd.kosogor
+package tanvd.kosogor.utils
 
 import org.gradle.api.Project
 import org.gradle.api.internal.HasConvention

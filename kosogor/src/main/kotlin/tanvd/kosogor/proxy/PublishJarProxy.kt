@@ -10,9 +10,9 @@ import org.gradle.kotlin.dsl.delegateClosureOf
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.task
 import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
-import tanvd.kosogor._artifactory
-import tanvd.kosogor._publishing
-import tanvd.kosogor._sourceSets
+import tanvd.kosogor.utils._artifactory
+import tanvd.kosogor.utils._publishing
+import tanvd.kosogor.utils._sourceSets
 import tanvd.kosogor.utils.applyPluginSafely
 
 class PublishJarProxy {
