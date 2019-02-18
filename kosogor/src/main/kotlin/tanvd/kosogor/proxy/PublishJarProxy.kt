@@ -17,7 +17,9 @@ import tanvd.kosogor.utils.applyPluginSafely
 
 class PublishJarProxy {
     data class JarConfig(
+            /** Name of maven publication to create */
             var publication: String = "jarPublication",
+            /** Components to add to publication */
             var components: MavenPublication.(Project) -> Unit = { from(it.components.getByName("java")) }
     )
 
@@ -30,7 +32,9 @@ class PublishJarProxy {
 
 
     data class SourcesConfig(
-            var publication: String = "sourcesPublication",
+            /** Name of jar task for sources to create */
+            var task: String = "sourcesJar",
+            /** Components to add to sources jar */
             var components: AbstractCopyTask.(Project) -> Unit = { from(it._sourceSets["main"]!!.allSource) }
     )
 
@@ -43,10 +47,27 @@ class PublishJarProxy {
 
 
     data class ArtifactoryConfig(
+            /**
+             * URL of artifactory server
+             * If not set, will be taken from System environment param `artifactory_url`
+             */
             var artifactoryUrl: String? = System.getenv("artifactory_url"),
+            /**
+             * Maven repo on artifactory server
+             * If not set, will be taken from System environment param `artifactory_repo`
+             */
             var artifactoryRepo: String? = System.getenv("artifactory_repo"),
+            /**
+             * Artifactory user name to use
+             * If not set, will be taken from System environment param `artifactory_user`
+             */
             var artifactoryUser: String? = System.getenv("artifactory_user"),
+            /**
+             * Artifactory secret key to use
+             * If not set, will be taken from System environment param `artifactory_key`
+             */
             var artifactoryKey: String? = System.getenv("artifactory_key"),
+            /** Should published artifact include pom.xml */
             var publishPom: Boolean = true
     )
 
@@ -58,11 +79,17 @@ class PublishJarProxy {
     }
 }
 
+/**
+ * Provides simple interface to jar, maven-publish and artifactory plugin through proxy
+ *
+ * Will apply `maven-publish` if it is not already applied and `jar { ... }` is used
+ * Will apply `com.jfrog.artifactory` if it is not already applied and `artifactory { ... }` is used
+ */
 fun Project.publishJar(configure: PublishJarProxy.() -> Unit): PublishJarProxy {
     val config = PublishJarProxy().apply { configure() }
 
     if (config.sourcesEnable) {
-        task<Jar>(config.sourcesConfig.publication) {
+        task<Jar>(config.sourcesConfig.task) {
             archiveClassifier.set("sources")
             config.sourcesConfig.components(this, project)
         }
@@ -77,7 +104,7 @@ fun Project.publishJar(configure: PublishJarProxy.() -> Unit): PublishJarProxy {
                     Action<MavenPublication> { t ->
                         config.jarConfig.components(t, project)
                         if (config.sourcesEnable) {
-                            t.artifact(tasks[config.sourcesConfig.publication])
+                            t.artifact(tasks[config.sourcesConfig.task])
                         }
                     })
         }

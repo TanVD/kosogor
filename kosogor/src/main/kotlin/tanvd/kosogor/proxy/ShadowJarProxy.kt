@@ -11,9 +11,12 @@ import java.io.File
 
 class ShadowJarProxy(private val project: Project) {
     data class ShadowJarConfig(
+            /** Name to use for result archive. Version will not be added. */
             var archiveName: String? = null,
+            /** Main class of shadow jar to add to Manifest */
             var mainClass: String? = null,
-            var path: File? = null
+            /** Destination directory of shadow jar file*/
+            var destinationDir: File? = null
     )
 
     fun artifact(pub: MavenPublication): MavenArtifact = pub.artifact(project.tasks.withType<ShadowJar>().single())
@@ -24,12 +27,17 @@ class ShadowJarProxy(private val project: Project) {
     }
 }
 
+/**
+ * Provides simple interface to shadowJar plugin through proxy
+ *
+ * Will apply `com.github.johnrengelman.shadow` if it is not already applied
+ */
 fun Project.shadowJar(configure: ShadowJarProxy.() -> Unit): ShadowJarProxy {
     val config = ShadowJarProxy(this).apply { configure() }
 
     applyPluginSafely("com.github.johnrengelman.shadow")
 
-    val shadowJars = tasks.withType<ShadowJar> {
+    tasks.withType<ShadowJar> {
         config.jarConfig.archiveName?.let {
             archiveFileName.set(it)
         }
@@ -38,7 +46,7 @@ fun Project.shadowJar(configure: ShadowJarProxy.() -> Unit): ShadowJarProxy {
                 it.attributes(mapOf("Main-Class" to cls))
             }
         }
-        config.jarConfig.path?.let {
+        config.jarConfig.destinationDir?.let {
             destinationDirectory.set(it)
         } ?: destinationDirectory.set(File(project.rootProject.projectDir, "build/shadow"))
     }

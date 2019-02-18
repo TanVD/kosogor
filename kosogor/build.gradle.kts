@@ -2,10 +2,10 @@ group = "tanvd.kosogor"
 version = "2019.1.0-SNAPSHOT"
 
 dependencies {
-    compile("org.jfrog.buildinfo", "build-info-extractor-gradle", "4.7.5")
     compile(gradleKotlinDsl())
-    compile("com.github.jengelman.gradle.plugins", "shadow", "4.0.4")
     compile(gradleApi())
+    compile("org.jfrog.buildinfo", "build-info-extractor-gradle", "4.7.5")
+    compile("com.github.jengelman.gradle.plugins", "shadow", "4.0.4")
 }
 
 gradlePlugin {
@@ -19,7 +19,7 @@ gradlePlugin {
 }
 
 val sources = task<Jar>("sourcesJar") {
-    classifier = "sources"
+    archiveClassifier.set("sources")
     from(sourceSets["main"]!!.allSource)
 }
 

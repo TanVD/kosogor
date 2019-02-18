@@ -10,6 +10,7 @@ import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.getPluginByName
 import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
 
+//Generated accessors to use in plugin
 
 private inline fun <reified T : Any> Project.extByName(name: String): T = extensions.getByName<T>(name)
 
