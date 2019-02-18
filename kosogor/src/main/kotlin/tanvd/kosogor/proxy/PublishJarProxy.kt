@@ -23,7 +23,7 @@ class PublishJarProxy {
             var components: MavenPublication.(Project) -> Unit = { from(it.components.getByName("java")) }
     )
 
-    internal var jarEnable: Boolean = true
+    var jarEnable: Boolean = true
     internal val jarConfig = JarConfig()
     fun jar(configure: JarConfig.() -> Unit) {
         jarEnable = true
@@ -38,7 +38,7 @@ class PublishJarProxy {
             var components: AbstractCopyTask.(Project) -> Unit = { from(it._sourceSets["main"]!!.allSource) }
     )
 
-    internal var sourcesEnable: Boolean = true
+    var sourcesEnable: Boolean = true
     internal val sourcesConfig = SourcesConfig()
     fun sources(configure: SourcesConfig.() -> Unit) {
         sourcesEnable = true
@@ -71,7 +71,7 @@ class PublishJarProxy {
             var publishPom: Boolean = true
     )
 
-    internal var artifactoryEnable: Boolean = false
+    var artifactoryEnable: Boolean = false
     internal val artifactoryConfig = ArtifactoryConfig()
     fun artifactory(configure: ArtifactoryConfig.() -> Unit) {
         artifactoryEnable = true
