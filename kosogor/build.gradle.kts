@@ -18,15 +18,16 @@ gradlePlugin {
     }
 }
 
-val sources = task<Jar>("sourcesJar") {
-    archiveClassifier.set("sources")
-    from(sourceSets["main"]!!.allSource)
-}
+pluginBundle {
+    website = "https://github.com/TanVD/kosogor"
+    vcsUrl = "https://github.com/TanVD/kosogor"
 
-publishing {
-    publications.create("publishJar", MavenPublication::class) {
-        artifactId = "tanvd.kosogor.gradle.plugin"
-        from(components.getByName("java"))
-        artifact(sources)
+    (plugins) {
+        "kosogor-plugin" {
+            description = "Reasonable defaults and simplified Kotlin-DSL interfaces for everyday development"
+            tags = listOf("default", "common", "kotlin", "jar", "shadowjar", "artifactory", "idea")
+            version = project.version.toString()
+        }
     }
 }
+

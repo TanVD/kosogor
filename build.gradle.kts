@@ -5,8 +5,9 @@ group = "tanvd.kosogor"
 plugins {
     idea apply true
     kotlin("jvm") version "1.3.21" apply true
-    id("com.jfrog.artifactory") version "4.7.5"
+    id("com.gradle.plugin-publish") version "0.10.1"
 }
+
 repositories {
     jcenter()
 }
@@ -31,8 +32,7 @@ subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "idea")
     apply(plugin = "java-gradle-plugin")
-    apply(plugin = "maven-publish")
-    apply(plugin = "com.jfrog.artifactory")
+    apply(plugin = "com.gradle.plugin-publish")
 
     (tasks.getByName("compileKotlin") as KotlinCompile).let {
         it.kotlinOptions {
