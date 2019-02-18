@@ -18,12 +18,18 @@ gradlePlugin {
     }
 }
 
+afterEvaluate {
+    System.setProperty("gradle.publish.key", System.getenv("gradle_publish_key") ?: "")
+    System.setProperty("gradle.publish.secret", System.getenv("gradle_publish_secret") ?: "")
+}
+
 pluginBundle {
     website = "https://github.com/TanVD/kosogor"
     vcsUrl = "https://github.com/TanVD/kosogor"
 
     (plugins) {
         "kosogor-plugin" {
+            displayName = "kosogor"
             description = "Reasonable defaults and simplified Kotlin-DSL interfaces for everyday development"
             tags = listOf("default", "common", "kotlin", "jar", "shadowjar", "artifactory", "idea")
             version = project.version.toString()
