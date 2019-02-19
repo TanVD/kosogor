@@ -1,5 +1,7 @@
 # Kosogor
 
+[![Build Status](https://travis-ci.org/TanVD/kosogor.svg?branch=master)](https://travis-ci.org/TanVD/kosogor)
+
 Kosogor is a plugin which provides reasonable defaults and simplified Kotlin-DSL interface to Gradle plugins and API functions used in everyday development.
 
 The idea behind Kosogor is to reduce the size  of your build.gradle.kts and remove from it all the boilerplate: setting
@@ -24,7 +26,7 @@ To setup it just apply plugin:
 
 ```
 plugins {
-    id("tanvd.kosogor") version "2019.1.0" apply true
+    id("tanvd.kosogor") version "1.0.0" apply true
 }
 ```
 ## What's inside
