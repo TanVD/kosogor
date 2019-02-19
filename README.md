@@ -9,7 +9,7 @@ plugins configurations which should be default or using verbose plugin interface
 
 It includes simplified Kotlin-DSL interfaces for:
 * IDEA plugin
-* Jar + SourceJar + Maven-Publication + Artifactory
+* Jar + Maven-Publication + Artifactory + Bintray
 * ShadowJar
 
 Also, it provides reasonable defaults (which, nevertheless, can be overridden) for:
@@ -76,6 +76,9 @@ to publish to artifactory.
 
 Note, that by default jar and sources also created, in example we just override some parameters. Of course, it is possible 
 to disable generation of some parts of package and it will be also removed from package published to artifactory.
+
+You can use also `bintray` to setup bintray publishing. It does not intersect with `artifactory` and both can 
+be used simultaneously.
 
 ### ShadowJar
 
