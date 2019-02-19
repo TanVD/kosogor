@@ -1,5 +1,6 @@
 package tanvd.kosogor.proxy
 
+import com.jfrog.bintray.gradle.BintrayExtension
 import groovy.lang.GroovyObject
 import org.gradle.api.Action
 import org.gradle.api.Project
@@ -10,27 +11,9 @@ import org.gradle.kotlin.dsl.delegateClosureOf
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.task
 import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
-import tanvd.kosogor.utils._artifactory
-import tanvd.kosogor.utils._publishing
-import tanvd.kosogor.utils._sourceSets
-import tanvd.kosogor.utils.applyPluginSafely
+import tanvd.kosogor.utils.*
 
 class PublishJarProxy {
-    data class JarConfig(
-            /** Name of maven publication to create */
-            var publication: String = "jarPublication",
-            /** Components to add to publication */
-            var components: MavenPublication.(Project) -> Unit = { from(it.components.getByName("java")) }
-    )
-
-    var jarEnable: Boolean = true
-    internal val jarConfig = JarConfig()
-    fun jar(configure: JarConfig.() -> Unit) {
-        jarEnable = true
-        jarConfig.configure()
-    }
-
-
     data class SourcesConfig(
             /** Name of jar task for sources to create */
             var task: String = "sourcesJar",
@@ -38,11 +21,25 @@ class PublishJarProxy {
             var components: AbstractCopyTask.(Project) -> Unit = { from(it._sourceSets["main"]!!.allSource) }
     )
 
-    var sourcesEnable: Boolean = true
+    var enableSources: Boolean = true
     internal val sourcesConfig = SourcesConfig()
     fun sources(configure: SourcesConfig.() -> Unit) {
-        sourcesEnable = true
+        enableSources = true
         sourcesConfig.configure()
+    }
+
+    data class PublicationConfig(
+            /** Name of artifact to publish */
+            var artifactId: String? = null,
+            /** Name of maven publication to create */
+            var publicationName: String = "jarPublication"
+    )
+
+    var enablePublication: Boolean = true
+    internal val publicationConfig = PublicationConfig()
+    fun publication(configure: PublicationConfig.() -> Unit) {
+        enablePublication = true
+        publicationConfig.configure()
     }
 
 
@@ -51,31 +48,63 @@ class PublishJarProxy {
              * URL of artifactory server
              * If not set, will be taken from System environment param `artifactory_url`
              */
-            var artifactoryUrl: String? = System.getenv("artifactory_url"),
+            var serverUrl: String? = System.getenv("artifactory_url"),
             /**
              * Maven repo on artifactory server
              * If not set, will be taken from System environment param `artifactory_repo`
              */
-            var artifactoryRepo: String? = System.getenv("artifactory_repo"),
+            var repository: String? = System.getenv("artifactory_repo"),
             /**
              * Artifactory user name to use
              * If not set, will be taken from System environment param `artifactory_user`
              */
-            var artifactoryUser: String? = System.getenv("artifactory_user"),
+            var username: String? = System.getenv("artifactory_user"),
             /**
              * Artifactory secret key to use
              * If not set, will be taken from System environment param `artifactory_key`
              */
-            var artifactoryKey: String? = System.getenv("artifactory_key"),
+            var secretKey: String? = System.getenv("artifactory_key"),
             /** Should published artifact include pom.xml */
             var publishPom: Boolean = true
     )
 
-    var artifactoryEnable: Boolean = false
+    var enableArtifactory: Boolean = false
     internal val artifactoryConfig = ArtifactoryConfig()
     fun artifactory(configure: ArtifactoryConfig.() -> Unit) {
-        artifactoryEnable = true
+        enableArtifactory = true
         artifactoryConfig.configure()
+    }
+
+
+    data class BintrayConfig(
+            /**
+             * Bintray user artifactId to use
+             * If not set, will be taken from System environment param `bintray_user`
+             */
+            var username: String? = System.getenv("bintray_user"),
+            /**
+             * Bintray key to use
+             * If not set, will be taken from System environment param `bintray_key`
+             */
+            var secretKey: String? = System.getenv("bintray_key"),
+            /** Repo to push in Bintray */
+            var repository: String? = null,
+            /** Additional information on package */
+            val info: Information = Information()) {
+        data class Information(var githubRepo: String? = null, var vcsUrl: String? = null,
+                               var labels: ArrayList<String> = ArrayList(), var license: String? = null,
+                               var description: String? = null)
+
+        fun info(configure: Information.() -> Unit) {
+            info.configure()
+        }
+    }
+
+    var enableBintray: Boolean = false
+    internal val bintrayConfig = BintrayConfig()
+    fun bintray(configure: BintrayConfig.() -> Unit) {
+        enableBintray = true
+        bintrayConfig.configure()
     }
 }
 
@@ -88,45 +117,65 @@ class PublishJarProxy {
 fun Project.publishJar(configure: PublishJarProxy.() -> Unit): PublishJarProxy {
     val config = PublishJarProxy().apply { configure() }
 
-    if (config.sourcesEnable) {
+    if (config.enableSources) {
         task<Jar>(config.sourcesConfig.task) {
-            archiveClassifier.set("sources")
+            classifier = "sources"
             config.sourcesConfig.components(this, project)
         }
     }
 
-    if (config.jarEnable) {
+    if (config.enablePublication) {
         applyPluginSafely("maven-publish")
         _publishing {
             publications.create(
-                    config.jarConfig.publication,
+                    config.publicationConfig.publicationName,
                     MavenPublication::class.java,
                     Action<MavenPublication> { t ->
-                        config.jarConfig.components(t, project)
-                        if (config.sourcesEnable) {
+                        t.artifactId = config.publicationConfig.artifactId ?: project.name
+                        t.from(components.getByName("java"))
+                        if (config.enableSources) {
                             t.artifact(tasks[config.sourcesConfig.task])
                         }
                     })
         }
     }
 
-    if (config.artifactoryEnable) {
+    if (config.enableArtifactory) {
         applyPluginSafely("com.jfrog.artifactory")
         _artifactory {
-            setContextUrl(config.artifactoryConfig.artifactoryUrl)
+            setContextUrl(config.artifactoryConfig.serverUrl)
 
             publish(delegateClosureOf<PublisherConfig> {
                 repository(delegateClosureOf<GroovyObject> {
-                    setProperty("repoKey", config.artifactoryConfig.artifactoryRepo)
-                    setProperty("username", config.artifactoryConfig.artifactoryUser)
-                    setProperty("password", config.artifactoryConfig.artifactoryKey)
+                    setProperty("repoKey", config.artifactoryConfig.repository)
+                    setProperty("username", config.artifactoryConfig.username)
+                    setProperty("password", config.artifactoryConfig.secretKey)
                     setProperty("maven", true)
                 })
                 defaults(delegateClosureOf<GroovyObject> {
                     setProperty("publishArtifacts", true)
                     setProperty("publishPom", config.artifactoryConfig.publishPom)
-                    invokeMethod("publications", config.jarConfig.publication)
+                    invokeMethod("publications", config.publicationConfig.publicationName)
                 })
+            })
+        }
+    }
+
+    if (config.enableBintray) {
+        applyPluginSafely("com.jfrog.bintray")
+        _bintray {
+            user = config.bintrayConfig.username
+            key = config.bintrayConfig.secretKey
+            publish = true
+            setPublications(config.publicationConfig.publicationName)
+            pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
+                repo = config.bintrayConfig.repository
+                name = config.publicationConfig.artifactId ?: project.name
+                githubRepo = config.bintrayConfig.info.githubRepo
+                vcsUrl = config.bintrayConfig.info.vcsUrl
+                setLabels(*config.bintrayConfig.info.labels.toTypedArray())
+                setLicenses(config.bintrayConfig.info.license)
+                desc = config.bintrayConfig.info.description
             })
         }
     }

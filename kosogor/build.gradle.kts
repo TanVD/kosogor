@@ -1,10 +1,11 @@
 group = "tanvd.kosogor"
-version = "2019.1.0-SNAPSHOT"
+version = "1.0.0"
 
 dependencies {
     compile(gradleKotlinDsl())
     compile(gradleApi())
     compile("org.jfrog.buildinfo", "build-info-extractor-gradle", "4.7.5")
+    compile("com.jfrog.bintray.gradle", "gradle-bintray-plugin", "1.8.4")
     compile("com.github.jengelman.gradle.plugins", "shadow", "4.0.4")
 }
 
@@ -21,6 +22,19 @@ gradlePlugin {
 afterEvaluate {
     System.setProperty("gradle.publish.key", System.getenv("gradle_publish_key") ?: "")
     System.setProperty("gradle.publish.secret", System.getenv("gradle_publish_secret") ?: "")
+}
+
+val sources = task<Jar>("sourcesJar") {
+    classifier = "sources"
+    from(sourceSets["main"]!!.allSource)
+}
+
+publishing {
+    publications.create("publishJar", MavenPublication::class) {
+        artifactId = "tanvd.kosogor.gradle.plugin"
+        from(components.getByName("java"))
+        artifact(sources)
+    }
 }
 
 pluginBundle {

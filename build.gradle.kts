@@ -33,6 +33,7 @@ subprojects {
     apply(plugin = "idea")
     apply(plugin = "java-gradle-plugin")
     apply(plugin = "com.gradle.plugin-publish")
+    apply(plugin = "maven-publish")
 
     (tasks.getByName("compileKotlin") as KotlinCompile).let {
         it.kotlinOptions {

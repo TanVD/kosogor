@@ -24,3 +24,6 @@ val Project._sourceSets: SourceSetContainer
 
 fun Project._publishing(configure: PublishingExtension.() -> Unit) = extensions.configure("publishing", configure)
 
+fun org.gradle.api.Project._bintray(configure: com.jfrog.bintray.gradle.BintrayExtension.() -> Unit): Unit =
+        (this as org.gradle.api.plugins.ExtensionAware).extensions.configure("bintray", configure)
+
