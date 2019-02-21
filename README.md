@@ -52,27 +52,23 @@ The facade is quite simple. You just use `publishJar` lambda and passes to it in
 
 ```kotlin
 publishJar {
-    jar {
-        publication = "myPreciousLibrary"
-    }
-    
-    sources {
-        task = "sourcesJar"
+    publication {
+        artifactId = "myPreciousLibrary"
     }
     
     artifactory {
-        artifactoryUrl = "https://artifactory.server.com"
-        artifactoryRepo = "artifactory-repo"
-        artifactoryUser = "artifactory-user"
-        artifactoryKey = System.getenv("artifactory_key")
+        serverUrl = "https://artifactory.server.com"
+        repository = "artifactory-repo"
+        username = "artifactory-user"
+        secretKey = System.getenv("artifactory_key")
     }
 }
 
 ```
 
-This simple code will create Jar publication named `myPreciousLibrary` and task generating Jar with sources named `sourcesJar`. 
-Then it will apply `com.jfrog.artifactory` plugin (if not already applied) and prepare package including jar, sources and pom 
-to publish to artifactory. 
+This simple code will create Jar publication with artifact id `myPreciousLibrary` (which will be used as artifact name for
+publishing) and task generating Jar with sources named `sourcesJar`. Then it will apply `com.jfrog.artifactory` plugin 
+(if not already applied) and prepare package including jar, sources and pom to publish to artifactory. 
 
 Note, that by default jar and sources also created, in example we just override some parameters. Of course, it is possible 
 to disable generation of some parts of package and it will be also removed from package published to artifactory.
