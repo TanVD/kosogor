@@ -27,9 +27,9 @@ fun Project.configureGlobalBuildDir() {
 internal fun Project.cleanTask(projectBuildDir: File) {
     afterEvaluate {
         tasks.findByName("clean")?.let {
-            delete(projectBuildDir)
+            (it as? Delete)?.delete(projectBuildDir)
         } ?: tasks.create("clean", Delete::class.java) {
-            delete(projectBuildDir)
+            it.delete(projectBuildDir)
         }
     }
 }

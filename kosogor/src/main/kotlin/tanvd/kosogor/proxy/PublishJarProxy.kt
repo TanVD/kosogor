@@ -7,9 +7,7 @@ import org.gradle.api.Project
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.AbstractCopyTask
 import org.gradle.api.tasks.bundling.Jar
-import org.gradle.kotlin.dsl.delegateClosureOf
-import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.task
+import org.gradle.kotlin.dsl.*
 import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 import tanvd.kosogor.utils.*
 

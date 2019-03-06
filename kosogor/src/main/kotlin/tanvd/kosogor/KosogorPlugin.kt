@@ -2,9 +2,7 @@ package tanvd.kosogor
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import tanvd.kosogor.defaults.configureGlobalBuildDir
-import tanvd.kosogor.defaults.configureIdea
-import tanvd.kosogor.defaults.configureWrapper
+import tanvd.kosogor.defaults.*
 
 /**
  * Implementation of Kosogor plugin.
@@ -13,6 +11,7 @@ import tanvd.kosogor.defaults.configureWrapper
  */
 class KosogorPlugin : Plugin<Project> {
     override fun apply(project: Project) {
+        if (project.parent != null) return
         project.configureIdea()
         project.configureGlobalBuildDir()
         project.configureWrapper()
