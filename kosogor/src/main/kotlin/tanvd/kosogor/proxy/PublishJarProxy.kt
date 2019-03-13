@@ -76,22 +76,22 @@ class PublishJarProxy {
 
     data class BintrayConfig(
             /**
-             * Bintray user artifactId to use
+             * Bintray username to use
              * If not set, will be taken from System environment param `bintray_user`
              */
             var username: String? = System.getenv("bintray_user"),
             /**
-             * Bintray key to use
+             * Bintray secret key to use
              * If not set, will be taken from System environment param `bintray_key`
              */
             var secretKey: String? = System.getenv("bintray_key"),
-            /** Repo to push in Bintray */
+            /** Repo to push into Bintray */
             var repository: String? = null,
             /** Additional information on package */
             val info: Information = Information()) {
         data class Information(var githubRepo: String? = null, var vcsUrl: String? = null,
-                               var labels: ArrayList<String> = ArrayList(), var license: String? = null,
-                               var description: String? = null)
+                               var userOrg: String? = null, var labels: ArrayList<String> = ArrayList(),
+                               var license: String? = null, var description: String? = null)
 
         fun info(configure: Information.() -> Unit) {
             info.configure()
@@ -169,6 +169,7 @@ fun Project.publishJar(configure: PublishJarProxy.() -> Unit): PublishJarProxy {
             pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
                 repo = config.bintrayConfig.repository
                 name = config.publicationConfig.artifactId ?: project.name
+                userOrg = config.bintrayConfig.info.userOrg
                 githubRepo = config.bintrayConfig.info.githubRepo
                 vcsUrl = config.bintrayConfig.info.vcsUrl
                 setLabels(*config.bintrayConfig.info.labels.toTypedArray())

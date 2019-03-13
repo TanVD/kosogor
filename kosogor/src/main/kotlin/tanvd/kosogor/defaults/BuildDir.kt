@@ -2,10 +2,11 @@ package tanvd.kosogor.defaults
 
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
+import tanvd.kosogor.utils.ifRootProject
 import java.io.File
 
 /**
- * Configure build dir. Should be used only on root project.
+ * Configure build dir.
  *
  * By default overrides projects to use dir with name ${project.name} inside global build dir.
  *
@@ -16,12 +17,12 @@ import java.io.File
 fun Project.configureGlobalBuildDir() {
     val globalBuildDir = File(project.rootProject.projectDir, "build")
 
-    project.allprojects {
-        buildDir = File(globalBuildDir, project.name)
-        cleanTask(buildDir)
-    }
+    buildDir = File(globalBuildDir, project.name)
+    cleanTask(buildDir)
 
-    project.cleanTask(globalBuildDir)
+    ifRootProject {
+        project.cleanTask(globalBuildDir)
+    }
 }
 
 internal fun Project.cleanTask(projectBuildDir: File) {

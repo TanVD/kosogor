@@ -9,3 +9,15 @@ fun Project.applyPluginSafely(id: String) {
         apply(plugin = id)
     }
 }
+
+fun Project.ifRootProject(body: Project.() -> Unit) {
+    if (this.parent == null) {
+        body()
+    }
+}
+
+fun Project.ifParentProject(body: Project.() -> Unit) {
+    if (this.parent != null) {
+        body()
+    }
+}

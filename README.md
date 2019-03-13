@@ -9,7 +9,10 @@ plugins configurations which should be default or using verbose plugin interface
 
 It includes simplified Kotlin-DSL interfaces for:
 * IDEA plugin
-* Jar + Maven-Publication + Artifactory + Bintray
+* Publishing: 
+    * Artifactory
+    * Bintray
+    * Gradle Plugin Portal
 * ShadowJar
 
 Also, it provides reasonable defaults (which, nevertheless, can be overridden) for:
@@ -26,7 +29,7 @@ To setup it just apply plugin:
 
 ```
 plugins {
-    id("tanvd.kosogor") version "1.0.0" apply true
+    id("tanvd.kosogor") version "1.0.2" apply true
 }
 ```
 ## What's inside
@@ -39,7 +42,7 @@ The default configuration of Kosogor plugin on apply will:
 * Apply `idea` plugin if not applied. The default configuration will add to `excluded` most of the build and tmp dirs, 
 gradle utility files and so on. Also, will be enabled download of javadocs, sources for dependencies and inheritance
 of output dirs 
-* Setup `wrapper` version to latest stable.
+* Setup `wrapper` version to `5.2.1` (latest stable on the date of release).
 * Setup global build dir for projects (each project will be built below own project dir inside of global). This behavior 
 is similar to IntelliJ IDEA behavior with flag `inheritOutputDirs`. Also, `clean` tasks in projects will be updated (or 
 created if not existed) to remove build dirs created.
@@ -75,6 +78,31 @@ to disable generation of some parts of package and it will be also removed from 
 
 You can use also `bintray` to setup bintray publishing. It does not intersect with `artifactory` and both can 
 be used simultaneously.
+
+### PublishPlugin
+
+Kosogor includes simplified facade to `java-gradle-plugin` and `com.gradle.publish-plugin`
+
+Here is the real definition of Kosogor plugin publisher:
+```kotlin
+publishPlugin {
+    id = "tanvd.kosogor"
+    displayName = "kosogor"
+    implementationClass = "tanvd.kosogor.KosogorPlugin"
+    version = project.version.toString()
+
+    info {
+        website = "https://github.com/TanVD/kosogor"
+        vcsUrl = "https://github.com/TanVD/kosogor"
+        description = "Reasonable defaults and simplified Kotlin-DSL interfaces for everyday development"
+        tags.addAll(listOf("default", "common", "kotlin", "jar", "shadowjar", "artifactory", "idea"))
+    }
+}
+```
+
+Such a quite concise piece of code applies `java-gradle-plugin` if not applied and sets up plugin bundle
+definition with specified id and implementation class. After it it applies `com.gradle.plugin-publish`
+if not applied and sets up all the needed publishing configuration to publish plugin to `plugins.gradle.org`.
 
 ### ShadowJar
 

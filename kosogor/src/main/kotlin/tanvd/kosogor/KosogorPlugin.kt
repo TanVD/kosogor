@@ -3,6 +3,7 @@ package tanvd.kosogor
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import tanvd.kosogor.defaults.*
+import tanvd.kosogor.utils.ifRootProject
 
 /**
  * Implementation of Kosogor plugin.
@@ -11,9 +12,12 @@ import tanvd.kosogor.defaults.*
  */
 class KosogorPlugin : Plugin<Project> {
     override fun apply(project: Project) {
-        if (project.parent != null) return
-        project.configureIdea()
-        project.configureGlobalBuildDir()
-        project.configureWrapper()
+        with(project) {
+            ifRootProject {
+                configureIdea()
+                configureWrapper()
+            }
+            configureGlobalBuildDir()
+        }
     }
 }

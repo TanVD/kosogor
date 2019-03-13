@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "tanvd.kosogor"
 
 plugins {
-    id("tanvd.kosogor") version "1.0.1" apply true
+    id("tanvd.kosogor") version "1.0.2" apply true
     kotlin("jvm") version "1.3.21" apply true
 }
 
