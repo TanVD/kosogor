@@ -31,5 +31,17 @@ publishJar {
     publication {
         artifactId = "tanvd.kosogor.gradle.plugin"
     }
+
+    bintray {
+        username = "tanvd"
+        repository = "tanvd.kosogor"
+        secretKey = project.findProperty("bintray_key") as String? ?: ""
+        info {
+            description = "Kosogor plugin artifact"
+            githubRepo = "https://github.com/TanVD/kosogor"
+            vcsUrl = "https://github.com/TanVD/kosogor"
+            labels.addAll(listOf("gradle", "kotlin", "kotlin-dsl", "plugin", "defaults", "common"))
+        }
+    }
 }
 
