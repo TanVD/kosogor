@@ -2,7 +2,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 # 1.0.2 - 2019-03-13
-- Fix BuildDir default broke in 1.0.2 (it was not applied to parent projects)
+- Fix BuildDir default broken in 1.0.2 (it was not applied to parent projects)
 - Update wrapper default to 5.2.1
 - Add `userOrg` field for bintray plugin
 

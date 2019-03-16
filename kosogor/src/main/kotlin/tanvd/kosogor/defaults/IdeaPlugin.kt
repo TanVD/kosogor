@@ -7,7 +7,8 @@ import tanvd.kosogor.utils.applyPluginSafely
 class DefaultIdeaConfig(project: Project) {
     /** Dirs and files to add to excluded in IDEA */
     val exclude = with(project) {
-        files(".gradle", ".gradle-cache", "gradle", "gradlew", "gradlew.bat", "gradle.properties",
+        files(
+                ".gradle", ".gradle-cache", "gradle", "gradlew", "gradlew.bat", "gradle.properties",
                 ".idea",
                 "out", "build", "tmp"
         ).toHashSet()
