@@ -6,8 +6,8 @@ The idea behind Kosogor project is to reduce the size  of your build.gradle.kts 
 setting plugins configurations which should be default or using verbose plugin interfaces when you don't need such flexibility.
 
 It includes few different plugins:
-* `kosogor` -- simplified Kotlin-DSL facades and defaults for everyday development. See [README](https://github.com/TanVD/kosogor/blob/master/kosogor/README.md)
-* `Kosogor-zkm` -- Gradle wrapper for ZKM-based obfuscation, clean and simple.  See [README](https://github.com/TanVD/kosogor/blob/master/kosogor-zkm/README.md)
+* `kosogor` -- simplified Kotlin-DSL facades and defaults for everyday development. See it's [README](https://github.com/TanVD/kosogor/blob/master/kosogor)
+* `Kosogor-zkm` -- Gradle wrapper for ZKM-based obfuscation, clean and simple.  See it's [README](https://github.com/TanVD/kosogor/blob/master/kosogor-zkm)
 
 ## More?
 

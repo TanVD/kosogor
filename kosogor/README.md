@@ -1,6 +1,6 @@
-# Kosogor
+# kosogor
 
-Kosogor is a plugin which provides reasonable defaults and simplified Kotlin-DSL interface to Gradle plugins and API functions used in everyday development.
+`kosogor` is a plugin which provides reasonable defaults and simplified Kotlin-DSL interface to Gradle plugins and API functions used in everyday development.
 
 It includes simplified Kotlin-DSL interfaces for:
 * IDEA plugin
@@ -18,7 +18,7 @@ Also, it provides reasonable defaults (which, nevertheless, can be overridden) f
 
 ## Setup
 
-Kosogor is released to `plugins.gradle.org`
+`kosogor` is released to `plugins.gradle.org`
 
 To setup it just apply plugin: 
 
