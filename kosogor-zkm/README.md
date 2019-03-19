@@ -1,14 +1,14 @@
 # kosogor-zkm
 
-`kosogor-zkm` is a plugin which provides kotlin-dsl facade to ZKM obfuscation.
+`kosogor-zkm` is a plugin which provides Kotlin-DSL facade to ZKM obfuscation.
 
-It wraps call of `ZKM` into Gradle task and passes to it's script few predefined variables from task definition.
+It wraps call of `ZKM` into Gradle task and passes to its script few predefined variables from task definition.
 
 ## Setup
 
 `kosogor-zkm` is released to `plugins.gradle.org`
 
-To setup it just apply plugin: 
+To set up it just apply plugin: 
 
 ```
 plugins {
