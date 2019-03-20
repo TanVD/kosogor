@@ -16,6 +16,18 @@ import java.io.File
 import java.util.zip.ZipOutputStream
 import javax.inject.Inject
 
+/**
+ * CollectLibsTask collects dependencies from specified configurations across whole project.
+ *
+ * Also it supports exclusion of other CollectLibsTasks from current.
+ *
+ * The main purpose of this task is to support preparing of libs for different classloaders
+ * of servlets container.
+ *
+ * In case of tomcat it can be used to collect in different archives dependencies for common
+ * classloader and per-webapp classloader.
+ *
+ */
 open class CollectLibsTask : DefaultTask() {
     init {
         group = "libs"

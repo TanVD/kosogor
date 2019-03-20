@@ -19,7 +19,7 @@ import javax.inject.Inject
  * Compilation is performed in parallel on all available cores.
  */
 @CacheableTask
-open class CompileJS : DefaultTask() {
+open class CompileJs : DefaultTask() {
     init {
         group = "js"
     }
@@ -126,7 +126,7 @@ open class CompileJS : DefaultTask() {
     }
 }
 
-/** Create CompileJS task with specified name (or `compileJS` by default) and configuration */
-fun Project.compileJs(name: String = "compileJS", configure: CompileJS.() -> Unit): CompileJS {
-    return task(name, CompileJS::class) { apply(configure) }
+/** Create CompileJs task with specified name (or `compileJS` by default) and configuration */
+fun Project.compileJs(name: String = "compileJS", configure: CompileJs.() -> Unit): CompileJs {
+    return task(name, CompileJs::class) { apply(configure) }
 }
