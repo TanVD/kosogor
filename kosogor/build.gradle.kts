@@ -7,6 +7,7 @@ version = "1.0.4-SNAPSHOT"
 dependencies {
     compile(gradleKotlinDsl())
     compile(gradleApi())
+    compile(project(":kosogor-utils"))
     compile("org.jfrog.buildinfo", "build-info-extractor-gradle", "4.7.5")
     compile("com.jfrog.bintray.gradle", "gradle-bintray-plugin", "1.8.4")
     compile("com.github.jengelman.gradle.plugins", "shadow", "4.0.4")
