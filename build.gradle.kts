@@ -1,3 +1,6 @@
+import com.gradle.publish.PublishPlugin
+import com.gradle.publish.PublishTask
+import com.jfrog.bintray.gradle.tasks.BintrayPublishTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "tanvd.kosogor"
@@ -29,8 +32,11 @@ subprojects {
 
     afterEvaluate {
         if (version.toString().contains("SNAPSHOT")) {
-            tasks.filter { it.group == "publishing" || it.group == "plugin portal" }.forEach {
-                it.enabled = false
+            tasks.withType(BintrayPublishTask::class) {
+                enabled = false
+            }
+            tasks.withType(PublishTask::class) {
+                enabled = false
             }
         }
 
