@@ -21,7 +21,6 @@ class PublishJarProxy {
         jarConfig.apply(configure)
     }
 
-
     data class SourcesConfig(
             /** Name of jar task for sources to create */
             var task: String = "sourcesJar",

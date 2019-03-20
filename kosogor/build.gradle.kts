@@ -35,7 +35,6 @@ publishJar {
     bintray {
         username = "tanvd"
         repository = "tanvd.kosogor"
-        secretKey = project.findProperty("bintray_key") as String? ?: ""
         info {
             description = "Kosogor plugin artifact"
             githubRepo = "https://github.com/TanVD/kosogor"
