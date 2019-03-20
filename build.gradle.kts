@@ -26,5 +26,13 @@ subprojects {
         jcenter()
         gradlePluginPortal()
     }
+
+    afterEvaluate {
+        if (version.toString().contains("SNAPSHOT")) {
+            tasks.filter { it.group == "publishing" || it.group == "plugin portal" }.forEach {
+                it.enabled = false
+            }
+        }
+    }
 }
 
