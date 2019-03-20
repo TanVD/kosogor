@@ -4,12 +4,15 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.Project
 import org.gradle.api.publish.maven.MavenArtifact
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.withType
 import tanvd.kosogor.utils.applyPluginSafely
 import java.io.File
 
 
 class ShadowJarProxy(private val project: Project) {
+    /** Name to use for task. By default is shadowJar. */
+    var taskName: String = "shadowJar"
     data class ShadowJarConfig(
             /** Name to use for result archive. Version will not be added. */
             var archiveName: String? = null,
@@ -19,12 +22,17 @@ class ShadowJarProxy(private val project: Project) {
             var destinationDir: File? = null
     )
 
-    fun artifact(pub: MavenPublication): MavenArtifact = pub.artifact(project.tasks.withType<ShadowJar>().single())
+    /** Add ShadowJar artifact to this publication */
+    fun artifact(pub: MavenPublication): MavenArtifact = pub.artifact(task)
 
     internal val jarConfig = ShadowJarConfig()
     fun jar(configure: ShadowJarConfig.() -> Unit) {
         jarConfig.configure()
     }
+
+    /** Get declared by this proxy shadowJar task */
+    val task: ShadowJar
+        get() = project.tasks[taskName] as ShadowJar
 }
 
 /**
@@ -32,8 +40,11 @@ class ShadowJarProxy(private val project: Project) {
  *
  * Will apply `com.github.johnrengelman.shadow` if it is not already applied
  */
-fun Project.shadowJar(configure: ShadowJarProxy.() -> Unit): ShadowJarProxy {
-    val config = ShadowJarProxy(this).apply { configure() }
+fun Project.shadowJar(name: String = "shadowJar", configure: ShadowJarProxy.() -> Unit): ShadowJarProxy {
+    val config = ShadowJarProxy(this).apply {
+        taskName = name
+        configure()
+    }
 
     applyPluginSafely("com.github.johnrengelman.shadow")
 

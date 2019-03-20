@@ -12,6 +12,16 @@ import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 import tanvd.kosogor.utils.*
 
 class PublishJarProxy {
+    data class JarConfig(
+            /** Components to add to main jar */
+            var components: MavenPublication.(Project) -> Unit = { from(it.components.getByName("java")) }
+    )
+    internal val jarConfig = JarConfig()
+    fun jar(configure: JarConfig.() -> Unit) {
+        jarConfig.apply(configure)
+    }
+
+
     data class SourcesConfig(
             /** Name of jar task for sources to create */
             var task: String = "sourcesJar",
@@ -117,7 +127,7 @@ fun Project.publishJar(configure: PublishJarProxy.() -> Unit): PublishJarProxy {
 
     if (config.enableSources) {
         task<Jar>(config.sourcesConfig.task) {
-            classifier = "sources"
+            archiveClassifier.set("sources")
             config.sourcesConfig.components(this, project)
         }
     }
@@ -130,7 +140,8 @@ fun Project.publishJar(configure: PublishJarProxy.() -> Unit): PublishJarProxy {
                     MavenPublication::class.java,
                     Action<MavenPublication> { t ->
                         t.artifactId = config.publicationConfig.artifactId ?: project.name
-                        t.from(components.getByName("java"))
+
+                        config.jarConfig.components(t, project)
                         if (config.enableSources) {
                             t.artifact(tasks[config.sourcesConfig.task])
                         }
