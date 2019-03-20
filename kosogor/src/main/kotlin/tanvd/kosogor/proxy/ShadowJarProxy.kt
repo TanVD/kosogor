@@ -13,6 +13,7 @@ import java.io.File
 class ShadowJarProxy(private val project: Project) {
     /** Name to use for task. By default is shadowJar. */
     var taskName: String = "shadowJar"
+
     data class ShadowJarConfig(
             /** Name to use for result archive. Version will not be added. */
             var archiveName: String? = null,
