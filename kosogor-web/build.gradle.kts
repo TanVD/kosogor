@@ -19,8 +19,8 @@ publishPlugin {
     info {
         website = "https://github.com/TanVD/kosogor"
         vcsUrl = "https://github.com/TanVD/kosogor"
-        description = "ZKM wrapper task for Gradle"
-        tags.addAll(listOf("zkm", "obfuscate", "kotlin"))
+        description = "Tasks and facades simplifying Web development -- from War preparation to Js minification"
+        tags.addAll(listOf("web", "js", "tomcat", "server", "dependencies", "kotlin-dsl", "kotlin"))
     }
 }
 
@@ -36,7 +36,7 @@ publishJar {
             description = "Kosogor Web plugin artifact"
             githubRepo = "https://github.com/TanVD/kosogor"
             vcsUrl = "https://github.com/TanVD/kosogor"
-            labels.addAll(listOf("web", "tomcat", "gradle", "kotlin-dsl", "plugin"))
+            labels.addAll(listOf("web", "js", "tomcat", "gradle", "kotlin-dsl", "plugin"))
         }
     }
 }

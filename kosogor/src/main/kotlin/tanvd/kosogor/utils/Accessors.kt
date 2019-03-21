@@ -6,11 +6,11 @@ import com.gradle.publish.PluginBundleExtension
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.Project
 import org.gradle.api.internal.HasConvention
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.kotlin.dsl.getPluginByName
 import org.gradle.plugin.devel.GradlePluginDevelopmentExtension
 import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
-import org.gradle.api.plugins.ExtensionAware
 
 //Generated accessors to use in plugin
 val Project._artifactory: ArtifactoryPluginConvention
