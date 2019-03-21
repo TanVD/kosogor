@@ -126,7 +126,7 @@ open class CompileJs : DefaultTask() {
     }
 }
 
-/** Create CompileJs task with specified name (or `compileJS` by default) and configuration */
-fun Project.compileJs(name: String = "compileJS", configure: CompileJs.() -> Unit): CompileJs {
+/** Create CompileJs task with specified name (or `compileJs` by default) and configuration */
+fun Project.compileJs(name: String = "compileJs", configure: CompileJs.() -> Unit): CompileJs {
     return task(name, CompileJs::class) { apply(configure) }
 }

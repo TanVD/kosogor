@@ -1,4 +1,3 @@
-import com.gradle.publish.PublishPlugin
 import com.gradle.publish.PublishTask
 import com.jfrog.bintray.gradle.tasks.BintrayPublishTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile

@@ -63,8 +63,8 @@ open class CollectDependencies : DefaultTask() {
      *
      * Note, configuration will be searched across all projects
      */
-    fun include(vararg config: String) {
-        includeConfs += config
+    fun include(vararg configuration: String) {
+        includeConfs += configuration
     }
 
     private val includeFiles = ArrayList<FilesConfig>()

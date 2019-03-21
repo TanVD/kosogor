@@ -9,33 +9,42 @@ import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.task
 import tanvd.kosogor.utils.*
 
-open class ValidateConfigurationsTask : DefaultTask() {
+/**
+ * Task checks if there are dependencies which were fixed for specific configuration,
+ * but now are used in some other configuration.
+ *
+ * The main purpose of this task is to fix dependencies per configuration (classloader).
+ * Use fixFor to fix dependency in some configuration and ValidateConfigurations task
+ * will make sure that this dependency is added only to this classloader.
+ */
+open class ValidateConfigurations : DefaultTask() {
     init {
-        group = "libs"
+        group = "deps"
     }
 
-    data class Artifact(val group: String, val name: String, val version: String?, val project: Project) {
+    internal data class Artifact(val group: String, val name: String, val version: String?, val project: Project) {
         override fun toString() = "$group:$name:$version"
     }
 
     companion object {
-        private const val mapName = "fixed_config"
-        fun getMap(project: Project): HashMap<String, Artifact> {
+        private const val mapName = "validate_configurations_fixed"
+        internal fun getMap(project: Project): HashMap<String, Artifact> {
             if (!project.rootProject._ext.has(mapName)) {
                 project.rootProject._ext[mapName] = HashMap<String, Artifact>()
             }
             return project.rootProject._ext[mapName] as HashMap<String, Artifact>
         }
 
-        val console = object : Console("Libs Configuration Validation>>> ", Color.RED) {}
+        val console = object : Console("Dependencies Configuration Validation>>> ", Color.RED) {}
     }
 
+    /** If true, than task will fail build if validation failed. By default -- true */
     @get:Input
     var failOnValidationError = true
 
     private val includeConfs = ArrayList<String>()
-    fun includeConf(vararg config: String) {
-        includeConfs += config
+    fun include(vararg configuration: String) {
+        includeConfs += configuration
     }
 
     @TaskAction
@@ -73,10 +82,10 @@ open class ValidateConfigurationsTask : DefaultTask() {
 }
 
 fun <T : ExternalModuleDependency> T.fixFor(project: Project, configuration: String) {
-    ValidateConfigurationsTask.getMap(project)[configuration] = ValidateConfigurationsTask.Artifact(group!!, name, version, project)
+    ValidateConfigurations.getMap(project)[configuration] = ValidateConfigurations.Artifact(group!!, name, version, project)
 }
 
-fun Project.validateConfigurationsLibs(name: String = "validateConfigurations",
-                                       configure: ValidateConfigurationsTask.() -> Unit): ValidateConfigurationsTask {
-    return task(name, ValidateConfigurationsTask::class) { configure() }
+fun Project.validateConfigurations(name: String = "validateConfigurations",
+                                   configure: ValidateConfigurations.() -> Unit): ValidateConfigurations {
+    return task(name, ValidateConfigurations::class) { configure() }
 }

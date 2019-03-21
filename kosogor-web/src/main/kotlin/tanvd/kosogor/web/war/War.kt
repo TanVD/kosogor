@@ -35,6 +35,7 @@ open class WarProxy : War() {
 
 
     class ClasspathConfig(val include: LinkedHashSet<File> = LinkedHashSet(), val exclude: LinkedHashSet<File> = LinkedHashSet())
+
     /** Configure classpath of war */
     fun classpath(configure: ClasspathConfig.() -> Unit) {
         doFirst {

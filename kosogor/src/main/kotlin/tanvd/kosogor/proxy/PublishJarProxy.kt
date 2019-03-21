@@ -16,6 +16,7 @@ class PublishJarProxy {
             /** Components to add to main jar */
             var components: MavenPublication.(Project) -> Unit = { from(it.components.getByName("java")) }
     )
+
     internal val jarConfig = JarConfig()
     fun jar(configure: JarConfig.() -> Unit) {
         jarConfig.apply(configure)
