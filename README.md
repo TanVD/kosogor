@@ -1,6 +1,6 @@
 # Kosogor
 
-[![Build Status](https://travis-ci.org/TanVD/kosogor.svg?branch=master)](https://travis-ci.org/TanVD/kosogor)
+[![CircleCI](https://circleci.com/gh/TanVD/kosogor.svg?style=svg)](https://circleci.com/gh/TanVD/kosogor)
 
 The idea behind Kosogor project is to reduce the size  of your build.gradle.kts and remove from it all the boilerplate: 
 setting plugins configurations which should be default or using verbose plugin interfaces when you don't need such flexibility.
