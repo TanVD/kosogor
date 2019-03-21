@@ -12,10 +12,10 @@ import java.io.File
 /**
  * Facade for war task.
  *
- * It offers simple Kotlin-DSL interface based on FilesConfig extensions
+ * It offers simple Kotlin-DSL facade based on FilesConfig extensions
  */
 @CacheableTask
-open class WarProxyTask : War() {
+open class WarProxy : War() {
     init {
         group = "war"
     }
@@ -64,10 +64,10 @@ open class WarProxyTask : War() {
     }
 }
 
-/** Create WarProxyTask task with specified name (by default `createWar`) and specified configuration */
-fun Project.createWar(name: String = "createWar", configure: WarProxyTask.() -> Unit): WarProxyTask {
+/** Create WarProxy task with specified name (by default `createWar`) and specified configuration */
+fun Project.createWar(name: String = "createWar", configure: WarProxy.() -> Unit): WarProxy {
     applyPluginSafely("war")
-    return task(name, WarProxyTask::class) {
+    return task(name, WarProxy::class) {
         configure()
     }
 }

@@ -1,6 +1,6 @@
 package tanvd.kosogor.utils
 
-open class Console(val prefix: String, val mainColor: Color) {
+open class Console(private val prefix: String, private val mainColor: Color) {
 
     enum class Color(val ansi: String) {
         GREEN("\u001B[32m"),

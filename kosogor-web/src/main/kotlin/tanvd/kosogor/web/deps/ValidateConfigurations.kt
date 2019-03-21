@@ -1,4 +1,4 @@
-package tanvd.kosogor.web.libs
+package tanvd.kosogor.web.deps
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
