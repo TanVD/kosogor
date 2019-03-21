@@ -14,7 +14,7 @@ import tanvd.kosogor.utils.fullName
  * versions in specified configurations.
  *
  * The main purpose of this task is to validate dependencies prepared for classloaders of
- * container servlet and be sure, that no dependencies are overridden
+ * web container and be sure, that no dependencies are overridden
  */
 open class ValidateVersions : DefaultTask() {
     init {

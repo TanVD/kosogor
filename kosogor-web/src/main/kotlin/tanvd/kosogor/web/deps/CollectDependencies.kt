@@ -23,7 +23,7 @@ import javax.inject.Inject
  * Also it supports exclusion of other CollectDependencies result sets from current.
  *
  * The main purpose of this task is to support preparing of libs for different classloaders
- * of servlets container.
+ * of web container.
  *
  * In case of Tomcat it can be used to collect in different archives dependencies for common
  * classloader and per-webapp classloader.

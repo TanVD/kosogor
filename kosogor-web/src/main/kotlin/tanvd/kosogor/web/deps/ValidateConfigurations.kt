@@ -14,7 +14,7 @@ import tanvd.kosogor.utils.*
  * but now are used in some other configuration.
  *
  * The main purpose of this task is to fix dependencies per configuration (in case
- * of servlet containers it guarantees that library will always be in the same classloader).
+ * of web containers it guarantees that library will always be in the same classloader).
  *
  * Use fixFor to fix dependency in some configuration and ValidateConfigurations task
  * will make sure that this dependency presenter only in this configuration.
