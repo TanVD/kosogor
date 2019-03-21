@@ -20,15 +20,15 @@ plugins {
 ZKM task provides simple interface to ZKM from Gradle.
 
 It passes following variables from task definition to ZKM environment:
-* inputJars -- it will be `%INPUT_JARS%` variable which evaluates into `open absolutePath.jar`
-* outputDir -- it will be `%OUPUT_DIR%` variable
-* changeLogFile -- it will be `%CHANGELOG_FILE%` variable (can be used for `changeLogFileOut`)
-* zkmLogFile -- used in call of zkm.jar as `-l zkmLogFile.absolutePath`
+* inputJars &mdash; it will be `%INPUT_JARS%` variable which evaluates into `open absolutePath.jar`
+* outputDir &mdash; it will be `%OUPUT_DIR%` variable
+* changeLogFile &mdash; it will be `%CHANGELOG_FILE%` variable (can be used for `changeLogFileOut`)
+* zkmLogFile &mdash; used in call of zkm.jar as `-l zkmLogFile.absolutePath`
 
 Also, there are few variables used by ZKM itself:
-* zkmClasspath -- classpath to ZKM should use during obfuscation
-* zkmJar -- path to your ZKM jar
-* zkmScript -- path to your ZKM script
+* zkmClasspath &mdash; classpath to ZKM should use during obfuscation
+* zkmJar &mdash; path to your ZKM jar
+* zkmScript &mdash; path to your ZKM script
 
 So, to sum up, here is the simple definition of task:
 

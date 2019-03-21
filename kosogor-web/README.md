@@ -55,7 +55,7 @@ This task collects dependencies from specified configurations across all project
 
 The main purpose of a task is to support prepartion of dependencies sets per web-container classloader. 
 
-In case of Tomcat it can be used in a following manner -- you define dependencies using `common`, `shared` and `webapp` configurations and during the build generate 3 archives -- `common` (all in common configuration), `shared` (all in shared configuration, excluding those which already in `common`) and `webapp` (all in webapp configuration, excluding shared and common). This archives can be used as dependency sets for Tomcat classloaders now.
+In case of Tomcat it can be used in a following manner &mdash; you define dependencies using `common`, `shared` and `webapp` configurations and during the build generate 3 archives &mdash; `common` (all in common configuration), `shared` (all in shared configuration, excluding those which already in `common`) and `webapp` (all in webapp configuration, excluding shared and common). This archives can be used as dependency sets for Tomcat classloaders now.
 
 Here is the example of CollectDependencies task configuration: 
 ```kotlin
