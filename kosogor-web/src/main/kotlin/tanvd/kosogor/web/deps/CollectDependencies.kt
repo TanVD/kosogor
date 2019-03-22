@@ -116,10 +116,8 @@ open class CollectDependencies : DefaultTask() {
 
         val rootSpec = getInstantiator().newInstance(DefaultCopySpec::class.java, getFileResolver(), getInstantiator()).apply {
             from(dependencySet)
-            includeFiles.forEach { (file, toFile) ->
-                from(file) {
-                    into(toFile)
-                }
+            includeFiles.forEach { config ->
+                config.apply(this)
             }
         }
         CopyActionExecuter(getInstantiator(), getFileSystem(), false).execute(rootSpec, copyAction)
