@@ -1,6 +1,10 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 1.0.4 - 2019-03-22
+- Add few accessors
+- Remove kosogor utils
+
 # 1.0.3 - 2019-03-20
 - Add task getter to ShadowJarProxy
 - Add possibility to override main jar for PublishJarProxy

@@ -24,7 +24,7 @@ To set up it just apply plugin:
 
 ```
 plugins {
-    id("tanvd.kosogor") version "1.0.2" apply true
+    id("tanvd.kosogor") version "1.0.4" apply true
 }
 ```
 ## What's inside

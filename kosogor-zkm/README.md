@@ -12,7 +12,7 @@ To set up it just apply plugin:
 
 ```
 plugins {
-    id("tanvd.kosogor.zkm") version "1.0.0" apply true
+    id("tanvd.kosogor.zkm") version "1.0.1" apply true
 }
 ```
 ## ZKM task
