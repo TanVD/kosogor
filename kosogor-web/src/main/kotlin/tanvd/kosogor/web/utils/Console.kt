@@ -1,4 +1,4 @@
-package tanvd.kosogor.utils
+package tanvd.kosogor.web.utils
 
 open class Console(private val prefix: String, private val mainColor: Color) {
 

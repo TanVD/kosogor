@@ -11,8 +11,7 @@ import org.gradle.internal.nativeplatform.filesystem.FileSystem
 import org.gradle.internal.reflect.Instantiator
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.task
-import tanvd.kosogor.utils.FilesConfig
-import tanvd.kosogor.utils._ext
+import tanvd.kosogor.web.utils.*
 import java.io.File
 import java.util.zip.ZipOutputStream
 import javax.inject.Inject
@@ -47,7 +46,7 @@ open class CollectDependencies : DefaultTask() {
     val dependencySet: Set<File>
         get() {
             initializeGlobalSet()
-            return project.rootProject._ext.get(setName) as Set<File>
+            return project.rootProject.ext(setName)
         }
 
     private val exclude = LinkedHashSet<CollectDependencies>()

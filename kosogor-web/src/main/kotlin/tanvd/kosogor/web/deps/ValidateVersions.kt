@@ -6,8 +6,8 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.task
-import tanvd.kosogor.utils.Console
-import tanvd.kosogor.utils.fullName
+import tanvd.kosogor.web.utils.Console
+import tanvd.kosogor.web.utils.fullName
 
 /**
  * Task checks if there are multiple artifacts equal by name and group, but with different

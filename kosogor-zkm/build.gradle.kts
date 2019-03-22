@@ -5,8 +5,8 @@ group = "tanvd.kosogor.zkm"
 version = "1.0.1-SNAPSHOT"
 
 dependencies {
-    compile(gradleKotlinDsl())
-    compile(gradleApi())
+    implementation(gradleKotlinDsl())
+    implementation(gradleApi())
 }
 
 publishPlugin {

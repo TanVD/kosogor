@@ -5,8 +5,8 @@ import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.bundling.War
 import org.gradle.kotlin.dsl.task
-import tanvd.kosogor.utils.FilesConfig
-import tanvd.kosogor.utils.applyPluginSafely
+import tanvd.kosogor.web.utils.FilesConfig
+import tanvd.kosogor.web.utils.applyPluginSafely
 import java.io.File
 
 /**

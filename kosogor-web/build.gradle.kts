@@ -5,9 +5,8 @@ group = "tanvd.kosogor.web"
 version = "1.0.1-SNAPSHOT"
 
 dependencies {
-    compile(gradleKotlinDsl())
-    compile(gradleApi())
-    compile(project(":kosogor-utils"))
+    implementation(gradleKotlinDsl())
+    implementation(gradleApi())
 }
 
 publishPlugin {

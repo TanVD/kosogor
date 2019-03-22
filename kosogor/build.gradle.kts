@@ -5,13 +5,12 @@ group = "tanvd.kosogor"
 version = "1.0.4-SNAPSHOT"
 
 dependencies {
-    compile(gradleKotlinDsl())
-    compile(gradleApi())
-    compile(project(":kosogor-utils"))
-    compile("org.jfrog.buildinfo", "build-info-extractor-gradle", "4.7.5")
-    compile("com.jfrog.bintray.gradle", "gradle-bintray-plugin", "1.8.4")
-    compile("com.github.jengelman.gradle.plugins", "shadow", "4.0.4")
-    compile("com.gradle.publish", "plugin-publish-plugin", "0.10.1")
+    implementation(gradleKotlinDsl())
+    implementation(gradleApi())
+    api("org.jfrog.buildinfo", "build-info-extractor-gradle", "4.7.5")
+    api("com.jfrog.bintray.gradle", "gradle-bintray-plugin", "1.8.4")
+    api("com.github.jengelman.gradle.plugins", "shadow", "4.0.4")
+    api("com.gradle.publish", "plugin-publish-plugin", "0.10.1")
 }
 
 publishPlugin {

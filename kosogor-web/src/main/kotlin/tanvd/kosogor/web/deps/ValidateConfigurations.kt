@@ -7,7 +7,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.task
-import tanvd.kosogor.utils.*
+import tanvd.kosogor.web.utils.*
 
 /**
  * Task checks if there are dependencies which were fixed for specific configuration,
@@ -34,7 +34,7 @@ open class ValidateConfigurations : DefaultTask() {
             if (!project.rootProject._ext.has(mapName)) {
                 project.rootProject._ext[mapName] = HashMap<String, Artifact>()
             }
-            return project.rootProject._ext[mapName] as HashMap<String, Artifact>
+            return project.rootProject.ext(mapName)
         }
     }
 
