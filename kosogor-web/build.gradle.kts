@@ -5,8 +5,8 @@ group = "tanvd.kosogor.web"
 version = "1.0.3-SNAPSHOT"
 
 dependencies {
-    implementation(gradleKotlinDsl())
-    implementation(gradleApi())
+    compileOnly(gradleKotlinDsl())
+    compileOnly(gradleApi())
 }
 
 publishPlugin {

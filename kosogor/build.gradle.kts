@@ -5,8 +5,8 @@ group = "tanvd.kosogor"
 version = "1.0.5-SNAPSHOT"
 
 dependencies {
-    implementation(gradleKotlinDsl())
-    implementation(gradleApi())
+    compileOnly(gradleKotlinDsl())
+    compileOnly(gradleApi())
     api("org.jfrog.buildinfo", "build-info-extractor-gradle", "4.7.5")
     api("com.jfrog.bintray.gradle", "gradle-bintray-plugin", "1.8.4")
     api("com.github.jengelman.gradle.plugins", "shadow", "4.0.4")

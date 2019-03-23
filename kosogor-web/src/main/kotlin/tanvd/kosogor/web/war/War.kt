@@ -48,20 +48,20 @@ open class WarProxy : War() {
     /** Configure files in META-INF war directory */
     fun metaRoot(configure: FilesConfig.() -> Unit) {
         metaInf {
-            FilesConfig(project).apply(configure).apply(this)
+            FilesConfig(project).apply(configure).apply(it)
         }
     }
 
     /** Configure files in WEB-INF war directory */
     fun webRoot(configure: FilesConfig.() -> Unit) {
         webInf {
-            FilesConfig(project).apply(configure).apply(this)
+            FilesConfig(project).apply(configure).apply(it)
         }
     }
 
     /** Configure files in root war directory */
     fun static(configure: FilesConfig.() -> Unit) {
-        FilesConfig(project).apply(configure).apply(super.getRootSpec())
+        FilesConfig(project).apply(configure).apply(rootSpec)
     }
 }
 
