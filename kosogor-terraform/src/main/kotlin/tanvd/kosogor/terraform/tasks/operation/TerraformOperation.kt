@@ -28,10 +28,6 @@ open class TerraformOperation : DefaultTask() {
         OUTPUT(listOf("output"));
     }
 
-    init {
-        outputs.upToDateWhen { false }
-    }
-
     lateinit var operation: Operation
     lateinit var targets: LinkedHashSet<String>
     lateinit var root: File

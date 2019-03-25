@@ -10,6 +10,7 @@ import java.net.URL
 
 /** Task downloads remote artifacts configured in DSL */
 open class DownloadArtifactsTask : DefaultTask() {
+    @get:Internal
     val toDownload: LinkedHashSet<TerraformDsl.Artifacts.Remote>
         get() = terraformDsl.artifacts.remotes
 

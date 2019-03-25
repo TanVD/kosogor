@@ -16,12 +16,12 @@ enum class Archive(val extension: String) {
     };
 
     companion object {
-        const val plexusErrorLoggerLevel = 5
+        private const val plexusErrorLoggerLevel = 5
     }
 
-    abstract fun getUnarchiver(from: File): AbstractUnArchiver
+    internal abstract fun getUnarchiver(from: File): AbstractUnArchiver
 
-    fun unarchive(from: File, to: File) {
+    internal fun unarchive(from: File, to: File) {
         to.mkdirs()
         getUnarchiver(from).apply {
             enableLogging(ConsoleLogger(plexusErrorLoggerLevel, "Archive"))
