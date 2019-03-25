@@ -36,10 +36,12 @@ private fun Project.cleanTask(projectBuildDir: File) {
 }
 
 /** Add dirs to clean task of this project */
-fun Project.alsoClean(vararg dirs: String) = alsoClean(*dirs.map { File(project.projectDir, it) }.toTypedArray())
+fun Project.alsoClean(vararg dirs: String) = alsoClean(dirs.map { File(project.projectDir, it) })
 
 /** Add dirs to clean task of this project */
-fun Project.alsoClean(vararg dirs: File) {
+fun Project.alsoClean(vararg dirs: File) = alsoClean(dirs.toList())
+
+fun Project.alsoClean(dirs: List<File>) {
     afterEvaluate {
         dirs.forEach { cleanTask(it) }
     }

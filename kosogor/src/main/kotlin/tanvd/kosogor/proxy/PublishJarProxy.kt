@@ -11,6 +11,7 @@ import org.gradle.kotlin.dsl.*
 import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 import tanvd.kosogor.utils.*
 
+/** Configuration of `publishJar` facade */
 class PublishJarProxy {
     data class JarConfig(
             /** Components to add to main jar */
@@ -183,6 +184,7 @@ fun Project.publishJar(configure: PublishJarProxy.() -> Unit): PublishJarProxy {
                 userOrg = config.bintrayConfig.info.userOrg
                 githubRepo = config.bintrayConfig.info.githubRepo
                 vcsUrl = config.bintrayConfig.info.vcsUrl
+                @Suppress("SpreadOperator")
                 setLabels(*config.bintrayConfig.info.labels.toTypedArray())
                 setLicenses(config.bintrayConfig.info.license)
                 desc = config.bintrayConfig.info.description

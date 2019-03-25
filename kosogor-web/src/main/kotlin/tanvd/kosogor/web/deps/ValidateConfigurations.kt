@@ -28,7 +28,7 @@ open class ValidateConfigurations : DefaultTask() {
         override fun toString() = "$group:$name:$version"
     }
 
-    companion object : Console("Dependencies Configurations Validation>>> ", Color.RED) {
+    internal companion object : Console("Dependencies Configurations Validation>>> ", Color.RED) {
         private const val mapName = "validate_configurations_fixed"
         internal fun getFixedMap(project: Project): HashMap<String, Artifact> {
             if (!project.rootProject._ext.has(mapName)) {

@@ -4,6 +4,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.invoke
 import tanvd.kosogor.utils.*
 
+/** Configuration of `publishPlugin` facade */
 data class PublishPluginConfig(
         /** Id of plugin to publish */
         var id: String? = null,
@@ -23,6 +24,11 @@ data class PublishPluginConfig(
     }
 }
 
+/**
+ * Provides simple interface to Gradle plugin publishing
+ *
+ * Will apply `java-gradle-plugin` and `com.gradle.plugin-publish` if it is not already applied
+ */
 fun Project.publishPlugin(configure: PublishPluginConfig.() -> Unit) {
     val config = PublishPluginConfig().apply(configure)
     applyPluginSafely("java-gradle-plugin")

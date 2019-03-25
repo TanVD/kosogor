@@ -27,7 +27,7 @@ open class ValidateVersions : DefaultTask() {
 
     private data class ArtifactVersion(val version: String, val project: Project, val configuration: String)
 
-    companion object : Console("Dependencies Versions Validation>>> ", Color.RED)
+    internal companion object : Console("Dependencies Versions Validation>>> ", Color.RED)
 
     /** If true, than task will fail build if validation failed. By default -- true */
     @get:Input

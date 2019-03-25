@@ -9,7 +9,7 @@ import org.gradle.kotlin.dsl.withType
 import tanvd.kosogor.utils.applyPluginSafely
 import java.io.File
 
-
+/** Configuration of `shadowJar` proxy */
 class ShadowJarProxy(private val project: Project) {
     /** Name to use for task. By default is shadowJar. */
     var taskName: String = "shadowJar"
