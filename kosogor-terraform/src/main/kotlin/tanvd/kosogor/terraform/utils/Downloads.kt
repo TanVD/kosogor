@@ -1,33 +1,32 @@
 package tanvd.kosogor.terraform.utils
 
 import org.codehaus.plexus.util.FileUtils
-import tanvd.kosogor.terraform.utils.Archiver
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
 import java.nio.channels.Channels
 import java.nio.file.Files
 
-object Downloads {
+internal object Downloads {
     fun download(url: URL, toFile: File) {
         toFile.parentFile.mkdirs()
         FileOutputStream(toFile).channel.transferFrom(Channels.newChannel(url.openStream()), 0, java.lang.Long.MAX_VALUE)
     }
 
-    fun download(url: URL, toFile: File, archiver: Archiver) {
+    fun download(url: URL, toFile: File, archive: Archive) {
         toFile.parentFile.mkdirs()
-        val archive = File(toFile.absolutePath + "." + archiver.extension)
+        val archiveFile = File(toFile.absolutePath + "." + archive.extension)
 
-        download(url, archive)
+        download(url, archiveFile)
 
-        archiver.unarchive(archive, toFile)
+        archive.unarchive(archiveFile, toFile)
 
-        archive.delete()
+        archiveFile.delete()
     }
 
-    fun download(url: URL, toFile: File, archiver: Archiver, filterToRoot: (File) -> Boolean) {
+    fun download(url: URL, toFile: File, archive: Archive, filterToRoot: (File) -> Boolean) {
         val tmpDir = File(toFile, "tmp_${RandomCode.next()}")
-        Downloads.download(url, tmpDir, archiver)
+        Downloads.download(url, tmpDir, archive)
         Files.walk(tmpDir.toPath())
                 .filter { filterToRoot(it.toFile()) }
                 .forEach {

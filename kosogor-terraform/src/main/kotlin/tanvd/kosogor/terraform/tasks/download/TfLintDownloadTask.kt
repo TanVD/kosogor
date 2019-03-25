@@ -8,7 +8,11 @@ import tanvd.kosogor.terraform.utils.CommandLine.os
 import java.io.File
 import java.net.URL
 
-@CacheableTask
+/**
+ * Task downloads `tflint` binary needed by terraform plugin.
+ *
+ * Note: OS for binary is determined automatically and assumed to be `amd64`.
+ */
 open class TfLintDownloadTask : DefaultTask() {
     @get:Input
     val version: String
@@ -22,7 +26,7 @@ open class TfLintDownloadTask : DefaultTask() {
     fun download() {
         logger.lifecycle("Downloading TfLint version $version for OS $os")
 
-        Downloads.download(URL("https://github.com/wata727/tflint/releases/download/v$version/tflint_$os.zip"), file.parentFile, Archiver.ZIP)
+        Downloads.download(URL("https://github.com/wata727/tflint/releases/download/v$version/tflint_$os.zip"), file.parentFile, Archive.ZIP)
 
         CommandLine.execute("chmod", listOf("+x", file.absolutePath), file.parentFile, false)
 

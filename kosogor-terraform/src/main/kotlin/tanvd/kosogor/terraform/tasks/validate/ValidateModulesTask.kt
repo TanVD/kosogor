@@ -9,6 +9,18 @@ import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.*
 import java.io.File
 
+/**
+ * Task validates correctness of terraform modules.
+ *
+ * It uses terraform itself to check correctness.
+ *
+ * Basically, inside each module will be added `infra.tf`
+ * file with specified in DSL aws provider and `terraform validate`
+ * will be executed for this module.
+ *
+ * Task guarantees syntax correctness of module and it's
+ * compliance to specified version of aws provider.
+ */
 open class ValidateModulesTask : DefaultTask() {
     init {
         outputs.upToDateWhen { false }

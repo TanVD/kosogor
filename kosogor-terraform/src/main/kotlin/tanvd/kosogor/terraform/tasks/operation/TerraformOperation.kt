@@ -6,6 +6,12 @@ import tanvd.kosogor.terraform.utils.*
 import java.io.File
 
 
+/**
+ * TerraformOperation task executes specified operation on terraform code
+ *
+ * Note: Apply and destroy will not require approve in console,
+ * terraform plugin passes to it `-auto-approve`
+ */
 open class TerraformOperation : DefaultTask() {
     init {
         outputs.upToDateWhen { false }

@@ -4,7 +4,7 @@ import org.codehaus.plexus.util.Os
 import org.codehaus.plexus.util.cli.*
 import java.io.File
 
-object CommandLine {
+internal object CommandLine {
     val os by lazy {
         when {
             Os.isFamily(Os.FAMILY_WINDOWS) -> "windows_amd64"

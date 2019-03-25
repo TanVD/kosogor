@@ -8,6 +8,7 @@ import tanvd.kosogor.terraform.utils.Downloads
 import java.io.File
 import java.net.URL
 
+/** Task downloads remote artifacts configured in DSL */
 open class DownloadArtifactsTask : DefaultTask() {
     val toDownload: LinkedHashSet<TerraformDsl.Artifacts.Remote>
         get() = terraformDsl.artifacts.remotes

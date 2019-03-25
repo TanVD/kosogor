@@ -5,7 +5,7 @@ import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
 import tanvd.kosogor.terraform.tasks.lint.LintRootTask
 import tanvd.kosogor.terraform.tasks.operation.TerraformOperation
-import tanvd.kosogor.terraform.utils.Archiver
+import tanvd.kosogor.terraform.utils.Archive
 import java.io.File
 import java.net.URL
 
@@ -68,10 +68,10 @@ class TerraformDsl(var project: Project? = null) {
             this.jars += Jars(configuration, destDir)
         }
 
-        data class Remote(val url: URL, val destDir: File, val archiver: Archiver? = null, val filterToRoot: (File) -> Boolean)
+        data class Remote(val url: URL, val destDir: File, val archive: Archive? = null, val filterToRoot: (File) -> Boolean)
 
-        fun remote(url: URL, destDir: File, archiver: Archiver? = null, filterToRoot: (File) -> Boolean = { true }) {
-            this.remotes += Remote(url, destDir, archiver, filterToRoot)
+        fun remote(url: URL, destDir: File, archive: Archive? = null, filterToRoot: (File) -> Boolean = { true }) {
+            this.remotes += Remote(url, destDir, archive, filterToRoot)
         }
     }
 

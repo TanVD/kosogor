@@ -8,6 +8,11 @@ import tanvd.kosogor.terraform.utils.CommandLine.os
 import java.io.File
 import java.net.URL
 
+/**
+ * Task downloads `terraform` binary needed by terraform plugin.
+ *
+ * Note: OS for binary is determined automatically and assumed to be `amd64`.
+ */
 open class TerraformDownloadTask : DefaultTask() {
     @get:Input
     val version: String
@@ -21,7 +26,7 @@ open class TerraformDownloadTask : DefaultTask() {
     fun download() {
         logger.lifecycle("Downloading terraform version $version for OS $os")
 
-        Downloads.download(URL("https://releases.hashicorp.com/terraform/$version/terraform_${version}_$os.zip"), file.parentFile, Archiver.ZIP)
+        Downloads.download(URL("https://releases.hashicorp.com/terraform/$version/terraform_${version}_$os.zip"), file.parentFile, Archive.ZIP)
 
         CommandLine.execute("chmod", listOf("+x", file.absolutePath), file.parentFile, false)
 

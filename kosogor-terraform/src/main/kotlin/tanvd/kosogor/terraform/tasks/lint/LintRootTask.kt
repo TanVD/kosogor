@@ -8,6 +8,23 @@ import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.*
 import java.io.File
 
+/**
+ * Task validates correctness of terraform root.
+ *
+ * It uses terraform itself or TfLint to check correctness.
+ *
+ * If terraform chosen in DSL as linter, then
+ * `plan` operation will be performed and linting will be successful
+ * only if `plan` returned 0 exit code.
+ *
+ * If `tflint` chosen in DSL as linter, then it will be
+ * executed upon provided source root and linting will be successful
+ * only if `tflint` returned 0 exit code.
+ *
+ * NOTE: right now it is better to use `terraform` linter,
+ * cause latest `tflint` version is not recommended to use
+ * by it's author.
+ */
 open class LintRootTask : DefaultTask() {
     init {
         outputs.upToDateWhen { false }

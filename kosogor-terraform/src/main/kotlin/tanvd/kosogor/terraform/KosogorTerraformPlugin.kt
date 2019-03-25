@@ -14,6 +14,23 @@ import tanvd.kosogor.terraform.utils.GlobalFile
 import tanvd.kosogor.terraform.utils.GlobalTask
 import java.io.File
 
+/**
+ * Implementation of Kosogor Terraform plugin.
+ *
+ *
+ * It adds few types of tasks:
+ * * Terraform deployment tasks -- terraform operations on registered
+ *   sources roots
+ * * Terraform publishing tasks -- validation and uploading of
+ *   terraform modules to remote repository.
+ *
+ * Tasks for publishing will be created automatically, if any
+ * `package.json` found in project sources.
+ *
+ * Also it creates tasks for build preparation:
+ * * Download of needed binaries: Terraform, TfLint
+ * * Download of remote artifacts: jars, archives
+ */
 class KosogorTerraformPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         if (project.configurations.findByName("lambdas") == null) {
@@ -29,7 +46,6 @@ class KosogorTerraformPlugin : Plugin<Project> {
             description = "Download Terraform"
         }
 
-        //publisher
         project.afterEvaluate {
             if (terraformDsl.enablePublisher) {
                 val validate = project.tasks.create<ValidateModulesTask>("validate") {
