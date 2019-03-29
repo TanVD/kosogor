@@ -3,7 +3,7 @@
 [![CircleCI](https://circleci.com/gh/TanVD/kosogor.svg?style=svg)](https://circleci.com/gh/TanVD/kosogor)
 
 The idea behind Kosogor project is to reduce the size  of your build.gradle.kts and remove from it all the boilerplate: 
-setting plugins configurations which should be default or using verbose plugin interfaces when you don't need such flexibility.
+setting plugins configurations, which should be defaults or using verbose plugin interfaces when you don't need such flexibility.
 
 It includes a few different plugins:
 * `kosogor` &mdash; simplified Kotlin-DSL facades and defaults for everyday development. See it's [README](https://github.com/TanVD/kosogor/blob/master/kosogor)
@@ -13,7 +13,7 @@ It includes a few different plugins:
 ## More?
 
 The priority of Kosogor project is to make Gradle simple and concise for everyday use. Feel free to add issues on extending
-Kosogor with facades for the plugins/systems you use. It is probable that such issues will be implemented in Kosogor itself
+Kosogor with facades for the plugins/systems you use. Probably such issues will be implemented in Kosogor itself
 or derivating plugins will occur (like `kosogor-zkm` already exists).
 
 ## Examples

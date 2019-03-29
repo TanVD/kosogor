@@ -19,7 +19,7 @@ import javax.inject.Inject
 /**
  * CollectDependencies task collects dependencies from specified configurations across all projects.
  *
- * Also it supports exclusion of other CollectDependencies result sets from current.
+ * Also, it supports exclusion of other CollectDependencies result sets from current.
  *
  * The main purpose of this task is to support preparing of libs for different classloaders
  * of web container.
@@ -58,7 +58,7 @@ open class CollectDependencies : DefaultTask() {
 
     private val includeConfs = LinkedHashSet<String>()
     /**
-     * Include configuration into this dependencySet
+     * Include a configuration into this dependencySet
      *
      * Note, configuration will be searched across all projects
      */

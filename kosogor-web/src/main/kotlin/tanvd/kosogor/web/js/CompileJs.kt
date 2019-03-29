@@ -28,7 +28,7 @@ open class CompileJs : DefaultTask() {
         private val threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1)
     }
 
-    /** Directory from which JS files should be taken by compiler */
+    /** Directory from which JS files should be taken by a compiler */
     @get:InputDirectory
     @get:PathSensitive(PathSensitivity.RELATIVE)
     lateinit var fromDir: File
@@ -37,7 +37,7 @@ open class CompileJs : DefaultTask() {
     @get:OutputDirectory
     lateinit var toDir: File
 
-    /** Configuration which should include closure-compiler jar */
+    /** Configuration, which should include closure-compiler jar */
     @get:Classpath
     lateinit var configuration: Configuration
 
@@ -63,7 +63,7 @@ open class CompileJs : DefaultTask() {
     /**
      * Compilation level of closure compiler.
      *
-     * By default it is `SIMPLE_OPTIMIZATIONS`
+     * By default, it is `SIMPLE_OPTIMIZATIONS`
      */
     @get:Input
     var compilationLevel: String = "SIMPLE_OPTIMIZATIONS"
@@ -71,7 +71,7 @@ open class CompileJs : DefaultTask() {
     /**
      * Language level of input code.
      *
-     * By default it is `ECMASCRIPT6`
+     * By default, it is `ECMASCRIPT6`
      */
     @get:Input
     var fromLang: String = "ECMASCRIPT6"
@@ -79,12 +79,12 @@ open class CompileJs : DefaultTask() {
     /**
      * Language level of input code.
      *
-     * By default it is `ECMASCRIPT5`
+     * By default, it is `ECMASCRIPT5`
      */
     @get:Input
     var toLang: String = "ECMASCRIPT5"
 
-    /** Warning level that should be used by `closure-compiler` during compilation */
+    /** Warning level should be used by `closure-compiler` during compilation */
     @get:Input
     var warningLevel: String = "QUIET"
 

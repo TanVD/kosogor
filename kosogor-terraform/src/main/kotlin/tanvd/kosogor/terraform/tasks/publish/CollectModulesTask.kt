@@ -9,6 +9,12 @@ import tanvd.kosogor.terraform.PackageInfo
 import tanvd.kosogor.terraform.utils.GlobalFile
 import java.io.File
 
+/**
+ * Task creates zip archives per package for following publishing.
+ *
+ * It will find packages automatically in project sources — just will
+ * find all directories with `package.json`
+ */
 open class CollectModulesTask : DefaultTask() {
     @TaskAction
     fun collectModules() {
@@ -24,7 +30,6 @@ open class CollectModulesTask : DefaultTask() {
                     )
                     archivePath.parentFile.mkdirs()
                     zipTo(archivePath, it.parentFile)
-
                 }
     }
 }

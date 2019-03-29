@@ -10,14 +10,14 @@ import org.gradle.kotlin.dsl.task
 import tanvd.kosogor.web.utils.*
 
 /**
- * Task checks if there are dependencies which were fixed for specific configuration,
+ * Task checks if there are dependencies, which were fixed for a specific configuration,
  * but now are used in some other configuration.
  *
  * The main purpose of this task is to fix dependencies per configuration (in case
  * of web containers it guarantees that library will always be in the same classloader).
  *
  * Use fixFor to fix dependency in some configuration and ValidateConfigurations task
- * will make sure that this dependency presenter only in this configuration.
+ * will make sure this dependency presenter only in this configuration.
  */
 open class ValidateConfigurations : DefaultTask() {
     init {
@@ -38,7 +38,7 @@ open class ValidateConfigurations : DefaultTask() {
         }
     }
 
-    /** If true, than task will fail build if validation failed. By default -- true */
+    /** If true, then task will fail build if validation failed. By default, true */
     @get:Input
     var failOnValidationError = true
 

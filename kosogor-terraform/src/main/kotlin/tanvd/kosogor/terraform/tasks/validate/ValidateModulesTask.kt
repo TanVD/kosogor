@@ -18,7 +18,7 @@ import java.io.File
  * file with specified in DSL aws provider and `terraform validate`
  * will be executed for this module.
  *
- * Task guarantees syntax correctness of module and it's
+ * Task guarantees syntax correctness of module, and it's
  * compliance to specified version of aws provider.
  */
 open class ValidateModulesTask : DefaultTask() {

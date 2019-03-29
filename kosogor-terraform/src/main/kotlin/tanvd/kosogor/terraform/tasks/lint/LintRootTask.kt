@@ -22,8 +22,8 @@ import java.io.File
  * only if `tflint` returned 0 exit code.
  *
  * NOTE: right now it is better to use `terraform` linter,
- * cause latest `tflint` version is not recommended to use
- * by it's author.
+ * cause author of `tflint` does not recommend using its latest
+ * version.
  */
 open class LintRootTask : DefaultTask() {
     init {

@@ -15,7 +15,7 @@ import org.gradle.kotlin.dsl.getPluginByName
 import org.gradle.plugin.devel.GradlePluginDevelopmentExtension
 import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
 
-//Generated accessors to use in plugin
+//Generated accessors to use in a plugin
 internal val Project._artifactory: ArtifactoryPluginConvention
     get() = ((this as? Project)?.convention ?: (this as HasConvention).convention).getPluginByName("artifactory")
 

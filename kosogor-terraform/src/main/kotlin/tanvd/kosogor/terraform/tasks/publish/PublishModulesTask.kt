@@ -9,6 +9,17 @@ import tanvd.kosogor.terraform.PackageInfo
 import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.GlobalFile
 
+/**
+ * Task publishes zipped modules to HTTP server
+ * (e.g. artifactory generic repository) via PUT method.
+ *
+ * PUT method is executed upon `/$publisher.repository/$modulePath/$fileName`
+ * path and uses basic authorization with an auth from
+ * `username` and `secretKey`.
+ *
+ * If `ignoreExisting` set to true in a publisher config,
+ * then task will not fail on `201` status.
+ */
 open class PublishModulesTask : DefaultTask() {
     init {
         outputs.upToDateWhen { false }

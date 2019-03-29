@@ -5,7 +5,7 @@ import org.gradle.plugins.ide.idea.IdeaPlugin
 import tanvd.kosogor.utils.applyPluginSafely
 import java.io.File
 
-/** Proxy configuration of `idea` plugin */
+/** The proxy configuration of `idea` plugin */
 data class DefaultIdeaConfig(
         val project: Project,
         /** Dirs and files to add to excluded in IDEA */
@@ -17,7 +17,7 @@ data class DefaultIdeaConfig(
             ).toHashSet()
         },
 
-        /** Should IDEA module use global dir for build */
+        /** Should IDEA module use a global dir for build */
         var inheritOutputDirs: Boolean = true,
 
         /** Should IDEA download sources for dependencies */
@@ -30,7 +30,7 @@ data class DefaultIdeaConfig(
 /**
  * Configure IDEA task of this project. Should be used for root project.
  *
- * By default excludes most of the build and tmp dirs, gradle utility files and so on.
+ * By default, excludes most of the build and tmp dirs, gradle utility files and so on.
  *
  * Used in default chain of Kosogor plugin.
  */

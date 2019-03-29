@@ -8,9 +8,9 @@ import java.io.File
 /**
  * Configure build dir.
  *
- * By default overrides projects to use dir with name `${project.name}` inside global build dir.
+ * By default, overrides projects to use dir with a name `${project.name}` inside global build dir.
  *
- * Also adds build dir to clean task or create it, if it does not exist.
+ * Also, adds build dir to clean task or create it, if it does not exist.
  *
  * Used in default chain of Kosogor plugin.
  */

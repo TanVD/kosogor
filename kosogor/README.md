@@ -1,6 +1,6 @@
 # kosogor
 
-`kosogor` is a plugin which provides reasonable defaults and simplified Kotlin-DSL interface to Gradle plugins and API functions used in everyday development.
+`kosogor` is a plugin, which provides reasonable defaults and simplified Kotlin-DSL interface to Gradle plugins and API functions used in everyday development.
 
 It includes simplified Kotlin-DSL interfaces for:
 * IDEA plugin
@@ -35,16 +35,16 @@ The only thing you need to do to get all the defaults is to apply Kosogor plugin
 
 The default configuration of Kosogor plugin on apply will:
 * Apply `idea` plugin if not applied. The default configuration will add to `excluded` most of the build and tmp dirs, 
-gradle utility files and so on. Also, will be enabled download of javadocs, sources for dependencies and inheritance
+gradle utility files and so on. Also, will be enabled a download of javadocs, sources for dependencies and inheritance
 of output dirs 
 * Setup `wrapper` version to `5.2.1` (the latest stable on the date of release).
 * Setup global build dir for projects (each project will be built below own project dir inside of global). This behavior 
-is similar to IntelliJ IDEA behavior with flag `inheritOutputDirs`. Also, `clean` tasks in projects will be updated (or 
+is similar to IntelliJ IDEA behavior with a flag `inheritOutputDirs`. Also, `clean` tasks in projects will be updated (or 
 created if not existed) to remove build dirs created.
 
 ### Jar publishing
 
-Kosogor includes facade to a collection of publishing tasks implemented by `Jar`, `maven-publish`, `com.jfrog.artifactory`,
+Kosogor includes a facade to a collection of publishing tasks implemented by `Jar`, `maven-publish`, `com.jfrog.artifactory`,
 `com.jfrog.bintray` APIs.
 
 The facade is quite simple. You just use `publishJar` lambda and passes to it in a declarative Kotlin-DSL format configuration you need:
@@ -70,14 +70,14 @@ publishing) and task generating Jar with sources named `sourcesJar`. Then it wil
 (if not already applied) and prepare package including jar, sources and pom to publish to artifactory. 
 
 Note, that by default jar and sources also created, in example we just override some parameters. Of course, it is possible 
-to disable generation of some parts of package and it will be also removed from package published to artifactory.
+to disable generation of some parts of package, and it will be also removed from package published to artifactory.
 
 You can use also `bintray` to set up bintray publishing. It does not intersect with `artifactory` and both can 
 be used simultaneously.
 
 ### Gradle plugin publishing
 
-Kosogor includes simplified facade to `java-gradle-plugin` and `com.gradle.publish-plugin`
+Kosogor includes a simplified facade to `java-gradle-plugin` and `com.gradle.publish-plugin`
 
 Here is the real definition of Kosogor plugin publisher:
 ```kotlin
@@ -102,7 +102,7 @@ if not applied and sets up all the needed publishing configuration to publish pl
 
 ### Shadow jar 
 
-Kosogor includes simplified facade to `com.github.johnrengelman.shadow`.
+Kosogor includes a simplified facade to `com.github.johnrengelman.shadow`.
 
 ```kotlin
 shadowJar {
@@ -115,4 +115,4 @@ shadowJar {
 
 This code will apply `com.github.johnrengelman.shadow` if it is not already applied. Then it will override some defaults
 of shadowJar plugin with values passed with DSL. In example, we override the name of resulting archive and mainClass (which is pushed
-to manifest). By default, destination dir for shadowJar is `$global_build_dir/shadow` but you can also override it.
+to manifest). By default, destination dir for shadowJar is `$global_build_dir/shadow`, but you can also override it.

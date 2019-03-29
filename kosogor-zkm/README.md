@@ -1,6 +1,6 @@
 # kosogor-zkm
 
-`kosogor-zkm` is a plugin which provides Kotlin-DSL facade to ZKM obfuscation.
+`kosogor-zkm` is a plugin, which provides Kotlin-DSL facade to ZKM obfuscation.
 
 It wraps call of `ZKM` into Gradle task and passes to its script few predefined variables from task definition.
 
@@ -17,10 +17,10 @@ plugins {
 ```
 ## ZKM task
 
-ZKM task provides simple interface to ZKM from Gradle.
+ZKM task provides a simple interface to ZKM from Gradle.
 
 It passes following variables from task definition to ZKM environment:
-* inputJars &mdash; it will be `%INPUT_JARS%` variable which evaluates into `open absolutePath.jar`
+* inputJars &mdash; it will be `%INPUT_JARS%` variable, which evaluates into `open absolutePath.jar`
 * outputDir &mdash; it will be `%OUPUT_DIR%` variable
 * changeLogFile &mdash; it will be `%CHANGELOG_FILE%` variable (can be used for `changeLogFileOut`)
 * zkmLogFile &mdash; used in call of zkm.jar as `-l zkmLogFile.absolutePath`

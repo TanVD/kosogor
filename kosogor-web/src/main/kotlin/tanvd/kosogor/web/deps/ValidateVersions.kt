@@ -29,7 +29,7 @@ open class ValidateVersions : DefaultTask() {
 
     internal companion object : Console("Dependencies Versions Validation>>> ", Color.RED)
 
-    /** If true, than task will fail build if validation failed. By default -- true */
+    /** If true, then task will fail build if validation failed. By default, true */
     @get:Input
     var failOnValidationError = true
 

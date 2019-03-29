@@ -27,7 +27,7 @@ import java.io.File
  * Tasks for publishing will be created automatically, if any
  * `package.json` found in project sources.
  *
- * Also it creates tasks for build preparation:
+ * Also, it creates tasks for build preparation:
  * * Download of needed binaries: Terraform, TfLint
  * * Download of remote artifacts: jars, archives
  */

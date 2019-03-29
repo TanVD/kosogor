@@ -10,7 +10,7 @@ data class PublishPluginConfig(
         var id: String? = null,
         /** Name that will be displayed on Gradle plugins portal */
         var displayName: String? = null,
-        /** Version of plugin. By default equals to version of project. */
+        /** Version of plugin. By default, equals to version of project. */
         var version: String? = null,
         /** Class implementing plugin interface */
         var implementationClass: String? = null,
@@ -25,7 +25,7 @@ data class PublishPluginConfig(
 }
 
 /**
- * Provides simple interface to Gradle plugin publishing
+ * Provides a simple interface to Gradle plugin publishing
  *
  * Will apply `java-gradle-plugin` and `com.gradle.plugin-publish` if it is not already applied
  */

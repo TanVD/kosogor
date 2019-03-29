@@ -11,7 +11,7 @@ import java.io.File
 
 /** Configuration of `shadowJar` proxy */
 class ShadowJarProxy(private val project: Project) {
-    /** Name to use for task. By default is shadowJar. */
+    /** Name to use for a task. By default, is shadowJar. */
     var taskName: String = "shadowJar"
 
     data class ShadowJarConfig(
@@ -37,7 +37,7 @@ class ShadowJarProxy(private val project: Project) {
 }
 
 /**
- * Provides simple interface to shadowJar plugin through proxy
+ * Provides a simple interface to shadowJar plugin through proxy
  *
  * Will apply `com.github.johnrengelman.shadow` if it is not already applied
  */

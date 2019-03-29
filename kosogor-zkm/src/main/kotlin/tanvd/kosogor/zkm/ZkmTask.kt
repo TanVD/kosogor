@@ -46,7 +46,7 @@ open class ZkmTask : DefaultTask() {
     @get:Internal
     lateinit var zkmLogFile: File
 
-    /** Classpath which should be used by ZKM during obfuscation */
+    /** Classpath, which should be used by ZKM during obfuscation */
     @get:Classpath
     lateinit var zkmClasspath: Set<Configuration>
 
