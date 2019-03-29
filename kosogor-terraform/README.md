@@ -66,8 +66,44 @@ terraform {
 
 ### Linting support
 
+`kosogor-terraform` supports linting of terraform source roots 
+out of the box.
 
+It uses terraform itself or TfLint to check correctness.
 
+If terraform chosen in DSL as linter, then `plan` operation will 
+be performed and linting will be successful only if `plan` 
+returned 0 exit code.
+
+If `tflint` chosen in DSL as linter, then it will be executed 
+upon provided source root and linting will be successful only 
+if `tflint` returned 0 exit code.
+
+Linting is executed upon terraform sources root (for modules 
+`validate` task acts as linter).
+
+Setting up sources roots linting is very simple:
+```kotlin
+
+terraform {
+    config {
+        tfVersion = "0.11.11"
+        awsProvider = "1.60.0"
+        awsRegion = "eu-west-1"
+        awsProfile = "default"
+    }
+    
+    lint {
+        linter = LinterType.Terraform
+    }
+
+    root("example", File(projectDir, "terraform"))
+}
+```
+
+For such configuration task `default.lint` will be created.
+
+Note, by default `LinterType.Terraform` will be used
 
 ## Authors
 
