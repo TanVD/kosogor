@@ -7,6 +7,7 @@ setting plugins configurations, which should be defaults or using verbose plugin
 
 It includes a few different plugins:
 * `kosogor` &mdash; simplified Kotlin-DSL facades and defaults for everyday development. See it's [README](https://github.com/TanVD/kosogor/blob/master/kosogor)
+* `kosogor-terraform` &mdash; support of Terraform in Gradle — from modules publish to deployment. See it's [README](https://github.com/TanVD/kosogor/blob/master/kosogor-terraform)
 * `kosogor-web` &mdash; tasks and facades simplifying Web development (from War preparation to Js minification). See it's [README](https://github.com/TanVD/kosogor/blob/master/kosogor-web)
 * `kosogor-zkm` &mdash; Gradle wrapper for ZKM-based obfuscation, clean and simple.  See it's [README](https://github.com/TanVD/kosogor/blob/master/kosogor-zkm)
 

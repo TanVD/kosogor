@@ -25,7 +25,7 @@ publishPlugin {
     info {
         website = "https://github.com/TanVD/kosogor"
         vcsUrl = "https://github.com/TanVD/kosogor"
-        description = "Support of Terraform in Gradle -- from modules publish to deployment"
+        description = "Support of Terraform in Gradle — from modules publish to deployment"
         tags.addAll(listOf("terraform", "kotlin", "kotlin-dsl"))
     }
 }
