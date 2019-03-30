@@ -96,7 +96,7 @@ class TerraformDsl(var project: Project? = null) {
                 task.description = "${operation.name.toLowerCase().capitalize()} root $name"
 
                 task.operation = operation
-                task.targets = targets
+                task.targets.addAll(targets)
                 task.root = dir
             }
         }

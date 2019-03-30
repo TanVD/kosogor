@@ -70,10 +70,8 @@ open class ValidateModulesTask : DefaultTask() {
     }
 
     private fun validate(workingDir: File) {
-        val retValidate = CommandLine.execute(
-                GlobalFile.tfBin.absolutePath, listOf("validate", "-check-variables=false"),
-                workingDir, true
-        )
+        val retValidate = CommandLine.execute(GlobalFile.tfBin.absolutePath, listOf("validate", "-check-variables=false"),
+                workingDir, true)
         if (retValidate != 0) {
             error("Terraform validate failed")
         }

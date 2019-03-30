@@ -24,10 +24,7 @@ open class CollectModulesTask : DefaultTask() {
                 .forEach {
                     val packageInfo = Klaxon().parse<PackageInfo>(it.readText())!!
 
-                    val archivePath = File(
-                            GlobalFile.modulesDir,
-                            "${packageInfo.groupPath()}/${packageInfo.name}/${packageInfo.version}.zip"
-                    )
+                    val archivePath = File(GlobalFile.modulesDir, "${packageInfo.groupPath()}/${packageInfo.name}/${packageInfo.version}.zip")
                     archivePath.parentFile.mkdirs()
                     zipTo(archivePath, it.parentFile)
                 }

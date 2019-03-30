@@ -21,23 +21,21 @@ open class TerraformOperation : DefaultTask() {
     }
 
     enum class Operation(val op: List<String>) {
-        INIT(listOf("init")),
-        PLAN(listOf("plan")),
-        APPLY(listOf("apply", "-auto-approve")),
-        DESTROY(listOf("destroy", "-auto-approve")),
-        OUTPUT(listOf("output"));
+        INIT("init"),
+        PLAN("plan"),
+        APPLY("apply", "-auto-approve"),
+        DESTROY("destroy", "-auto-approve"),
+        OUTPUT("output");
+
+        constructor(vararg op: String) : this(op.toList())
     }
 
     lateinit var operation: Operation
-    lateinit var targets: LinkedHashSet<String>
+    val targets: LinkedHashSet<String> = LinkedHashSet()
     lateinit var root: File
 
     @TaskAction
     fun execOperation() {
-        targets = LinkedHashSet(targets.map { "-target=$it" })
-
-        val args = operation.op + targets
-
-        CommandLine.execute(GlobalFile.tfBin.absolutePath, args, root, redirectStdout = true, redirectErr = true)
+        CommandLine.execute(GlobalFile.tfBin.absolutePath, operation.op + targets.map { "-target=$it" }, root, redirectStdout = true, redirectErr = true)
     }
 }

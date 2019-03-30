@@ -3,7 +3,7 @@ package tanvd.kosogor.terraform.tasks.lint
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
-import tanvd.kosogor.terraform.TerraformDsl
+import tanvd.kosogor.terraform.TerraformDsl.Linter.LinterType
 import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.*
 import java.io.File
@@ -39,7 +39,7 @@ open class LintRootTask : DefaultTask() {
     @TaskAction
     fun lintDir() {
         when (terraformDsl.linter.linter) {
-            TerraformDsl.Linter.LinterType.Terraform -> {
+            LinterType.Terraform -> {
                 val retInit = CommandLine.execute(GlobalFile.tfBin.absolutePath, listOf("init"), root)
                 if (retInit != 0) {
                     error("Terraform init failed (during linting)")
@@ -50,7 +50,7 @@ open class LintRootTask : DefaultTask() {
                     error("Terraform plan failed (during linting)")
                 }
             }
-            TerraformDsl.Linter.LinterType.TfLint -> {
+            LinterType.TfLint -> {
                 val retLint = CommandLine.execute(GlobalFile.tfLintBin.absolutePath, emptyList(), root)
                 if (retLint != 0) {
                     error("TfLint failed")
