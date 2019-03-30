@@ -39,10 +39,7 @@ class TerraformDsl(var project: Project? = null) {
         publisher.configure()
     }
 
-    data class Linter(
-            var linter: LinterType = LinterType.Terraform,
-            var roots: LinkedHashSet<File> = LinkedHashSet()
-    ) {
+    data class Linter(var linter: LinterType = LinterType.Terraform) {
         enum class LinterType {
             Terraform,
             TfLint
