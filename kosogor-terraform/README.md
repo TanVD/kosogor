@@ -64,6 +64,20 @@ terraform {
 }
 ```
 
+Then just create in a directory of module `package.json` file with 
+following structure:
+```json
+{
+  "group": "com.example",
+  "name": "package",
+  "version": "1.0.0"
+}
+
+```
+
+Tasks will find such files under the sources root and will consider
+them as terraform modules.
+
 ### Deployment support
 
 `kosogor-terraform` supports deployment of infrastructure via
