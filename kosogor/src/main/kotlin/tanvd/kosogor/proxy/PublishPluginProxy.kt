@@ -6,7 +6,7 @@ import tanvd.kosogor.utils.*
 
 /** Configuration of `publishPlugin` facade */
 data class PublishPluginConfig(
-        /** Id of plugin to publish */
+        /** ID of plugin to publish */
         var id: String? = null,
         /** Name that will be displayed on Gradle plugins portal */
         var displayName: String? = null,

@@ -15,7 +15,7 @@ It includes a few different plugins:
 
 The priority of Kosogor project is to make Gradle simple and concise for everyday use. Feel free to add issues on extending
 Kosogor with facades for the plugins/systems you use. Probably such issues will be implemented in Kosogor itself
-or derivating plugins will occur (like `kosogor-zkm` already exists).
+or deriving plugins will occur (like `kosogor-zkm` already exists).
 
 ## Examples
 

@@ -21,7 +21,7 @@ ZKM task provides a simple interface to ZKM from Gradle.
 
 It passes following variables from task definition to ZKM environment:
 * inputJars &mdash; it will be `%INPUT_JARS%` variable, which evaluates into `open absolutePath.jar`
-* outputDir &mdash; it will be `%OUPUT_DIR%` variable
+* outputDir &mdash; it will be `%OUTPUT_DIR%` variable
 * changeLogFile &mdash; it will be `%CHANGELOG_FILE%` variable (can be used for `changeLogFileOut`)
 * zkmLogFile &mdash; used in call of zkm.jar as `-l zkmLogFile.absolutePath`
 

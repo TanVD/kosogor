@@ -37,7 +37,7 @@ The default configuration of Kosogor plugin on apply will:
 * Apply `idea` plugin if not applied. The default configuration will add to `excluded` most of the build and tmp dirs, 
 gradle utility files and so on. Also, will be enabled a download of javadocs, sources for dependencies and inheritance
 of output dirs 
-* Setup `wrapper` version to `5.2.1` (the latest stable on the date of release).
+* Setup `wrapper` version to `5.3.1` (the latest stable on the date of release).
 * Setup global build dir for projects (each project will be built below own project dir inside of global). This behavior 
 is similar to IntelliJ IDEA behavior with a flag `inheritOutputDirs`. Also, `clean` tasks in projects will be updated (or 
 created if not existed) to remove build dirs created.
@@ -79,7 +79,7 @@ be used simultaneously.
 
 Kosogor includes a simplified facade to `java-gradle-plugin` and `com.gradle.publish-plugin`
 
-Here is the real definition of Kosogor plugin publisher:
+Here is the definition of Kosogor plugin publisher:
 ```kotlin
 publishPlugin {
     id = "tanvd.kosogor"
@@ -98,7 +98,7 @@ publishPlugin {
 
 Such a quite concise piece of code applies `java-gradle-plugin` if not applied and sets up plugin bundle
 definition with specified id and implementation class. After it applies `com.gradle.plugin-publish`
-if not applied and sets up all the needed publishing configuration to publish plugin to `plugins.gradle.org`.
+if not applied and sets up all the needed publishing configuration to publish a plugin to `plugins.gradle.org`.
 
 ### Shadow jar 
 

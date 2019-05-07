@@ -73,7 +73,7 @@ class PublishJarProxy {
              * If not set, will be taken from System environment param `artifactory_key`
              */
             var secretKey: String? = System.getenv("artifactory_key"),
-            /** Should published artifact include pom.xml */
+            /** Should the published artifact include pom.xml */
             var publishPom: Boolean = true
     )
 
@@ -118,7 +118,7 @@ class PublishJarProxy {
 }
 
 /**
- * Provides simple interface to jar, maven-publish and artifactory plugin through proxy
+ * Provides a simple interface to jar, maven-publish and artifactory plugin through proxy
  *
  * Will apply `maven-publish` if it is not already applied and `jar { ... }` is used
  * Will apply `com.jfrog.artifactory` if it is not already applied and `artifactory { ... }` is used

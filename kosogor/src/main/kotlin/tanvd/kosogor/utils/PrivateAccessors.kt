@@ -24,7 +24,7 @@ internal fun Project._artifactory(configure: ArtifactoryPluginConvention.() -> U
 internal fun Project._publishing(configure: PublishingExtension.() -> Unit) = extensions.configure("publishing", configure)
 
 internal fun Project._bintray(configure: BintrayExtension.() -> Unit): Unit =
-        (this as org.gradle.api.plugins.ExtensionAware).extensions.configure("bintray", configure)
+        (this as ExtensionAware).extensions.configure("bintray", configure)
 
 internal fun Project._pluginBundle(configure: PluginBundleExtension.() -> Unit) = (this as ExtensionAware).extensions.configure("pluginBundle", configure)
 

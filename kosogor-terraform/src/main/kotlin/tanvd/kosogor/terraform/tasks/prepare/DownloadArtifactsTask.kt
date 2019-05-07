@@ -32,7 +32,7 @@ open class DownloadArtifactsTask : DefaultTask() {
             } else {
                 Downloads.download(url, file, archiver, filter)
             }
-            logger.lifecycle("Remote artifact for URL ${url.toExternalForm()} successfully downloaded")
+            logger.lifecycle("A remote artifact for URL ${url.toExternalForm()} successfully downloaded")
         }
     }
 }

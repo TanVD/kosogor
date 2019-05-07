@@ -26,7 +26,7 @@ internal object Downloads {
 
     fun download(url: URL, toFile: File, archive: Archive, filterToRoot: (File) -> Boolean) {
         val tmpDir = File(toFile, "tmp_${RandomCode.next()}")
-        Downloads.download(url, tmpDir, archive)
+        download(url, tmpDir, archive)
         Files.walk(tmpDir.toPath())
                 .filter { filterToRoot(it.toFile()) }
                 .forEach {
