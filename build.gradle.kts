@@ -5,9 +5,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "tanvd.kosogor"
 
 plugins {
-    id("tanvd.kosogor") version "1.0.4" apply true
+    id("tanvd.kosogor") version "1.0.5" apply true
     id("io.gitlab.arturbosch.detekt").version("1.0.0-RC14") apply true
-    kotlin("jvm") version "1.3.21" apply true
+    kotlin("jvm") version "1.3.31" apply true
 }
 
 repositories {

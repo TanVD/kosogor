@@ -37,7 +37,7 @@ The default configuration of Kosogor plugin on apply will:
 * Apply `idea` plugin if not applied. The default configuration will add to `excluded` most of the build and tmp dirs, 
 gradle utility files and so on. Also, will be enabled a download of javadocs, sources for dependencies and inheritance
 of output dirs 
-* Setup `wrapper` version to `5.3.1` (the latest stable on the date of release).
+* Setup `wrapper` version to `5.4.1` (the latest stable on the date of release).
 * Setup global build dir for projects (each project will be built below own project dir inside of global). This behavior 
 is similar to IntelliJ IDEA behavior with a flag `inheritOutputDirs`. Also, `clean` tasks in projects will be updated (or 
 created if not existed) to remove build dirs created.

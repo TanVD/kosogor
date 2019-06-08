@@ -9,7 +9,7 @@ import java.io.File
 data class DefaultIdeaConfig(
         val project: Project,
         /** Dirs and files to add to excluded in IDEA */
-        val exclude: Set<File> = with(project) {
+        val exclude: MutableSet<File> = with(project) {
             files(
                     ".gradle", ".gradle-cache", "gradle", "gradlew", "gradlew.bat",
                     ".idea",
