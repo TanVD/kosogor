@@ -88,6 +88,7 @@ publishPlugin {
     version = project.version.toString()
 
     info {
+        publish = true
         website = "https://github.com/TanVD/kosogor"
         vcsUrl = "https://github.com/TanVD/kosogor"
         description = "Reasonable defaults and simplified Kotlin-DSL interfaces for everyday development"

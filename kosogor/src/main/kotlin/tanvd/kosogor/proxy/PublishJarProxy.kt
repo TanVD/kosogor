@@ -102,7 +102,8 @@ class PublishJarProxy {
             val info: Information = Information()) {
         data class Information(var githubRepo: String? = null, var vcsUrl: String? = null,
                                var userOrg: String? = null, var labels: ArrayList<String> = ArrayList(),
-                               var license: String? = null, var description: String? = null)
+                               var license: String? = null, var description: String? = null,
+                               var publish: Boolean = true)
 
         fun info(configure: Information.() -> Unit) {
             info.configure()
@@ -176,7 +177,7 @@ fun Project.publishJar(configure: PublishJarProxy.() -> Unit): PublishJarProxy {
         _bintray {
             user = config.bintrayConfig.username
             key = config.bintrayConfig.secretKey
-            publish = true
+            publish = config.bintrayConfig.info.publish
             setPublications(config.publicationConfig.publicationName)
             pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
                 repo = config.bintrayConfig.repository
