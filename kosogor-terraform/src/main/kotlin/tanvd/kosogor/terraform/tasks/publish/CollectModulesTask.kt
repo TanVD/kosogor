@@ -6,6 +6,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.support.zipTo
 import tanvd.kosogor.terraform.PackageInfo
+import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.GlobalFile
 import java.io.File
 
@@ -18,7 +19,11 @@ import java.io.File
 open class CollectModulesTask : DefaultTask() {
     @TaskAction
     fun collectModules() {
-        project.projectDir
+        val workDir = terraformDsl.collector.directory?.let {
+            File(it)
+        } ?: project.projectDir
+
+        workDir
                 .walk()
                 .filter { it.absolutePath.endsWith("/package.json") }
                 .forEach {
