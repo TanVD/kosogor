@@ -24,6 +24,16 @@ class TerraformDsl(var project: Project? = null) {
         config.configure()
     }
 
+    data class ModulesCollector(
+            var directory: String? = null
+    )
+
+    internal var collector = ModulesCollector()
+    /** Configuration of modules collecting */
+    fun collect(configure: ModulesCollector.() -> Unit) {
+        collector.configure()
+    }
+
     data class Publisher(
             var serverUrl: String? = System.getenv("server_url"),
             var repository: String? = System.getenv("repository"),
