@@ -23,10 +23,17 @@ open class CollectModulesTask : DefaultTask() {
                 .filter { it.absolutePath.endsWith("/package.json") }
                 .forEach {
                     val packageInfo = Klaxon().parse<PackageInfo>(it.readText())!!
+                    val currentDir = it.parentFile
 
                     val archivePath = File(GlobalFile.modulesDir, "${packageInfo.groupPath()}/${packageInfo.name}/${packageInfo.version}.zip")
+
+                    val files = currentDir.walk()
+                            .filter { !it.relativeTo(currentDir).startsWith(".terraform") }
+                            .filter { it.isFile }
+                            .map { Pair(it.relativeTo(currentDir).toString(), it.readBytes()) }
+
                     archivePath.parentFile.mkdirs()
-                    zipTo(archivePath, it.parentFile)
+                    zipTo(archivePath, files)
                 }
     }
 }
