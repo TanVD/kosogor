@@ -62,7 +62,8 @@ class TerraformDsl(var project: Project? = null) {
         linter.configure()
     }
 
-    data class Validater(val cacheInitPlugins: Boolean = true)
+    data class Validater(val cacheInitPlugins: Boolean = true,
+                         val directory: String? = null)
 
     internal val validater = Validater()
     fun validate(configure: Validater.() -> Unit) {

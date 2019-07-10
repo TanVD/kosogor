@@ -31,9 +31,14 @@ open class ValidateModulesTask : DefaultTask() {
 
     @TaskAction
     fun validateModules() {
-        project.projectDir
+        val workDir = terraformDsl.validater.directory?.let {
+            File(it)
+        } ?: project.projectDir
+
+        workDir
                 .walk()
                 .filter { it.absolutePath.endsWith("/package.json") }
+                .filter { !it.parent.contains(".terraform") }
                 .forEach { file ->
                     val workingDir = file.parentFile
 
