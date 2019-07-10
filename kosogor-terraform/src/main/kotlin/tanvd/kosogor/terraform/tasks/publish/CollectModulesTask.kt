@@ -26,6 +26,7 @@ open class CollectModulesTask : DefaultTask() {
         workDir
                 .walk()
                 .filter { it.absolutePath.endsWith("/package.json") }
+                .filter { !it.parent.contains(".terraform") }
                 .forEach {
                     val packageInfo = Klaxon().parse<PackageInfo>(it.readText())!!
                     val currentDir = it.parentFile
