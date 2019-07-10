@@ -39,7 +39,8 @@ class TerraformDsl(var project: Project? = null) {
             var repository: String? = System.getenv("repository"),
             var username: String? = System.getenv("username"),
             var secretKey: String? = System.getenv("secret_key"),
-            var ignoreExisting: Boolean = false
+            var ignoreErrorIfArtifactExists: Boolean = true,
+            var overwriteSnapshots: Boolean = true
     )
 
     var enablePublisher = false

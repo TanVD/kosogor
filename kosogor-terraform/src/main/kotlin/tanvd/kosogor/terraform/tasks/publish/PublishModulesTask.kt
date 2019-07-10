@@ -39,15 +39,16 @@ open class PublishModulesTask : DefaultTask() {
                     val fullPath = "/${terraformDsl.publisher.repository}/$modulePath/${it.name}"
 
                     val parts = modulePath.split("/")
-                    val info = PackageInfo(parts.dropLast(1).joinToString("."), parts.takeLast(1).single(), it.name)
+                    val info = PackageInfo(parts.dropLast(1).joinToString("."), parts.takeLast(1).single(), it.nameWithoutExtension)
 
                     val exists = checkIfExists(fullPath, info)
 
-                    if (exists && !terraformDsl.publisher.ignoreExisting) {
+                    if (exists && !terraformDsl.publisher.ignoreErrorIfArtifactExists)  {
                         error("Artifact $info already exists.")
                     }
 
-                    if (!exists) {
+                    if (!exists || (terraformDsl.publisher.overwriteSnapshots && info.version.endsWith("SNAPSHOT"))) {
+
                         val response = Fuel.put("/${terraformDsl.publisher.repository}/$modulePath/${it.name}")
                                 .authentication().basic(terraformDsl.publisher.username!!, terraformDsl.publisher.secretKey!!)
                                 .body(it.readBytes())
