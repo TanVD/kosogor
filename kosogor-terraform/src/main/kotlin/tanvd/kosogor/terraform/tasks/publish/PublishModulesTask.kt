@@ -43,7 +43,7 @@ open class PublishModulesTask : DefaultTask() {
 
                     val exists = checkIfExists(fullPath, info)
 
-                    if (exists && !terraformDsl.publisher.ignoreExisting)  {
+                    if (exists && !terraformDsl.publisher.ignoreErrorIfArtifactExists)  {
                         error("Artifact $info already exists.")
                     }
 
