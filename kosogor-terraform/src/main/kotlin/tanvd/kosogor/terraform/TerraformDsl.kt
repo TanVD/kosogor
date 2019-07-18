@@ -89,7 +89,8 @@ class TerraformDsl(var project: Project? = null) {
     }
 
 
-    fun root(name: String, dir: File, enableDestroy: Boolean = false, targets: LinkedHashSet<String> = LinkedHashSet()) {
+    fun root(name: String, dir: File, enableDestroy: Boolean = false, targets: LinkedHashSet<String> = LinkedHashSet(),
+             variables: LinkedHashMap<String, Any> = LinkedHashMap()) {
         val lint = project!!.tasks.create("$name.lint", LintRootTask::class.java) { task ->
             task.group = "terraform.$name"
             task.description = "Lint root $name"
@@ -108,6 +109,7 @@ class TerraformDsl(var project: Project? = null) {
 
                 task.operation = operation
                 task.targets.addAll(targets)
+                task.variables.putAll(variables)
                 task.root = dir
             }
         }

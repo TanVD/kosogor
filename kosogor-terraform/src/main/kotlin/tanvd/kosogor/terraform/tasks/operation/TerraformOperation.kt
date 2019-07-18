@@ -32,10 +32,23 @@ open class TerraformOperation : DefaultTask() {
 
     lateinit var operation: Operation
     val targets: LinkedHashSet<String> = LinkedHashSet()
+    val variables: LinkedHashMap<String, Any> = LinkedHashMap()
     lateinit var root: File
 
     @TaskAction
     fun execOperation() {
-        CommandLine.execute(GlobalFile.tfBin.absolutePath, operation.op + targets.map { "-target=$it" }, root, redirectStdout = true, redirectErr = true)
+        CommandLine.execute(GlobalFile.tfBin.absolutePath, operation.op + targets.map { "-target=$it" } + variables.map {
+            "-var '${it.key}=${stringifyVariable(it.value)}'"
+        }, root, redirectStdout = true, redirectErr = true)
+    }
+
+    private fun stringifyVariable(variable: Any): String = when (variable) {
+        is Number, Boolean, String -> "\"$variable\""
+        is Map<*, *> -> variable.mapNotNull { entry ->
+            entry.value?.let {
+                "${entry.key}=${stringifyVariable(it)}"
+            }}.joinToString(", ", "{", "}")
+        is List<*> -> variable.filterNotNull().joinToString(", ", "[", "]") { stringifyVariable(it) }
+        else -> error("Unsupported variable type")
     }
 }
