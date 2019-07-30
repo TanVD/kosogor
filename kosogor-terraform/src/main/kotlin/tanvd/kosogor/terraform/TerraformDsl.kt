@@ -24,6 +24,20 @@ class TerraformDsl(var project: Project? = null) {
         config.configure()
     }
 
+    data class Parameters(
+            var init: List<String>? = null,
+            var plan: List<String>? = null,
+            var apply: List<String>? = null,
+            var destroy: List<String>? = null,
+            var output: List<String>? = null,
+            var lint: List<String>? = null
+    )
+
+    internal val parameters = Parameters()
+    fun parameters(configure: Parameters.() -> Unit) {
+        parameters.configure()
+    }
+
     data class ModulesCollector(
             var directory: String? = null
     )
@@ -97,7 +111,9 @@ class TerraformDsl(var project: Project? = null) {
             task.root = dir
         }
 
-        fun terraformOperation(operation: TerraformOperation.Operation, vararg depends: Task): Task {
+        fun terraformOperation(operation: TerraformOperation.Operation,
+                               parameters: List<String>?,
+                               vararg depends: Task): Task {
             return project!!.tasks.create(
                     "$name.${operation.name.toLowerCase()}",
                     TerraformOperation::class.java
@@ -108,17 +124,20 @@ class TerraformDsl(var project: Project? = null) {
 
                 task.operation = operation
                 task.targets.addAll(targets)
+                if (parameters != null) {
+                    task.parameters.addAll(parameters)
+                }
                 task.root = dir
             }
         }
 
-        val init = terraformOperation(TerraformOperation.Operation.INIT)
-        val plan = terraformOperation(TerraformOperation.Operation.PLAN, init)
-        val apply = terraformOperation(TerraformOperation.Operation.APPLY, init)
+        val init = terraformOperation(TerraformOperation.Operation.INIT, parameters.init)
+        val plan = terraformOperation(TerraformOperation.Operation.PLAN, parameters.plan, init)
+        val apply = terraformOperation(TerraformOperation.Operation.APPLY, parameters.apply, init)
         if (enableDestroy) {
-            val destroy = terraformOperation(TerraformOperation.Operation.DESTROY, init)
+            val destroy = terraformOperation(TerraformOperation.Operation.DESTROY, parameters.destroy, init)
         }
-        val output = terraformOperation(TerraformOperation.Operation.OUTPUT, init)
+        val output = terraformOperation(TerraformOperation.Operation.OUTPUT, parameters.output, init)
     }
 }
 
