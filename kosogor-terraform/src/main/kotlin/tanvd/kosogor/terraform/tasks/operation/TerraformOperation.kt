@@ -32,10 +32,11 @@ open class TerraformOperation : DefaultTask() {
 
     lateinit var operation: Operation
     val targets: LinkedHashSet<String> = LinkedHashSet()
+    val parameters = ArrayList<String>()
     lateinit var root: File
 
     @TaskAction
     fun execOperation() {
-        CommandLine.execute(GlobalFile.tfBin.absolutePath, operation.op + targets.map { "-target=$it" }, root, redirectStdout = true, redirectErr = true)
+        CommandLine.execute(GlobalFile.tfBin.absolutePath, operation.op + targets.map { "-target=$it" } + parameters, root, redirectStdout = true, redirectErr = true)
     }
 }
