@@ -32,7 +32,7 @@ open class TerraformOperation : DefaultTask() {
 
     lateinit var operation: Operation
     val targets: LinkedHashSet<String> = LinkedHashSet()
-    val parameters = mutableListOf<String>()
+    val parameters = ArrayList<String>()
     lateinit var root: File
 
     @TaskAction

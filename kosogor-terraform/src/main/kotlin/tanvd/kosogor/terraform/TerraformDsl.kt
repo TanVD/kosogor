@@ -25,12 +25,12 @@ class TerraformDsl(var project: Project? = null) {
     }
 
     data class Parameters(
-            var init: List<String>? = null,
-            var plan: List<String>? = null,
-            var apply: List<String>? = null,
-            var destroy: List<String>? = null,
-            var output: List<String>? = null,
-            var lint: List<String>? = null
+            var init: Iterable<String>? = null,
+            var plan: Iterable<String>? = null,
+            var apply: Iterable<String>? = null,
+            var destroy: Iterable<String>? = null,
+            var output: Iterable<String>? = null,
+            var lint: Iterable<String>? = null
     )
 
     internal val parameters = Parameters()
@@ -112,7 +112,7 @@ class TerraformDsl(var project: Project? = null) {
         }
 
         fun terraformOperation(operation: TerraformOperation.Operation,
-                               parameters: List<String>?,
+                               parameters: Iterable<String>?,
                                vararg depends: Task): Task {
             return project!!.tasks.create(
                     "$name.${operation.name.toLowerCase()}",
@@ -124,9 +124,7 @@ class TerraformDsl(var project: Project? = null) {
 
                 task.operation = operation
                 task.targets.addAll(targets)
-                if (parameters != null) {
-                    task.parameters.addAll(parameters)
-                }
+                task.parameters.addAll(parameters ?: emptyList())
                 task.root = dir
             }
         }
