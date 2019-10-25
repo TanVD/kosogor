@@ -1,6 +1,7 @@
 package tanvd.kosogor.terraform.tasks.operation
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 import tanvd.kosogor.terraform.utils.*
 import java.io.File
@@ -24,6 +25,7 @@ open class TerraformOperation : DefaultTask() {
         INIT("init"),
         PLAN("plan"),
         APPLY("apply", "-auto-approve"),
+        WORKSPACE("workspace"),
         DESTROY("destroy", "-auto-approve"),
         OUTPUT("output");
 

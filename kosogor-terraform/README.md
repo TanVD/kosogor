@@ -112,6 +112,29 @@ itself into the build directory.
 You can specify targets in root and enable creation
 of `destroy` operation (disabled by default) also from DSL.
 
+#### terraform workspaces
+
+`kosogor-terraform` supports terraform-workspace configuration.
+
+```kotlin
+terraform {
+    config {
+        tfVersion = "0.12.6"
+    }
+    
+    root("example", File(projectDir, "terraform"), true, new LinkedHashSet(), 'my-workspace')
+}
+```
+
+In this example, `kosogor-terraform` will create additional tasks
+`example.workspace_new`, `example.workspace_select` and `example.workspace_delete`.
+
+Furthermore, executing `example.plan` or `example.apply`, 
+kosogor-terraform will switch to the already existing 'my-workspace' workspace.  
+If the workspace does not already exist, it is possible to create it executing `example.workspace_new` 
+
+
+
 ### Additional artifacts support
 
 In some cases, your deployment may depend on external 
