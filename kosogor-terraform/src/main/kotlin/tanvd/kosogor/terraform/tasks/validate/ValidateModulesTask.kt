@@ -1,7 +1,6 @@
 package tanvd.kosogor.terraform.tasks.validate
 
 import com.beust.klaxon.Klaxon
-import org.codehaus.plexus.util.FileUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import tanvd.kosogor.terraform.PackageInfo
@@ -45,7 +44,7 @@ open class ValidateModulesTask : DefaultTask() {
                         init(workingDir)
                         validate(workingDir)
                     } finally {
-                        File(file.parentFile, "terraform").deleteRecursively()
+                        File(file.parentFile, ".terraform").deleteRecursively()
                         providerFile?.delete()
                     }
                     println("Validated module ${packageInfo.group}:${packageInfo.name}:${packageInfo.version}")
@@ -53,24 +52,19 @@ open class ValidateModulesTask : DefaultTask() {
     }
 
     private fun init(workingDir: File) {
-        val curInitDir = File(workingDir, "terraform")
-        if (terraformDsl.validater.cacheInitPlugins && GlobalFile.tfInitDir.exists()) {
-            FileUtils.copyDirectory(GlobalFile.tfInitDir, curInitDir)
-        }
-
-        if (terraformDsl.validater.cacheInitPlugins && !GlobalFile.tfInitDir.exists()) {
-            val retInit = CommandLine.execute(GlobalFile.tfBin.absolutePath, listOf("init"), workingDir, false)
-            if (retInit != 0) {
-                error("Terraform init failed")
-            }
-
-            GlobalFile.tfInitDir.mkdirs()
-            FileUtils.copyDirectory(File(curInitDir, "plugins"), File(GlobalFile.tfInitDir, "plugins"))
+        val retInit = CommandLine.execute(GlobalFile.tfBin.absolutePath, listOf("init"), workingDir, true)
+        if (retInit != 0) {
+            error("Terraform init failed")
         }
     }
 
     private fun validate(workingDir: File) {
-        val retValidate = CommandLine.execute(GlobalFile.tfBin.absolutePath, listOf("validate", "-check-variables=false"),
+        val tfVersion = terraformDsl.config.tfVersion.replace(".", "").toInt()
+        val args = when (tfVersion < 1200) {
+            true -> listOf("validate", "-check-variables=false")
+            else -> listOf("validate")
+        }
+        val retValidate = CommandLine.execute(GlobalFile.tfBin.absolutePath, args,
                 workingDir, true)
         if (retValidate != 0) {
             error("Terraform validate failed")
