@@ -7,6 +7,8 @@ import tanvd.kosogor.terraform.PackageInfo
 import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.*
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption.COPY_ATTRIBUTES
 
 /**
  * Task validates correctness of terraform modules.
@@ -52,9 +54,25 @@ open class ValidateModulesTask : DefaultTask() {
     }
 
     private fun init(workingDir: File) {
+        val curInitDir = File(workingDir, ".terraform")
+        if (terraformDsl.validater.cacheInitPlugins && GlobalFile.tfInitDir.exists() && !curInitDir.exists()) {
+            curInitDir.mkdirs()
+            File(GlobalFile.tfInitDir, "plugins").walk().forEach {
+                val targetPath = File(curInitDir.absolutePath + it.absolutePath.replace(GlobalFile.tfInitDir.absolutePath, "")).toPath()
+                Files.copy(it.toPath(), targetPath, COPY_ATTRIBUTES)
+            }
+        }
         val retInit = CommandLine.execute(GlobalFile.tfBin.absolutePath, listOf("init"), workingDir, true)
         if (retInit != 0) {
             error("Terraform init failed")
+        }
+
+        if (terraformDsl.validater.cacheInitPlugins && !GlobalFile.tfInitDir.exists()) {
+            GlobalFile.tfInitDir.mkdirs()
+            File(curInitDir, "plugins").walk().forEach {
+                val targetPath = File(GlobalFile.tfInitDir.absolutePath + it.absolutePath.replace(curInitDir.absolutePath, "")).toPath()
+                Files.copy(it.toPath(), targetPath, COPY_ATTRIBUTES)
+            }
         }
     }
 
