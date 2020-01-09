@@ -17,7 +17,10 @@ class TerraformDsl(var project: Project? = null) {
             var awsProvider: String = "1.60.0",
             var awsRegion: String? = null,
             var awsProfile: String? = null
-    )
+    ) {
+        internal val tfVersionInt: Int
+            get() = tfVersion.replace(".", "").toInt()
+    }
 
     internal val config = Config()
     fun config(configure: Config.() -> Unit) {

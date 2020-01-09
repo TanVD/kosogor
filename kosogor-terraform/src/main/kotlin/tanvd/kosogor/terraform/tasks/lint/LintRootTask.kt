@@ -40,21 +40,12 @@ open class LintRootTask : DefaultTask() {
     fun lintDir() {
         when (terraformDsl.linter.linter) {
             LinterType.Terraform -> {
-                val retInit = CommandLine.execute(GlobalFile.tfBin.absolutePath, listOf("init"), root)
-                if (retInit != 0) {
-                    error("Terraform init failed (during linting)")
-                }
+                CommandLine.executeOrFail(GlobalFile.tfBin.absolutePath, listOf("init"), root)
 
-                val retPlan = CommandLine.execute(GlobalFile.tfBin.absolutePath, listOf("plan"), root)
-                if (retPlan != 0) {
-                    error("Terraform plan failed (during linting)")
-                }
+                CommandLine.executeOrFail(GlobalFile.tfBin.absolutePath, listOf("plan"), root)
             }
             LinterType.TfLint -> {
-                val retLint = CommandLine.execute(GlobalFile.tfLintBin.absolutePath, emptyList(), root)
-                if (retLint != 0) {
-                    error("TfLint failed")
-                }
+                CommandLine.executeOrFail(GlobalFile.tfLintBin.absolutePath, emptyList(), root)
             }
         }
     }

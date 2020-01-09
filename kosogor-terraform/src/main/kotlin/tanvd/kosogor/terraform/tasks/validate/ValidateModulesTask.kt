@@ -55,38 +55,32 @@ open class ValidateModulesTask : DefaultTask() {
 
     private fun init(workingDir: File) {
         val curInitDir = File(workingDir, ".terraform")
-        if (terraformDsl.validater.cacheInitPlugins && GlobalFile.tfInitDir.exists() && !curInitDir.exists()) {
+        if (curInitDir.exists()) curInitDir.deleteRecursively()
+        if (terraformDsl.validater.cacheInitPlugins && GlobalFile.tfInitDir.exists()) {
             curInitDir.mkdirs()
             File(GlobalFile.tfInitDir, "plugins").walk().forEach {
-                val targetPath = File(curInitDir.absolutePath + it.absolutePath.replace(GlobalFile.tfInitDir.absolutePath, "")).toPath()
-                Files.copy(it.toPath(), targetPath, COPY_ATTRIBUTES)
+                val targetFile = File(curInitDir, it.toRelativeString(GlobalFile.tfInitDir))
+                Files.copy(it.toPath(), targetFile.toPath(), COPY_ATTRIBUTES)
             }
         }
-        val retInit = CommandLine.execute(GlobalFile.tfBin.absolutePath, listOf("init"), workingDir, true)
-        if (retInit != 0) {
-            error("Terraform init failed")
-        }
+        CommandLine.executeOrFail(GlobalFile.tfBin.absolutePath, listOf("init"), workingDir, false)
 
         if (terraformDsl.validater.cacheInitPlugins && !GlobalFile.tfInitDir.exists()) {
             GlobalFile.tfInitDir.mkdirs()
             File(curInitDir, "plugins").walk().forEach {
-                val targetPath = File(GlobalFile.tfInitDir.absolutePath + it.absolutePath.replace(curInitDir.absolutePath, "")).toPath()
-                Files.copy(it.toPath(), targetPath, COPY_ATTRIBUTES)
+                val targetFile = File(GlobalFile.tfInitDir, it.toRelativeString(curInitDir))
+                Files.copy(it.toPath(), targetFile.toPath(), COPY_ATTRIBUTES)
             }
         }
     }
 
     private fun validate(workingDir: File) {
-        val tfVersion = terraformDsl.config.tfVersion.replace(".", "").toInt()
-        val args = when (tfVersion < 1200) {
+        val args = when (terraformDsl.config.tfVersionInt < 1200) {
             true -> listOf("validate", "-check-variables=false")
             else -> listOf("validate")
         }
-        val retValidate = CommandLine.execute(GlobalFile.tfBin.absolutePath, args,
+        CommandLine.executeOrFail(GlobalFile.tfBin.absolutePath, args,
                 workingDir, true)
-        if (retValidate != 0) {
-            error("Terraform validate failed")
-        }
     }
 
     private fun addProviderIfNeeded(workingDir: File): File? {
