@@ -37,6 +37,6 @@ open class TerraformOperation : DefaultTask() {
 
     @TaskAction
     fun execOperation() {
-        CommandLine.execute(GlobalFile.tfBin.absolutePath, operation.op + targets.map { "-target=$it" } + parameters, root, redirectStdout = true, redirectErr = true)
+        CommandLine.executeOrFail(GlobalFile.tfBin.absolutePath, operation.op + targets.map { "-target=$it" } + parameters, root, redirectStdout = true, redirectErr = true)
     }
 }
