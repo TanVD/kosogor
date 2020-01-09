@@ -25,13 +25,7 @@ internal object CommandLine {
     }
 
     fun executeOrFail(exec: String, args: List<String>, workingDir: File, redirectStdout: Boolean = false, redirectErr: Boolean = true){
-        val returnCode = CommandLineUtils.executeCommandLine(
-                Commandline().apply {
-                    workingDirectory = workingDir
-                    executable = exec
-                    addArguments(args.toTypedArray())
-                }, getConsumer(redirectStdout), getConsumer(redirectErr)
-        )
+        val returnCode = execute(exec, args, workingDir, redirectStdout, redirectErr)
         if (returnCode != 0) {
             error("Command failed: '$exec ${args.joinToString { " " }}'")
         }

@@ -53,24 +53,24 @@ open class ValidateModulesTask : DefaultTask() {
                 }
     }
 
+    private fun copyPluginsDirWithAttrs(sourceDir: File, targetDir: File) {
+        targetDir.mkdirs()
+        File(sourceDir, "plugins").walk().forEach {
+            val targetFile = File(targetDir, it.toRelativeString(sourceDir))
+            Files.copy(it.toPath(), targetFile.toPath(), COPY_ATTRIBUTES)
+        }
+    }
+
     private fun init(workingDir: File) {
         val curInitDir = File(workingDir, ".terraform")
         if (curInitDir.exists()) curInitDir.deleteRecursively()
         if (terraformDsl.validater.cacheInitPlugins && GlobalFile.tfInitDir.exists()) {
-            curInitDir.mkdirs()
-            File(GlobalFile.tfInitDir, "plugins").walk().forEach {
-                val targetFile = File(curInitDir, it.toRelativeString(GlobalFile.tfInitDir))
-                Files.copy(it.toPath(), targetFile.toPath(), COPY_ATTRIBUTES)
-            }
+            copyPluginsDirWithAttrs(GlobalFile.tfInitDir, curInitDir)
         }
         CommandLine.executeOrFail(GlobalFile.tfBin.absolutePath, listOf("init"), workingDir, false)
 
         if (terraformDsl.validater.cacheInitPlugins && !GlobalFile.tfInitDir.exists()) {
-            GlobalFile.tfInitDir.mkdirs()
-            File(curInitDir, "plugins").walk().forEach {
-                val targetFile = File(GlobalFile.tfInitDir, it.toRelativeString(curInitDir))
-                Files.copy(it.toPath(), targetFile.toPath(), COPY_ATTRIBUTES)
-            }
+            copyPluginsDirWithAttrs(curInitDir, GlobalFile.tfInitDir)
         }
     }
 
