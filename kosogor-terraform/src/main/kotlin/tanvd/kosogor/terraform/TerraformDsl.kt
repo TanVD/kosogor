@@ -10,6 +10,9 @@ import java.io.File
 import java.net.URL
 
 
+@DslMarker
+annotation class TerraformDSLTag
+
 class TerraformDsl(var project: Project? = null) {
     data class Config(
             var tfVersion: String = "0.11.11",
@@ -23,6 +26,8 @@ class TerraformDsl(var project: Project? = null) {
     }
 
     internal val config = Config()
+
+    @TerraformDSLTag
     fun config(configure: Config.() -> Unit) {
         config.configure()
     }
@@ -37,6 +42,8 @@ class TerraformDsl(var project: Project? = null) {
     )
 
     internal val parameters = Parameters()
+
+    @TerraformDSLTag
     fun parameters(configure: Parameters.() -> Unit) {
         parameters.configure()
     }
@@ -46,7 +53,9 @@ class TerraformDsl(var project: Project? = null) {
     )
 
     internal var collector = ModulesCollector()
+
     /** Configuration of modules collecting */
+    @TerraformDSLTag
     fun collect(configure: ModulesCollector.() -> Unit) {
         collector.configure()
     }
@@ -61,7 +70,10 @@ class TerraformDsl(var project: Project? = null) {
     )
 
     var enablePublisher = false
+
     internal val publisher = Publisher()
+
+    @TerraformDSLTag
     fun publish(configure: Publisher.() -> Unit) {
         enablePublisher = true
         publisher.configure()
@@ -75,6 +87,8 @@ class TerraformDsl(var project: Project? = null) {
     }
 
     internal val linter = Linter()
+
+    @TerraformDSLTag
     fun lint(configure: Linter.() -> Unit) {
         linter.configure()
     }
@@ -82,6 +96,8 @@ class TerraformDsl(var project: Project? = null) {
     data class Validater(val cacheInitPlugins: Boolean = true)
 
     internal val validater = Validater()
+
+    @TerraformDSLTag
     fun validate(configure: Validater.() -> Unit) {
         validater.configure()
     }
@@ -89,23 +105,28 @@ class TerraformDsl(var project: Project? = null) {
     data class Artifacts(val jars: LinkedHashSet<Jars> = LinkedHashSet(), val remotes: LinkedHashSet<Remote> = LinkedHashSet()) {
         data class Jars(val configuration: Configuration, val destDir: File)
 
+        @TerraformDSLTag
         fun jars(configuration: Configuration, destDir: File) {
             this.jars += Jars(configuration, destDir)
         }
 
         data class Remote(val url: URL, val destDir: File, val archive: Archive? = null, val filterToRoot: (File) -> Boolean)
 
+        @TerraformDSLTag
         fun remote(url: URL, destDir: File, archive: Archive? = null, filterToRoot: (File) -> Boolean = { true }) {
             this.remotes += Remote(url, destDir, archive, filterToRoot)
         }
     }
 
     internal val artifacts = Artifacts()
+
+    @TerraformDSLTag
     fun artifacts(configure: Artifacts.() -> Unit) {
         artifacts.configure()
     }
 
 
+    @TerraformDSLTag
     fun root(name: String, dir: File, enableDestroy: Boolean = false, targets: LinkedHashSet<String> = LinkedHashSet()) {
         val lint = project!!.tasks.create("$name.lint", LintRootTask::class.java) { task ->
             task.group = "terraform.$name"
@@ -144,6 +165,7 @@ class TerraformDsl(var project: Project? = null) {
 
 internal val terraformDsl = TerraformDsl()
 
+@TerraformDSLTag
 fun Project.terraform(configure: TerraformDsl.() -> Unit) {
     terraformDsl.project = this
     terraformDsl.configure()
