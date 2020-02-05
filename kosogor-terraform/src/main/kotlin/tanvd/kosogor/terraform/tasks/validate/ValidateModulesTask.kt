@@ -42,6 +42,11 @@ open class ValidateModulesTask : DefaultTask() {
 
                     val packageInfo = Klaxon().parse<PackageInfo>(file.readText())!!
 
+                    if (packageInfo.skipValidation) {
+                        println("Skipped validation for module ${packageInfo.group}:${packageInfo.name}:${packageInfo.version}")
+                        return@forEach
+                    }
+
                     try {
                         init(workingDir)
                         validate(workingDir)

@@ -28,6 +28,7 @@ open class CollectModulesTask : DefaultTask() {
                 .filter { it.absolutePath.endsWith("/package.json") }
                 .forEach {
                     val packageInfo = Klaxon().parse<PackageInfo>(it.readText())!!
+
                     val currentDir = it.parentFile
 
                     val archivePath = File(GlobalFile.modulesDir, "${packageInfo.groupPath()}/${packageInfo.name}/${packageInfo.version}.zip")

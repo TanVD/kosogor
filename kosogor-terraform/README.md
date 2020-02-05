@@ -70,10 +70,13 @@ following structure:
 {
   "group": "com.example",
   "name": "package",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "skip-validation": true
 }
 
 ```
+
+`skip-validation` is optional and is `false` by default
 
 Tasks will find such files under the sources root and will consider
 them as terraform modules.
