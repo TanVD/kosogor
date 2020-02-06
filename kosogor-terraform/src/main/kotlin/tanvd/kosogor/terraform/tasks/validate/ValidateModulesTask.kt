@@ -36,16 +36,16 @@ open class ValidateModulesTask : DefaultTask() {
                 .walk()
                 .filter { it.absolutePath.endsWith("/package.json") }
                 .forEach { file ->
-                    val workingDir = file.parentFile
-
-                    val providerFile = addProviderIfNeeded(workingDir)
-
                     val packageInfo = Klaxon().parse<PackageInfo>(file.readText())!!
 
                     if (packageInfo.skipValidation) {
                         println("Skipped validation for module ${packageInfo.group}:${packageInfo.name}:${packageInfo.version}")
                         return@forEach
                     }
+
+                    val workingDir = file.parentFile
+
+                    val providerFile = addProviderIfNeeded(workingDir)
 
                     try {
                         init(workingDir)
