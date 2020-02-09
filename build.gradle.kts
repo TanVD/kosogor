@@ -6,7 +6,7 @@ group = "tanvd.kosogor"
 
 plugins {
     id("tanvd.kosogor") version "1.0.5" apply true
-    id("io.gitlab.arturbosch.detekt").version("1.0.0-RC14") apply true
+    id("io.gitlab.arturbosch.detekt").version("1.5.1") apply true
     kotlin("jvm") version "1.3.31" apply true
 }
 
@@ -19,8 +19,8 @@ subprojects {
     apply(plugin = "tanvd.kosogor")
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
-    (tasks.getByName("compileKotlin") as KotlinCompile).let {
-        it.kotlinOptions {
+    tasks.withType(KotlinCompile::class) {
+        kotlinOptions {
             languageVersion = "1.3"
             apiVersion = "1.3"
         }
