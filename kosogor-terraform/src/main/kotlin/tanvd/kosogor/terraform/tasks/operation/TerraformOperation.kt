@@ -1,7 +1,7 @@
 package tanvd.kosogor.terraform.tasks.operation
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 import tanvd.kosogor.terraform.utils.*
 import java.io.File
 
@@ -30,9 +30,16 @@ open class TerraformOperation : DefaultTask() {
         constructor(vararg op: String) : this(op.toList())
     }
 
+    @get:Input
     lateinit var operation: Operation
+
+    @get:Input
     val targets: LinkedHashSet<String> = LinkedHashSet()
+
+    @get:Input
     val parameters = ArrayList<String>()
+
+    @get:InputDirectory
     lateinit var root: File
 
     @TaskAction

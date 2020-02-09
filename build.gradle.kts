@@ -1,6 +1,6 @@
 import com.gradle.publish.PublishTask
 import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 group = "tanvd.kosogor"
 
@@ -19,10 +19,11 @@ subprojects {
     apply(plugin = "tanvd.kosogor")
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
-    tasks.withType(KotlinCompile::class) {
+    tasks.withType(KotlinJvmCompile::class) {
         kotlinOptions {
             languageVersion = "1.3"
             apiVersion = "1.3"
+            jvmTarget = "1.8"
         }
     }
 

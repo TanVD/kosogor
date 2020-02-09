@@ -1,8 +1,7 @@
 package tanvd.kosogor.terraform.tasks.lint
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 import tanvd.kosogor.terraform.TerraformDsl.Linter.LinterType
 import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.*
@@ -33,7 +32,7 @@ open class LintRootTask : DefaultTask() {
         }
     }
 
-    @get:Input
+    @get:InputDirectory
     lateinit var root: File
 
     @TaskAction
