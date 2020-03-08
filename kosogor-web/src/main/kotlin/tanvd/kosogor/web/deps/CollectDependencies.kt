@@ -7,7 +7,7 @@ import org.gradle.api.internal.file.FileResolver
 import org.gradle.api.internal.file.archive.ZipCopyAction
 import org.gradle.api.internal.file.copy.*
 import org.gradle.api.tasks.*
-import org.gradle.internal.nativeplatform.filesystem.FileSystem
+import org.gradle.internal.nativeintegration.filesystem.FileSystem
 import org.gradle.internal.reflect.Instantiator
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.task

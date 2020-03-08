@@ -33,7 +33,7 @@ complexity:
 
 exceptions:
   NotImplementedDeclaration:
-    active: true
+    active: false
   InstanceOfCheckForException:
     active: true
   RethrowCaughtException:
@@ -58,7 +58,7 @@ formatting:
 
 naming:
   MemberNameEqualsClassName:
-    active: true
+    active: false
   VariableNaming:
     active: true
     variablePattern: '[a-z][A-Za-z0-9]*'
