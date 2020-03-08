@@ -24,6 +24,7 @@ open class TerraformOperation : DefaultTask() {
         INIT("init"),
         PLAN("plan"),
         APPLY("apply", "-auto-approve"),
+        WORKSPACE("workspace"),
         DESTROY("destroy", "-auto-approve"),
         OUTPUT("output");
 

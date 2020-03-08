@@ -127,7 +127,7 @@ class TerraformDsl(var project: Project? = null) {
 
 
     @TerraformDSLTag
-    fun root(name: String, dir: File, enableDestroy: Boolean = false, targets: LinkedHashSet<String> = LinkedHashSet()) {
+    fun root(name: String, dir: File, enableDestroy: Boolean = false, targets: LinkedHashSet<String> = LinkedHashSet(), workspace: String? = null) {
         val lint = project!!.tasks.create("$name.lint", LintRootTask::class.java) { task ->
             task.group = "terraform.$name"
             task.description = "Lint root $name"
@@ -135,31 +135,43 @@ class TerraformDsl(var project: Project? = null) {
             task.root = dir
         }
 
-        fun terraformOperation(operation: TerraformOperation.Operation,
-                               parameters: Iterable<String>?,
-                               vararg depends: Task): Task {
-            return project!!.tasks.create(
-                    "$name.${operation.name.toLowerCase()}",
-                    TerraformOperation::class.java
-            ) { task ->
+        fun terraformOperation(operation: TerraformOperation.Operation, parameters: Iterable<String>?, vararg depends: Task): Task {
+            var taskName = "$name.${operation.name.toLowerCase()}"
+            if (operation == TerraformOperation.Operation.WORKSPACE) {
+                taskName += "." + parameters!!.first()
+            }
+            return project!!.tasks.create(taskName, TerraformOperation::class.java) { task ->
                 task.dependsOn(depends)
                 task.group = "terraform.$name"
                 task.description = "${operation.name.toLowerCase().capitalize()} root $name"
 
                 task.operation = operation
-                task.targets.addAll(targets)
+                if (task.operation != TerraformOperation.Operation.WORKSPACE) {
+                    task.targets.addAll(targets)
+                }
                 task.parameters.addAll(parameters ?: emptyList())
                 task.root = dir
             }
         }
 
         val init = terraformOperation(TerraformOperation.Operation.INIT, parameters.init)
-        val plan = terraformOperation(TerraformOperation.Operation.PLAN, parameters.plan, init)
-        val apply = terraformOperation(TerraformOperation.Operation.APPLY, parameters.apply, init)
-        if (enableDestroy) {
-            val destroy = terraformOperation(TerraformOperation.Operation.DESTROY, parameters.destroy, init)
+
+        val setup = if (workspace == null) {
+            init
+        } else {
+            val workspaceSelect = terraformOperation(TerraformOperation.Operation.WORKSPACE, listOf("select", workspace), init)
+            val workspaceNew = terraformOperation(TerraformOperation.Operation.WORKSPACE, listOf("new", workspace), init)
+            val workspaceDelete = terraformOperation(TerraformOperation.Operation.WORKSPACE, listOf("delete", workspace), init)
+
+            workspaceSelect
         }
-        val output = terraformOperation(TerraformOperation.Operation.OUTPUT, parameters.output, init)
+
+        val plan = terraformOperation(TerraformOperation.Operation.PLAN, parameters.plan, setup)
+        val apply = terraformOperation(TerraformOperation.Operation.APPLY, parameters.apply, setup)
+        if (enableDestroy) {
+            val destroy = terraformOperation(TerraformOperation.Operation.DESTROY, parameters.destroy, setup)
+        }
+        val output = terraformOperation(TerraformOperation.Operation.OUTPUT, parameters.output, setup)
     }
 }
 
