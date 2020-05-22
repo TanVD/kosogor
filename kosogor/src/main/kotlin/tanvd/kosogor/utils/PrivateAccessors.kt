@@ -19,16 +19,25 @@ import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
 internal val Project._artifactory: ArtifactoryPluginConvention
     get() = ((this as? Project)?.convention ?: (this as HasConvention).convention).getPluginByName("artifactory")
 
-internal fun Project._artifactory(configure: ArtifactoryPluginConvention.() -> Unit) = configure(_artifactory)
+internal fun Project._artifactory(configure: ArtifactoryPluginConvention.() -> Unit) {
+    configure(_artifactory)
+}
 
-internal fun Project._publishing(configure: PublishingExtension.() -> Unit) = extensions.configure("publishing", configure)
+internal fun Project._publishing(configure: PublishingExtension.() -> Unit) {
+    extensions.configure("publishing", configure)
+}
 
-internal fun Project._bintray(configure: BintrayExtension.() -> Unit): Unit =
-        (this as ExtensionAware).extensions.configure("bintray", configure)
+internal fun Project._bintray(configure: BintrayExtension.() -> Unit) {
+    (this as ExtensionAware).extensions.configure("bintray", configure)
+}
 
-internal fun Project._pluginBundle(configure: PluginBundleExtension.() -> Unit) = (this as ExtensionAware).extensions.configure("pluginBundle", configure)
+internal fun Project._pluginBundle(configure: PluginBundleExtension.() -> Unit) {
+    (this as ExtensionAware).extensions.configure("pluginBundle", configure)
+}
 
-internal fun Project._gradlePlugin(configure: GradlePluginDevelopmentExtension.() -> Unit): Unit = (this as ExtensionAware).extensions.configure("gradlePlugin", configure)
+internal fun Project._gradlePlugin(configure: GradlePluginDevelopmentExtension.() -> Unit) {
+    (this as ExtensionAware).extensions.configure("gradlePlugin", configure)
+}
 
 internal inline fun <reified T : Any> Project.extByName(name: String): T = extensions.getByName<T>(name)
 
