@@ -2,7 +2,7 @@ import tanvd.kosogor.proxy.publishJar
 import tanvd.kosogor.proxy.publishPlugin
 
 group = "tanvd.kosogor"
-version = "1.0.9"
+version = "1.0.10-SNAPSHOT"
 
 dependencies {
     compileOnly(gradleKotlinDsl())
@@ -11,7 +11,7 @@ dependencies {
     api("org.jfrog.buildinfo", "build-info-extractor-gradle", "4.9.6")
     api("com.jfrog.bintray.gradle", "gradle-bintray-plugin", "1.8.4")
     api("com.github.jengelman.gradle.plugins", "shadow", "5.0.0")
-    api("com.gradle.publish", "plugin-publish-plugin", "0.10.1")
+    api("com.gradle.publish", "plugin-publish-plugin", "0.11.0")
 }
 
 publishPlugin {
