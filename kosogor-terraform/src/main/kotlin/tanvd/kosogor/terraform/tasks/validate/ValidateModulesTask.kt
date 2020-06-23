@@ -38,14 +38,14 @@ open class ValidateModulesTask : DefaultTask() {
                 .forEach { file ->
                     val packageInfo = Klaxon().parse<PackageInfo>(file.readText())!!
 
-                    if (packageInfo.skipValidation) {
+                    if (packageInfo.validationRules.skipValidation) {
                         println("Skipped validation for module ${packageInfo.group}:${packageInfo.name}:${packageInfo.version}")
                         return@forEach
                     }
 
                     val workingDir = file.parentFile
 
-                    val providerFile = addProviderIfNeeded(workingDir)
+                    val providerFile = addProviderIfNeeded(workingDir, packageInfo.validationRules.forceProvider)
 
                     try {
                         init(workingDir)
@@ -88,13 +88,10 @@ open class ValidateModulesTask : DefaultTask() {
                 workingDir, true)
     }
 
-    private fun addProviderIfNeeded(workingDir: File): File? {
+    private fun addProviderIfNeeded(workingDir: File, forceProvider: Boolean = true): File? {
         val allFiles = workingDir.listFiles()
-        val alreadyGotProvider = allFiles.any {
-            it.isFile && it.absolutePath.endsWith(".tf") &&
-                    it.readText().contains(Regex("provider\\s*\"aws\""))
-        }
-        return if (!alreadyGotProvider) {
+
+        return if (forceProvider) {
             val name = "provider"
             var index = 0
             while (allFiles.map { it.name }.any { it == "${name}_$index.tf" }) {
