@@ -38,14 +38,16 @@ open class ValidateModulesTask : DefaultTask() {
                 .forEach { file ->
                     val packageInfo = Klaxon().parse<PackageInfo>(file.readText())!!
 
-                    if (packageInfo.validationRules.skipValidation) {
+                    if (packageInfo.validation.skip) {
                         println("Skipped validation for module ${packageInfo.group}:${packageInfo.name}:${packageInfo.version}")
                         return@forEach
                     }
 
                     val workingDir = file.parentFile
 
-                    val providerFile = addProviderIfNeeded(workingDir, packageInfo.validationRules.forceProvider)
+                    val providerFile = if (packageInfo.validation.createProvider) {
+                        addProvider(workingDir)
+                    } else null
 
                     try {
                         init(workingDir)
@@ -88,26 +90,24 @@ open class ValidateModulesTask : DefaultTask() {
                 workingDir, true)
     }
 
-    private fun addProviderIfNeeded(workingDir: File, forceProvider: Boolean = true): File? {
-        val allFiles = workingDir.listFiles()
+    private fun addProvider(workingDir: File): File {
+        val allFiles = workingDir.listFiles()!!
 
-        return if (forceProvider) {
-            val name = "provider"
-            var index = 0
-            while (allFiles.map { it.name }.any { it == "${name}_$index.tf" }) {
-                index++
-            }
-            File(workingDir, "${name}_$index.tf").apply {
-                writeText(
-                        """
-                        | provider "aws" {
-                        |   region = "${terraformDsl.config.awsRegion}"
-                        |   profile = "${terraformDsl.config.awsProfile}"
-                        |   version = "${terraformDsl.config.awsProvider}"
-                        | }
-                        """.trimMargin()
-                )
-            }
-        } else null
+        val name = "provider"
+        var index = 0
+        while (allFiles.map { it.name }.any { it == "${name}_$index.tf" }) {
+            index++
+        }
+        return File(workingDir, "${name}_$index.tf").apply {
+            writeText(
+                    """
+                    | provider "aws" {
+                    |   region = "${terraformDsl.config.awsRegion}"
+                    |   profile = "${terraformDsl.config.awsProfile}"
+                    |   version = "${terraformDsl.config.awsProvider}"
+                    | }
+                    """.trimMargin()
+            )
+        }
     }
 }
