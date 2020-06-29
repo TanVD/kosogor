@@ -6,6 +6,7 @@ import org.gradle.api.tasks.Copy
 import org.gradle.kotlin.dsl.create
 import tanvd.kosogor.terraform.tasks.download.TerraformDownloadTask
 import tanvd.kosogor.terraform.tasks.download.TfLintDownloadTask
+import tanvd.kosogor.terraform.tasks.lint.LintModulesTask
 import tanvd.kosogor.terraform.tasks.prepare.DownloadArtifactsTask
 import tanvd.kosogor.terraform.tasks.publish.CollectModulesTask
 import tanvd.kosogor.terraform.tasks.publish.PublishModulesTask
@@ -59,6 +60,10 @@ class KosogorTerraformPlugin : Plugin<Project> {
 
                     group = "terraform_modules"
                     description = "Package terraform modules"
+                }
+                project.tasks.create<LintModulesTask>("tflint") {
+                    group = "terraform_modules"
+                    description = "Validate modules with tflint"
                 }
                 project.tasks.create<PublishModulesTask>("publish") {
                     dependsOn(collect)

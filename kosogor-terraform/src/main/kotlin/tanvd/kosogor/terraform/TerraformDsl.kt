@@ -16,7 +16,8 @@ annotation class TerraformDSLTag
 class TerraformDsl(var project: Project? = null) {
     data class Config(
             var tfVersion: String = "0.11.11",
-            var tfLintVersion: String = "0.7.3",
+            var tfLintVersion: String = "0.17.0",
+            var tfLintConfigPath: String? = null,
             var awsProvider: String = "1.60.0",
             var awsRegion: String? = null,
             var awsProfile: String? = null
