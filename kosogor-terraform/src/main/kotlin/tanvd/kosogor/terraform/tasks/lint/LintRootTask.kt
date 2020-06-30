@@ -44,7 +44,7 @@ open class LintRootTask : DefaultTask() {
                 CommandLine.executeOrFail(GlobalFile.tfBin.absolutePath, listOf("plan"), root)
             }
             LinterType.TfLint -> {
-                CommandLine.executeOrFail(GlobalFile.tfLintBin.absolutePath, emptyList(), root)
+                TFLint.lint(root)
             }
         }
     }

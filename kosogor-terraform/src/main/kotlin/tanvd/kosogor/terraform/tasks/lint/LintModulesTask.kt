@@ -8,6 +8,7 @@ import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.CommandLine
 import tanvd.kosogor.terraform.utils.GlobalFile
 import tanvd.kosogor.terraform.utils.GlobalTask
+import tanvd.kosogor.terraform.utils.TFLint
 import java.io.File
 
 open class LintModulesTask : DefaultTask() {
@@ -20,65 +21,26 @@ open class LintModulesTask : DefaultTask() {
 
     @TaskAction
     fun lintModules() {
-        val defaultConfig = configureTFLint()
-        try {
-            project.projectDir
-                    .walk()
-                    .filter { it.absolutePath.endsWith("/package.json") }
-                    .forEach { file ->
-                        val packageInfo = Klaxon().parse<PackageInfo>(file.readText())!!
+        project.projectDir
+                .walk()
+                .filter { it.absolutePath.endsWith("/package.json") }
+                .forEach { file ->
+                    val packageInfo = Klaxon().parse<PackageInfo>(file.readText())!!
 
-                        if (packageInfo.validation.skip) {
-                            println("Skipped validation for module ${packageInfo.group}:${packageInfo.name}:${packageInfo.version}")
-                            return@forEach
-                        }
-
-                        val workingDir = file.parentFile
-
-                        val configFile = File(workingDir, ".tflint.hcl")
-                        val config = when {
-                            configFile.exists() -> configFile.absolutePath
-                            terraformDsl.config.tfLintConfigPath != null -> terraformDsl.config.tfLintConfigPath
-                            else -> defaultConfig.absolutePath
-                        }
-
-                        println("TFLint module ${packageInfo.group}:${packageInfo.name}:${packageInfo.version}")
-                        lint(workingDir, config!!)
+                    if (packageInfo.validation.skip) {
+                        println("Skipped validation for module ${packageInfo.group}:${packageInfo.name}:${packageInfo.version}")
+                        return@forEach
                     }
-        } finally {
-            defaultConfig.delete()
-        }
-    }
 
-    private fun lint(workingDir: File, config: String) {
-        CommandLine.executeOrFail(GlobalFile.tfLintBin.absolutePath, listOf("-c=$config"),
-                workingDir, true)
-    }
+                    val workingDir = file.parentFile
 
-    private fun configureTFLint(): File {
-        return File(project.buildDir, "tflint.hcl").apply {
-            writeText(
-                    """
-                        | config {
-                        |   module = false
-                        |   deep_check = false
-                        |   force = false
-                        | }
-                        | 
-                        | rule "terraform_unused_declarations" {
-                        |   enabled = true
-                        | }
-                        | 
-                        | rule "terraform_deprecated_index" {
-                        |   enabled = true
-                        | }
-                        | 
-                        | rule "terraform_naming_convention" {
-                        |   enabled = true
-                        |   custom = "^[a-z0-9]+([_-][a-z0-9]+)*${'$'}"
-                        | }
-                        """.trimMargin()
-            )
-        }
+                    try {
+                        TFLint.lint(workingDir)
+                    } catch (e: Throwable) {
+                        println("Linting failed for ${packageInfo.group}:${packageInfo.name}:${packageInfo.version}")
+                        throw e
+                    }
+                    println("Linting successfully completed for ${packageInfo.group}:${packageInfo.name}:${packageInfo.version}")
+                }
     }
 }
