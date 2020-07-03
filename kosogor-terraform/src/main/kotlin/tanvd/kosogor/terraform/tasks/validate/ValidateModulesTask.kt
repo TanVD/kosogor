@@ -52,6 +52,9 @@ open class ValidateModulesTask : DefaultTask() {
                     try {
                         init(workingDir)
                         validate(workingDir)
+                    } catch (e: Throwable) {
+                        println("Validation failed for ${packageInfo.group}:${packageInfo.name}:${packageInfo.version}")
+                        throw e
                     } finally {
                         File(file.parentFile, ".terraform").deleteRecursively()
                         providerFile?.delete()
