@@ -8,10 +8,10 @@ dependencies {
     compileOnly(gradleKotlinDsl())
     compileOnly(gradleApi())
 
-    api("org.jfrog.buildinfo", "build-info-extractor-gradle", "4.9.6")
-    api("com.jfrog.bintray.gradle", "gradle-bintray-plugin", "1.8.4")
-    api("com.github.jengelman.gradle.plugins", "shadow", "5.0.0")
-    api("com.gradle.publish", "plugin-publish-plugin", "0.11.0")
+    api("org.jfrog.buildinfo", "build-info-extractor-gradle", "4.15.1")
+    api("com.jfrog.bintray.gradle", "gradle-bintray-plugin", "1.8.5")
+    api("com.github.jengelman.gradle.plugins", "shadow", "5.2.0")
+    api("com.gradle.publish", "plugin-publish-plugin", "0.12.0")
 }
 
 publishPlugin {
