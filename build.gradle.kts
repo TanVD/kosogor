@@ -19,6 +19,10 @@ subprojects {
     apply(plugin = "tanvd.kosogor")
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
+    tasks.withType(JavaCompile::class) {
+        targetCompatibility = "1.8"
+    }
+
     tasks.withType(KotlinJvmCompile::class) {
         kotlinOptions {
             languageVersion = "1.3"
