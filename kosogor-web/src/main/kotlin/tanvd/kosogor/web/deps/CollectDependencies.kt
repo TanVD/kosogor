@@ -7,6 +7,8 @@ import org.gradle.api.internal.file.FileResolver
 import org.gradle.api.internal.file.archive.ZipCopyAction
 import org.gradle.api.internal.file.copy.*
 import org.gradle.api.tasks.*
+import org.gradle.api.tasks.util.internal.PatternSets
+import org.gradle.api.tasks.util.internal.PatternSpecFactory
 import org.gradle.internal.nativeintegration.filesystem.FileSystem
 import org.gradle.internal.reflect.Instantiator
 import org.gradle.kotlin.dsl.get
@@ -111,10 +113,13 @@ open class CollectDependencies : DefaultTask() {
         archiveFile.parentFile.mkdirs()
         initializeGlobalSet()
 
-        val copyAction = ZipCopyAction(archiveFile, DefaultZipCompressor(false, ZipOutputStream.DEFLATED),
-                services.get(DocumentationRegistry::class.java), "UTF-8", true)
+        val copyAction = ZipCopyAction(
+            archiveFile, DefaultZipCompressor(false, ZipOutputStream.DEFLATED),
+            services.get(DocumentationRegistry::class.java), "UTF-8", true
+        )
 
-        val rootSpec = getInstantiator().newInstance(DefaultCopySpec::class.java, getFileResolver(), getInstantiator()).apply {
+        val patterFactory = PatternSets.getPatternSetFactory(PatternSpecFactory.INSTANCE)
+        val rootSpec = getInstantiator().newInstance(DefaultCopySpec::class.java, getFileResolver(), getInstantiator(), patterFactory).apply {
             from(dependencySet)
             includeFiles.forEach { config ->
                 config.apply(this)
