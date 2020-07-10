@@ -3,9 +3,13 @@ package tanvd.kosogor.web.deps
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.internal.DocumentationRegistry
+import org.gradle.api.internal.file.DefaultFileCollectionFactory
 import org.gradle.api.internal.file.FileResolver
 import org.gradle.api.internal.file.archive.ZipCopyAction
+import org.gradle.api.internal.file.collections.DefaultDirectoryFileTreeFactory
 import org.gradle.api.internal.file.copy.*
+import org.gradle.api.internal.provider.PropertyHost
+import org.gradle.api.internal.tasks.DefaultTaskDependencyFactory
 import org.gradle.api.tasks.*
 import org.gradle.api.tasks.util.internal.PatternSets
 import org.gradle.api.tasks.util.internal.PatternSpecFactory
@@ -119,13 +123,24 @@ open class CollectDependencies : DefaultTask() {
         )
 
         val patterFactory = PatternSets.getPatternSetFactory(PatternSpecFactory.INSTANCE)
-        val rootSpec = getInstantiator().newInstance(DefaultCopySpec::class.java, getFileResolver(), getInstantiator(), patterFactory).apply {
+        val fileSystem = getFileSystem()
+
+        val taskFactory = DefaultTaskDependencyFactory.forProject {
+            project.getTasksByName(path, true).firstOrNull() ?: project.task(path)
+        }
+
+        val fileFactory = DefaultDirectoryFileTreeFactory(patterFactory, fileSystem)
+
+        val fileCollectionFactory = DefaultFileCollectionFactory(getFileResolver(), taskFactory, fileFactory, patterFactory, PropertyHost.NO_OP, fileSystem)
+        DefaultCopySpec(fileCollectionFactory, getInstantiator(), patterFactory)
+
+        val rootSpec = DefaultCopySpec(fileCollectionFactory, getInstantiator(), patterFactory).apply {
             from(dependencySet)
             includeFiles.forEach { config ->
                 config.apply(this)
             }
         }
-        CopyActionExecuter(getInstantiator(), getFileSystem(), false).execute(rootSpec, copyAction)
+        CopyActionExecuter(getInstantiator(), fileSystem, false).execute(rootSpec, copyAction)
     }
 }
 
