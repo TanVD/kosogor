@@ -1,6 +1,12 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 1.0.10 - 2020-07-10
+* Upgrade to gradle 6.5.1
+
+# 1.0.9 - 2020-05-22
+* Upgrade to gradle 6.4.1
+
 # 1.0.8 — 2020-03-08
 * Upgrade to gradle 6.2.2
 
