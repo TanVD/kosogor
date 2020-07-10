@@ -1,6 +1,10 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 1.0.6 - 2020-07-11
+* Fix bug in CollectDependencies task doesn't work with gradle 6.5.1
+* GradleMetadata should allow using Java 8 
+
 # 1.0.5 - 2020-07-10
 * Upgrade to gradle 6.5.1
 
