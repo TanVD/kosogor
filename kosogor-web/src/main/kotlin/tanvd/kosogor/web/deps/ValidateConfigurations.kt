@@ -47,13 +47,18 @@ open class ValidateConfigurations : DefaultTask() {
         includeConfs += configuration
     }
 
+    private val excludeSubprojects = mutableSetOf<Project>()
+    fun excludeSubProjects(vararg project: Project) {
+        excludeSubprojects += project
+    }
+
     @TaskAction
     fun validate() {
         with(project) {
             var hasErrors = false
 
             val configurations = HashMap<String, ArrayList<Artifact>>()
-            subprojects.forEach { sub ->
+            subprojects.filter { it !in excludeSubprojects }.forEach { sub ->
                 includeConfs.forEach { conf ->
                     configurations.getOrPut(conf) { ArrayList() }.addAll(sub.configurations[conf].resolvedConfiguration.resolvedArtifacts.map {
                         with(it.moduleVersion.id) {

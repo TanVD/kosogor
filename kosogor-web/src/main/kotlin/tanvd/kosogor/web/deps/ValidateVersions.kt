@@ -38,12 +38,17 @@ open class ValidateVersions : DefaultTask() {
         includeConfs += configuration
     }
 
+    private val excludeSubprojects = mutableSetOf<Project>()
+    fun excludeSubProjects(vararg project: Project) {
+        excludeSubprojects += project
+    }
+
     @TaskAction
     fun validate() {
         with(project) {
             var hasErrors = false
 
-            val dependencies = subprojects.flatMap { subproject ->
+            val dependencies = subprojects.filter { it !in excludeSubprojects }.flatMap { subproject ->
                 includeConfs.flatMap { configuration ->
                     subproject.configurations[configuration].resolvedConfiguration.resolvedArtifacts
                             .map { it.moduleVersion.id }

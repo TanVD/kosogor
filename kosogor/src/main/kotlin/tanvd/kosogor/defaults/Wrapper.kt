@@ -5,7 +5,8 @@ import org.gradle.api.tasks.wrapper.Wrapper
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
 
 /** The proxy configuration of `wrapper` */
-data class WrapperConfig(var version: String = "6.5.1", var distributionType: DistributionType = DistributionType.ALL,
+data class WrapperConfig(var version: String = "6.8.1",
+                         var distributionType: DistributionType = DistributionType.ALL,
                          var distributionUrl: String? = null)
 
 /**
