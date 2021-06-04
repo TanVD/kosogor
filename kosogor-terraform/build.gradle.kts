@@ -14,6 +14,7 @@ dependencies {
     compile("com.github.kittinunf.fuel", "fuel", "2.0.1")
 
     compile("com.beust", "klaxon", "5.0.1")
+    implementation("org.apache.maven:maven-artifact:3.8.1")
 }
 
 publishPlugin {
