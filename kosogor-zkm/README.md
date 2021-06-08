@@ -12,23 +12,23 @@ To set up it just apply plugin:
 
 ```
 plugins {
-    id("tanvd.kosogor.zkm") version "1.0.1" apply true
+    id("tanvd.kosogor.zkm") version "1.0.4" apply true
 }
 ```
 ## ZKM task
 
 ZKM task provides a simple interface to ZKM from Gradle.
 
-It passes following variables from task definition to ZKM environment:
-* inputJars &mdash; it will be `%INPUT_JARS%` variable, which evaluates into `open absolutePath.jar`
-* outputDir &mdash; it will be `%OUTPUT_DIR%` variable
-* changeLogFile &mdash; it will be `%CHANGELOG_FILE%` variable (can be used for `changeLogFileOut`)
-* zkmLogFile &mdash; used in call of zkm.jar as `-l zkmLogFile.absolutePath`
+It passes following variables from task definition to ZKM script file as placeholders. All paths placeholders should be unquoted in script:
+* inputJars &mdash; it will replace `__INPUT_JARS__` placeholder, which should contain the list of obfuscated jars. Evaluates into `open absolutePath.jar;`.
+* outputDir &mdash; it will be `__OUTPUT_DIR__` placeholder
+* changeLogFile &mdash; it will be `__CHANGELOG_FILE__` placeholder (can be used for `changeLogFileOut`)
+* zkmClasspath &mdash; it will be `__CLASSPATH__` placeholder classpath to ZKM should use during obfuscation. Evaluates into `classpath absolutePath.jar;`.* 
 
 Also, there are few variables used by ZKM itself:
-* zkmClasspath &mdash; classpath to ZKM should use during obfuscation
 * zkmJar &mdash; path to your ZKM jar
-* zkmScript &mdash; path to your ZKM script
+* zkmScript &mdash; path to your ZKM script template with placeholders described above
+* zkmLogFile &mdash; used in call of zkm.jar as `-l zkmLogFile.absolutePath`
 
 So, to sum up, here is the simple definition of task:
 

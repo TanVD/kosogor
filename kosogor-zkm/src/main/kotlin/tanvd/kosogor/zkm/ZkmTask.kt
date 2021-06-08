@@ -8,7 +8,6 @@ import org.gradle.kotlin.dsl.task
 import org.gradle.process.internal.ExecActionFactory
 import java.io.File
 import javax.inject.Inject
-import kotlin.collections.set
 
 /** Gradle wrapper task for ZKM process */
 @CacheableTask
@@ -67,21 +66,32 @@ open class ZkmTask : DefaultTask() {
     fun obfuscate() {
         with(project) {
             outputDir.mkdirs()
-            getExecActionFactory().newJavaExecAction().apply {
-                args = listOf("-v", "-l", zkmLogFile.absolutePath, zkmScript.absolutePath)
-                classpath = files(zkmClasspath.flatMap { it.files } + fileTree(zkmJar))
+            val processedKmpScript = File(zkmScript.absolutePath + ".tmp")
+            zkmScript.copyTo(processedKmpScript, overwrite = true)
+            extendFileWithParameters(processedKmpScript)
 
-                systemProperties["INPUT_JARS"] = inputJars.joinToString(prefix = "open ", separator = "\n") {
-                    if (File.separatorChar == '\\')
-                        "\\\"${it.absolutePath}\\\""
-                    else
-                        "\"${it.absolutePath}\""
-                }
-                systemProperties["OUTPUT_DIR"] = outputDir.absolutePath
-                systemProperties["CHANGELOG_FILE"] = changeLogFile.absolutePath
+            getExecActionFactory().newJavaExecAction().apply {
+                args = listOf("-v", "-l", zkmLogFile.absolutePath, processedKmpScript.absolutePath)
+                classpath = fileTree(zkmJar)
                 main = "com.zelix.ZKM"
             }.execute()
+            processedKmpScript.delete()
         }
+    }
+
+    private fun Collection<File>.joinFilesToString(prefix: String) : String =
+        distinct().joinToString(prefix = prefix, postfix = ";", separator = "\n") {
+            "\"${it.absolutePath}\""
+        }
+
+    private fun Project.extendFileWithParameters(fileToProcess: File) {
+        var content = fileToProcess.readText()
+        content = content.replace("__INPUT_JARS__", inputJars.joinFilesToString("open "))
+        val classpath = zkmClasspath.flatMap { it.files } + fileTree(zkmJar).files
+        content = content.replace("__CLASSPATH__", classpath.joinFilesToString("classpath "))
+        content = content.replace("__OUTPUT_DIR__", "\"${outputDir.absolutePath}\"")
+        content = content.replace("__CHANGELOG_FILE__", "\"${changeLogFile.absolutePath}\"")
+        fileToProcess.writeText(content)
     }
 }
 
