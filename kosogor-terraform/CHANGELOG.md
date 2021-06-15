@@ -1,6 +1,9 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 1.0.10 - 2021-06-15
+* Fix terraform version validation
+
 # 1.0.9 - 2021-06-08
 * Upgrade to Kotlin 1.5.10
 
