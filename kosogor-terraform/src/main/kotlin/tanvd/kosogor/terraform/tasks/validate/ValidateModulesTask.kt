@@ -1,6 +1,7 @@
 package tanvd.kosogor.terraform.tasks.validate
 
 import com.beust.klaxon.Klaxon
+import org.apache.maven.artifact.versioning.ComparableVersion
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import tanvd.kosogor.terraform.PackageInfo
@@ -85,7 +86,9 @@ open class ValidateModulesTask : DefaultTask() {
     }
 
     private fun validate(workingDir: File) {
-        val args = when (terraformDsl.config.tfVersionInt < 1200) {
+        val tfVersion = ComparableVersion(terraformDsl.config.tfVersion)
+        val tf012 = ComparableVersion("0.12.0")
+        val args = when (tfVersion < tf012) {
             true -> listOf("validate", "-check-variables=false")
             else -> listOf("validate")
         }
