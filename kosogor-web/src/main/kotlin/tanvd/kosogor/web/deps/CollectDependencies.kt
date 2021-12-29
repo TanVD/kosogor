@@ -10,6 +10,7 @@ import org.gradle.api.internal.file.collections.DefaultDirectoryFileTreeFactory
 import org.gradle.api.internal.file.copy.*
 import org.gradle.api.internal.provider.PropertyHost
 import org.gradle.api.internal.tasks.DefaultTaskDependencyFactory
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.*
 import org.gradle.api.tasks.util.internal.PatternSets
 import org.gradle.api.tasks.util.internal.PatternSpecFactory
@@ -93,6 +94,11 @@ open class CollectDependencies : DefaultTask() {
         throw NotImplementedError()
     }
 
+    @Inject
+    open fun getObjectFactory(): ObjectFactory {
+        throw NotImplementedError()
+    }
+
     private var initialized: Boolean = false
     private fun initializeGlobalSet() {
         if (initialized) return
@@ -140,7 +146,7 @@ open class CollectDependencies : DefaultTask() {
                 config.apply(this)
             }
         }
-        CopyActionExecuter(getInstantiator(), fileSystem, false).execute(rootSpec, copyAction)
+        CopyActionExecuter(getInstantiator(), getObjectFactory(), fileSystem, false, DocumentationRegistry()).execute(rootSpec, copyAction)
     }
 }
 

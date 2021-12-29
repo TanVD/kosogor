@@ -44,13 +44,11 @@ fun Project.publishPlugin(configure: PublishPluginConfig.() -> Unit) {
     _pluginBundle {
         website = config.info.website
         vcsUrl = config.info.vcsUrl
-        (plugins) {
-            config.id!! {
-                displayName = config.displayName!!
-                description = config.info.description
-                tags = config.info.tags
-                version = config.version ?: project.version.toString()
-            }
+        plugins.configureEach {
+            it.displayName = config.displayName!!
+            it.description = config.info.description
+            it.tags = config.info.tags
+            it.version = config.version ?: project.version.toString()
         }
     }
 }
