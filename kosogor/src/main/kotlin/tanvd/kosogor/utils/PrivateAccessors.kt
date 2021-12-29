@@ -3,7 +3,6 @@
 package tanvd.kosogor.utils
 
 import com.gradle.publish.PluginBundleExtension
-import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.Project
 import org.gradle.api.internal.HasConvention
 import org.gradle.api.plugins.ExtensionAware
@@ -25,10 +24,6 @@ internal fun Project._artifactory(configure: ArtifactoryPluginConvention.() -> U
 
 internal fun Project._publishing(configure: PublishingExtension.() -> Unit) {
     extensions.configure("publishing", configure)
-}
-
-internal fun Project._bintray(configure: BintrayExtension.() -> Unit) {
-    (this as ExtensionAware).extensions.configure("bintray", configure)
 }
 
 internal fun Project._pluginBundle(configure: PluginBundleExtension.() -> Unit) {

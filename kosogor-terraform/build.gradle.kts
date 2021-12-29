@@ -30,21 +30,3 @@ publishPlugin {
         tags.addAll(listOf("terraform", "kotlin", "kotlin-dsl"))
     }
 }
-
-publishJar {
-    publication {
-        artifactId = "tanvd.kosogor.terraform.gradle.plugin"
-    }
-
-    bintray {
-        username = "tanvd"
-        repository = "tanvd.kosogor"
-        info {
-            description = "kosogor-terraform plugin artifact"
-            githubRepo = "https://github.com/TanVD/kosogor"
-            vcsUrl = "https://github.com/TanVD/kosogor"
-            labels.addAll(listOf("gradle", "kotlin", "kotlin-dsl", "plugin", "terraform"))
-        }
-    }
-}
-

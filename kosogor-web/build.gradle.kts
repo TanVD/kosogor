@@ -22,21 +22,3 @@ publishPlugin {
         tags.addAll(listOf("web", "js", "tomcat", "server", "dependencies", "kotlin-dsl", "kotlin"))
     }
 }
-
-publishJar {
-    publication {
-        artifactId = "tanvd.kosogor.web.gradle.plugin"
-    }
-
-    bintray {
-        username = "tanvd"
-        repository = "tanvd.kosogor"
-        info {
-            description = "Kosogor Web plugin artifact"
-            githubRepo = "https://github.com/TanVD/kosogor"
-            vcsUrl = "https://github.com/TanVD/kosogor"
-            labels.addAll(listOf("web", "js", "tomcat", "gradle", "kotlin-dsl", "plugin"))
-        }
-    }
-}
-

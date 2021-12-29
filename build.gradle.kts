@@ -1,5 +1,4 @@
 import com.gradle.publish.PublishTask
-import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 group = "tanvd.kosogor"
@@ -52,9 +51,6 @@ subprojects {
 
     afterEvaluate {
         if (version.toString().contains("SNAPSHOT")) {
-            tasks.withType(BintrayUploadTask::class) {
-                enabled = false
-            }
             tasks.withType(PublishTask::class) {
                 enabled = false
             }

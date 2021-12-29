@@ -19,4 +19,4 @@ or deriving plugins will occur (like `kosogor-zkm` already exists).
 
 ## Examples
 
-Examples of Kosogor usage you can find in [JetBrains/Exposed](https://github.com/Jetbrains/Exposed), [TanVD/AORM](https://github.com/TanVD/AORM) or [TanVD/JetAudit](https://github.com/TanVD/JetAudit) libraries
+Examples of Kosogor usage you can find in [TanVD/AORM](https://github.com/TanVD/AORM) or [TanVD/JetAudit](https://github.com/TanVD/JetAudit) libraries
