@@ -49,13 +49,6 @@ exceptions:
   ThrowingNewInstanceOfSameException:
     active: true
 
-formatting:
-  active: true
-  android: false
-  autoCorrect: true
-  MaximumLineLength:
-    active: false
-
 naming:
   MemberNameEqualsClassName:
     active: false
