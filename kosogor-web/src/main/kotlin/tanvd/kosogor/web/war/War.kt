@@ -40,7 +40,7 @@ open class WarProxy : War() {
     fun classpath(configure: ClasspathConfig.() -> Unit) {
         doFirst {
             with(ClasspathConfig().apply(configure)) {
-                setClasspath(classpath!!.files.plus(include).subtract(exclude))
+                setClasspath(classpath!!.plus(include).subtract(exclude))
             }
         }
     }
