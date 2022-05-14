@@ -1,7 +1,7 @@
 import tanvd.kosogor.proxy.publishPlugin
 
 group = "tanvd.kosogor.web"
-version = "1.0.10-SNAPSHOT"
+version = "1.0.10"
 
 dependencies {
     compileOnly(gradleKotlinDsl())
