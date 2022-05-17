@@ -1,3 +1,4 @@
+import tanvd.kosogor.proxy.publishJar
 import tanvd.kosogor.proxy.publishPlugin
 
 group = "tanvd.kosogor.zkm"
@@ -6,6 +7,12 @@ version = "1.0.6"
 dependencies {
     compileOnly(gradleKotlinDsl())
     compileOnly(gradleApi())
+}
+
+publishJar {
+    publication {
+        artifactId = "tanvd.kosogor.zkm.gradle.plugin"
+    }
 }
 
 publishPlugin {

@@ -13,6 +13,12 @@ dependencies {
     api("com.gradle.publish", "plugin-publish-plugin", "0.12.0")
 }
 
+publishJar {
+    publication {
+        artifactId = "tanvd.kosogor.gradle.plugin"
+    }
+}
+
 publishPlugin {
     id = "tanvd.kosogor"
     displayName = "kosogor"

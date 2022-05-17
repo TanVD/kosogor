@@ -1,3 +1,4 @@
+import tanvd.kosogor.proxy.publishJar
 import tanvd.kosogor.proxy.publishPlugin
 
 group = "tanvd.kosogor.terraform"
@@ -14,6 +15,12 @@ dependencies {
 
     implementation("com.beust", "klaxon", "5.0.1")
     implementation("org.apache.maven:maven-artifact:3.8.1")
+}
+
+publishJar {
+    publication {
+        artifactId = "tanvd.kosogor.terraform.gradle.plugin"
+    }
 }
 
 publishPlugin {
