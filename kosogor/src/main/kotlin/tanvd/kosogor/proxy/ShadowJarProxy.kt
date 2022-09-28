@@ -1,11 +1,14 @@
 package tanvd.kosogor.proxy
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
+import com.github.jengelman.gradle.plugins.shadow.transformers.Transformer
 import org.gradle.api.Project
 import org.gradle.api.publish.maven.MavenArtifact
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.withType
+import shadow.org.apache.logging.log4j.core.util.Transform
 import tanvd.kosogor.utils.applyPluginSafely
 import java.io.File
 
@@ -15,12 +18,14 @@ class ShadowJarProxy(private val project: Project) {
     var taskName: String = "shadowJar"
 
     data class ShadowJarConfig(
-            /** Name to use for result archive. Version will not be added. */
-            var archiveName: String? = null,
-            /** Main class of shadow jar to add to Manifest */
-            var mainClass: String? = null,
-            /** Destination directory of shadow jar file*/
-            var destinationDir: File? = null
+        /** Name to use for result archive. Version will not be added. */
+        var archiveName: String? = null,
+        /** Main class of shadow jar to add to Manifest */
+        var mainClass: String? = null,
+        /** Destination directory of shadow jar file*/
+        var destinationDir: File? = null,
+        /** List of transform plugins applied to jar file*/
+        var transformers: List<Transformer>? = null
     )
 
     /** Add ShadowJar artifact to this publication */
@@ -61,6 +66,8 @@ fun Project.shadowJar(name: String = "shadowJar", configure: ShadowJarProxy.() -
         config.jarConfig.destinationDir?.let {
             destinationDirectory.set(it)
         } ?: destinationDirectory.set(File(project.rootProject.projectDir, "build/shadow"))
+
+        config.jarConfig.transformers?.let { transformers.addAll(it) }
     }
 
     return config
