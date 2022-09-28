@@ -1,14 +1,12 @@
 package tanvd.kosogor.proxy
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
 import com.github.jengelman.gradle.plugins.shadow.transformers.Transformer
 import org.gradle.api.Project
 import org.gradle.api.publish.maven.MavenArtifact
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.withType
-import shadow.org.apache.logging.log4j.core.util.Transform
 import tanvd.kosogor.utils.applyPluginSafely
 import java.io.File
 
