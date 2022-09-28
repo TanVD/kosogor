@@ -1,6 +1,11 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 1.0.16 - 2022-09-28
+* `ShadowJarProxy` supports `transformers`
+
+# 1.0.15 - 2022-05-17
+* Fix plugins jar artifactId
 
 # 1.0.14 - 2022-05-14
 * Upgrade to Kotlin 1.6.21
