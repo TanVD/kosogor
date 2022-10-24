@@ -1,12 +1,13 @@
 import com.gradle.publish.PublishTask
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+
 
 group = "tanvd.kosogor"
 
 plugins {
-    id("tanvd.kosogor") version "1.0.14" apply true
+    id("tanvd.kosogor") version "1.0.16" apply true
     id("io.gitlab.arturbosch.detekt") version "1.20.0" apply true
-    kotlin("jvm") version "1.6.21" apply true
+    kotlin("jvm") version "1.7.20" apply true
 }
 
 repositories {
@@ -24,8 +25,8 @@ subprojects {
 
     tasks.withType(KotlinJvmCompile::class) {
         kotlinOptions {
-            languageVersion = "1.5"
-            apiVersion = "1.5"
+            languageVersion = "1.7"
+            apiVersion = "1.7"
             jvmTarget = "1.8"
         }
     }
