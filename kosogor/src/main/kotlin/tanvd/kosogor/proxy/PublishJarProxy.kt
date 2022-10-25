@@ -1,13 +1,10 @@
 package tanvd.kosogor.proxy
 
-import groovy.lang.GroovyObject
-import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.AbstractCopyTask
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.*
-import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 import tanvd.kosogor.utils.*
 
 /** Configuration of `publishJar` facade */
@@ -43,10 +40,16 @@ class PublishJarProxy {
         var publicationName: String = "jarPublication"
     )
 
-    var enablePublication: Boolean = true
+    private var _enablePublication: Boolean? = null
+
+    var enablePublication: Boolean
+        get() = _enablePublication ?: true
+        set(value) { _enablePublication = value }
+
     internal val publicationConfig = PublicationConfig()
     fun publication(configure: PublicationConfig.() -> Unit) {
-        enablePublication = true
+        if (_enablePublication == null)
+            _enablePublication = true
         publicationConfig.configure()
     }
 
@@ -84,6 +87,78 @@ class PublishJarProxy {
     }
 }
 
+class PublishMultipleJarsConfig {
+    internal val configs = mutableListOf<PublishJarProxy>()
+    internal var enableArtifactory: Boolean = false
+    internal var artifactoryConfig = PublishJarProxy.ArtifactoryConfig()
+
+    fun artifactory(configure: PublishJarProxy.ArtifactoryConfig.() -> Unit) {
+        enableArtifactory = true
+        artifactoryConfig.configure()
+    }
+
+    fun publishJar(configure: PublishJarProxy.() -> Unit) {
+        configs += PublishJarProxy().apply { configure() }.also {
+            check(!it.enableArtifactory) {
+                "Artifactory should be configured on publishJars level"
+            }
+        }
+    }
+}
+
+fun Project.publishJars(configure: PublishMultipleJarsConfig.() -> Unit) {
+    val multiConfig = PublishMultipleJarsConfig().apply { configure() }
+    multiConfig.configs.forEach { config ->
+        if (config.enableSources) {
+            task<Jar>(config.sourcesConfig.task) {
+                archiveClassifier.set("sources")
+                config.sourcesConfig.components(this, project)
+            }
+        }
+
+        if (config.enablePublication) {
+            applyPluginSafely("maven-publish")
+            _publishing {
+                publications.create(config.publicationConfig.publicationName, MavenPublication::class.java) { t ->
+                    t.artifactId = config.publicationConfig.artifactId ?: project.name
+                    config.jarConfig.components(t, project)
+                    if (config.enableSources) {
+                        t.artifact(tasks[config.sourcesConfig.task])
+                    }
+                }
+            }
+        }
+    }
+
+    val allPublications = multiConfig.configs.filter {
+        it.enablePublication
+    }
+    if (multiConfig.enableArtifactory && allPublications.isNotEmpty()) {
+        applyPluginSafely("maven-publish")
+        applyPluginSafely("com.jfrog.artifactory")
+        _artifactory {
+            val artifactoryConfig = multiConfig.artifactoryConfig
+
+            publish {
+                it.setContextUrl(artifactoryConfig.serverUrl)
+                it.repository { r ->
+                    r.setRepoKey(artifactoryConfig.repository)
+                    r.setUsername(artifactoryConfig.username)
+                    r.setPassword(artifactoryConfig.secretKey)
+                    r.setMavenCompatible(true)
+                }
+                it.defaults { at ->
+                    at.setPublishArtifacts(true)
+                    at.setPublishPom(artifactoryConfig.publishPom)
+
+                    val publicationNames = allPublications.map { it.publicationConfig.publicationName  }.toTypedArray()
+                    at.publications(*publicationNames)
+                }
+            }
+        }
+    }
+}
+
 /**
  * Provides a simple interface to jar, maven-publish and artifactory plugin through proxy
  *
@@ -93,49 +168,10 @@ class PublishJarProxy {
 fun Project.publishJar(configure: PublishJarProxy.() -> Unit): PublishJarProxy {
     val config = PublishJarProxy().apply { configure() }
 
-    if (config.enableSources) {
-        task<Jar>(config.sourcesConfig.task) {
-            archiveClassifier.set("sources")
-            config.sourcesConfig.components(this, project)
-        }
-    }
-
-    if (config.enablePublication) {
-        applyPluginSafely("maven-publish")
-        _publishing {
-            publications.create(
-                    config.publicationConfig.publicationName,
-                    MavenPublication::class.java,
-                    Action<MavenPublication> { t ->
-                        t.artifactId = config.publicationConfig.artifactId ?: project.name
-
-                        config.jarConfig.components(t, project)
-                        if (config.enableSources) {
-                            t.artifact(tasks[config.sourcesConfig.task])
-                        }
-                    })
-        }
-    }
-
-    if (config.enableArtifactory) {
-        applyPluginSafely("com.jfrog.artifactory")
-        _artifactory {
-            setContextUrl(config.artifactoryConfig.serverUrl)
-
-            publish(delegateClosureOf<PublisherConfig> {
-                repository(delegateClosureOf<GroovyObject> {
-                    setProperty("repoKey", config.artifactoryConfig.repository)
-                    setProperty("username", config.artifactoryConfig.username)
-                    setProperty("password", config.artifactoryConfig.secretKey)
-                    setProperty("maven", true)
-                })
-                defaults(delegateClosureOf<GroovyObject> {
-                    setProperty("publishArtifacts", true)
-                    setProperty("publishPom", config.artifactoryConfig.publishPom)
-                    invokeMethod("publications", config.publicationConfig.publicationName)
-                })
-            })
-        }
+    publishJars {
+        configs.add(config)
+        enableArtifactory = config.enableArtifactory
+        artifactoryConfig = config.artifactoryConfig
     }
 
     return config
