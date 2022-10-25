@@ -1,6 +1,12 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 1.0.14 - 2022-10-25
+* Upgrade to Kotlin 1.7.20
+* Upgrade to gradle 7.5.1
+* Upgrade klaxon to 5.5
+* Upgrade maven-artifact to 3.8.6
+
 # 1.0.13 - 2022-05-17
 * Fix plugins jar artifactId
 

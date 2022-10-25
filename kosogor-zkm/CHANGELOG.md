@@ -1,6 +1,10 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 1.0.8 - 2022-10-25
+* Upgrade to Kotlin 1.7.20
+* Upgrade to gradle 7.5.1
+
 # 1.0.7 - 2022-05-17
 * Fix plugin jar artifactId
 

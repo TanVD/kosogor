@@ -1,6 +1,13 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+* 1.0.17 - 2022-01-25
+* Upgrade to Kotlin 1.7.20
+* Upgrade to gradle 7.5.1
+* Upgrade gradle plugin plugin-publish 1.0.0 
+* Upgrade gradle plugin build-info-extractor-gradle 4.29.2
+* Support multiple jars publications with `publishJars`
+
 # 1.0.16 - 2022-09-28
 * `ShadowJarProxy` supports `transformers`
 
