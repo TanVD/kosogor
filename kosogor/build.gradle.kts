@@ -8,9 +8,9 @@ dependencies {
     compileOnly(gradleKotlinDsl())
     compileOnly(gradleApi())
 
-    api("org.jfrog.buildinfo", "build-info-extractor-gradle", "4.29.2")
-    api("com.github.jengelman.gradle.plugins", "shadow", "5.2.0")
-    api("com.gradle.publish", "plugin-publish-plugin", "1.0.0")
+    api("org.jfrog.buildinfo", "build-info-extractor-gradle", "4.30.0")
+    api("gradle.plugin.com.github.johnrengelman", "shadow", "7.1.2")
+    api("com.gradle.publish", "plugin-publish-plugin", "1.1.0")
 }
 
 publishJar {
