@@ -140,12 +140,11 @@ fun Project.publishJars(configure: PublishMultipleJarsConfig.() -> Unit) {
             val artifactoryConfig = multiConfig.artifactoryConfig
 
             publish {
-                it.setContextUrl(artifactoryConfig.serverUrl)
+                it.contextUrl = artifactoryConfig.serverUrl
                 it.repository { r ->
-                    r.setRepoKey(artifactoryConfig.repository)
-                    r.setUsername(artifactoryConfig.username)
-                    r.setPassword(artifactoryConfig.secretKey)
-                    r.setMavenCompatible(true)
+                    r.repoKey = artifactoryConfig.repository
+                    r.username = artifactoryConfig.username
+                    r.password = artifactoryConfig.secretKey
                 }
                 it.defaults { at ->
                     at.setPublishArtifacts(true)

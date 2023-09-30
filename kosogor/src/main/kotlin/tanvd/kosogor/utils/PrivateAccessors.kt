@@ -4,18 +4,17 @@ package tanvd.kosogor.utils
 
 import com.gradle.publish.PluginBundleExtension
 import org.gradle.api.Project
-import org.gradle.api.internal.HasConvention
 import org.gradle.api.plugins.ExtraPropertiesExtension
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.getByName
-import org.gradle.kotlin.dsl.getPluginByName
 import org.gradle.plugin.devel.GradlePluginDevelopmentExtension
 import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
+import org.jfrog.gradle.plugin.artifactory.utils.ConventionUtils
 
 //Generated accessors to use in a plugin
 internal val Project._artifactory: ArtifactoryPluginConvention
-    get() = ((this as? Project)?.convention ?: (this as HasConvention).convention).getPluginByName("artifactory")
+    get() = ConventionUtils.getArtifactoryConvention(project);
 
 internal fun Project._artifactory(configure: ArtifactoryPluginConvention.() -> Unit) {
     configure(_artifactory)

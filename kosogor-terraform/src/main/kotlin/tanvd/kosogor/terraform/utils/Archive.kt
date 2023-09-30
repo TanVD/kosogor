@@ -24,7 +24,6 @@ enum class Archive(val extension: String) {
     internal fun unarchive(from: File, to: File) {
         to.mkdirs()
         getUnarchiver(from).apply {
-            enableLogging(ConsoleLogger(plexusErrorLoggerLevel, "Archive"))
             sourceFile = from
             destDirectory = to
         }.extract()

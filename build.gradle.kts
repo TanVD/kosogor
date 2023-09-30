@@ -5,9 +5,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 group = "tanvd.kosogor"
 
 plugins {
-    id("tanvd.kosogor") version "1.0.16" apply true
+    id("tanvd.kosogor") version "1.0.18" apply true
     id("io.gitlab.arturbosch.detekt") version "1.20.0" apply true
-    kotlin("jvm") version "1.7.20" apply true
+    kotlin("jvm") version "1.9.10" apply true
 }
 
 repositories {
@@ -20,14 +20,14 @@ subprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
     tasks.withType(JavaCompile::class) {
-        targetCompatibility = "1.8"
+        targetCompatibility = "11"
     }
 
     tasks.withType(KotlinJvmCompile::class) {
         kotlinOptions {
-            languageVersion = "1.7"
-            apiVersion = "1.7"
-            jvmTarget = "1.8"
+            languageVersion = "1.9"
+            apiVersion = "1.9"
+            jvmTarget = "11"
         }
     }
 
