@@ -40,13 +40,9 @@ fun Project.publishPlugin(configure: PublishPluginConfig.() -> Unit) {
             description = config.info.description
             version = config.version ?: project.version.toString()
             implementationClass = config.implementationClass!!
+            website.set(config.info.website)
+            vcsUrl.set(config.info.vcsUrl)
+            tags.set(config.info.tags)
         }
-    }
-
-    applyPluginSafely("com.gradle.plugin-publish")
-    _pluginBundle {
-        website = config.info.website
-        vcsUrl = config.info.vcsUrl
-        tags = config.info.tags
     }
 }

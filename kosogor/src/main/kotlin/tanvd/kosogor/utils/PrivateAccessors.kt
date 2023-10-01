@@ -24,10 +24,6 @@ internal fun Project._publishing(configure: PublishingExtension.() -> Unit) {
     extensions.configure("publishing", configure)
 }
 
-internal fun Project._pluginBundle(configure: PluginBundleExtension.() -> Unit) {
-    extensions.configure("pluginBundle", configure)
-}
-
 internal fun Project._gradlePlugin(configure: GradlePluginDevelopmentExtension.() -> Unit) {
     extensions.configure("gradlePlugin", configure)
 }
