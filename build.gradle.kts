@@ -18,6 +18,7 @@ subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "tanvd.kosogor")
     apply(plugin = "io.gitlab.arturbosch.detekt")
+    apply(plugin = "com.gradle.plugin-publish")
 
     tasks.withType(JavaCompile::class) {
         targetCompatibility = "11"
