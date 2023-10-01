@@ -73,7 +73,7 @@ open class ZkmTask : DefaultTask() {
             getExecActionFactory().newJavaExecAction().apply {
                 args = listOf("-v", "-l", zkmLogFile.absolutePath, processedKmpScript.absolutePath)
                 classpath = fileTree(zkmJar)
-                main = "com.zelix.ZKM"
+                mainClass.set("com.zelix.ZKM")
             }.execute()
             processedKmpScript.delete()
         }

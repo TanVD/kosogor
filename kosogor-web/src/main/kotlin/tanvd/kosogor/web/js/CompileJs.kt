@@ -116,7 +116,7 @@ open class CompileJs : DefaultTask() {
                         getExecActionFactory().newJavaExecAction().apply {
                             args = allArgs
                             classpath = configuration
-                            main = compilerMainClass
+                            mainClass.set(compilerMainClass)
                         }.execute()
                     }
                 }

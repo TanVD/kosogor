@@ -112,7 +112,7 @@ open class CollectDependencies : DefaultTask() {
             val set = rootProject._ext.get(setName) as HashSet<File>
 
             set.addAll(subprojects.flatMap { sub -> includeConfs.flatMap { sub.configurations[it].resolvedConfiguration.resolvedArtifacts.map { it.file } } })
-            set.removeAll(exclude.flatMap { rootProject._ext[it.setName] as HashSet<File> })
+            set.removeAll(exclude.flatMapTo(hashSetOf()) { rootProject._ext[it.setName] as HashSet<File> })
         }
 
         initialized = true
@@ -131,16 +131,14 @@ open class CollectDependencies : DefaultTask() {
         val patterFactory = PatternSets.getPatternSetFactory(PatternSpecFactory.INSTANCE)
         val fileSystem = getFileSystem()
 
-        val taskFactory = DefaultTaskDependencyFactory.forProject {
-            project.getTasksByName(path, true).firstOrNull() ?: project.task(path)
-        }
+        val taskFactory = DefaultTaskDependencyFactory.forProject({ path -> project.getTasksByName(path, true).firstOrNull() ?: project.task(path) }, null)
 
         val fileFactory = DefaultDirectoryFileTreeFactory(patterFactory, fileSystem)
 
         val fileCollectionFactory = DefaultFileCollectionFactory(getFileResolver(), taskFactory, fileFactory, patterFactory, PropertyHost.NO_OP, fileSystem)
-        DefaultCopySpec(fileCollectionFactory, getInstantiator(), patterFactory)
+        DefaultCopySpec(fileCollectionFactory, project.objects, getInstantiator(), patterFactory)
 
-        val rootSpec = DefaultCopySpec(fileCollectionFactory, getInstantiator(), patterFactory).apply {
+        val rootSpec = DefaultCopySpec(fileCollectionFactory, project.objects, getInstantiator(), patterFactory).apply {
             from(dependencySet)
             includeFiles.forEach { config ->
                 config.apply(this)

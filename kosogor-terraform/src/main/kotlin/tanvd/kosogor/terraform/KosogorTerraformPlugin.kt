@@ -38,10 +38,10 @@ class KosogorTerraformPlugin : Plugin<Project> {
             project.configurations.create("lambdas")
         }
 
-        GlobalFile.modulesDir = File(project.buildDir, "modules")
+        GlobalFile.modulesDir = project.layout.buildDirectory.file("modules").get().asFile
 
-        GlobalFile.tfBin = File(project.buildDir, "bin/terraform")
-        GlobalFile.tfInitDir = File(project.buildDir, "bin/tf_init")
+        GlobalFile.tfBin = project.layout.buildDirectory.file("bin/terraform").get().asFile
+        GlobalFile.tfInitDir = project.layout.buildDirectory.file("bin/tf_init").get().asFile
         GlobalTask.tfDownload = project.tasks.create<TerraformDownloadTask>("tf_download") {
             group = "build setup"
             description = "Download Terraform"
@@ -76,7 +76,7 @@ class KosogorTerraformPlugin : Plugin<Project> {
 
 
         //linter
-        GlobalFile.tfLintBin = File(project.buildDir, "bin/tflint")
+        GlobalFile.tfLintBin = project.layout.buildDirectory.file("bin/tflint").get().asFile
 
         GlobalTask.tfLintDownload = project.tasks.create<TfLintDownloadTask>("tflint_download") {
             group = "build setup"

@@ -8,6 +8,8 @@ import tanvd.kosogor.terraform.tasks.operation.TerraformOperation
 import tanvd.kosogor.terraform.utils.Archive
 import java.io.File
 import java.net.URL
+import java.util.*
+import kotlin.collections.LinkedHashSet
 
 
 @DslMarker
@@ -157,18 +159,18 @@ class TerraformDsl(var project: Project? = null) {
             init
         } else {
             val workspaceSelect = terraformOperation(TerraformOperation.Operation.WORKSPACE, listOf("select", workspace), init)
-            val workspaceNew = terraformOperation(TerraformOperation.Operation.WORKSPACE, listOf("new", workspace), init)
-            val workspaceDelete = terraformOperation(TerraformOperation.Operation.WORKSPACE, listOf("delete", workspace), init)
+            terraformOperation(TerraformOperation.Operation.WORKSPACE, listOf("new", workspace), init)
+            terraformOperation(TerraformOperation.Operation.WORKSPACE, listOf("delete", workspace), init)
 
             workspaceSelect
         }
 
-        val plan = terraformOperation(TerraformOperation.Operation.PLAN, parameters.plan, setup)
-        val apply = terraformOperation(TerraformOperation.Operation.APPLY, parameters.apply, setup)
+        terraformOperation(TerraformOperation.Operation.PLAN, parameters.plan, setup)
+        terraformOperation(TerraformOperation.Operation.APPLY, parameters.apply, setup)
         if (enableDestroy) {
-            val destroy = terraformOperation(TerraformOperation.Operation.DESTROY, parameters.destroy, setup)
+            terraformOperation(TerraformOperation.Operation.DESTROY, parameters.destroy, setup)
         }
-        val output = terraformOperation(TerraformOperation.Operation.OUTPUT, parameters.output, setup)
+        terraformOperation(TerraformOperation.Operation.OUTPUT, parameters.output, setup)
     }
 }
 
