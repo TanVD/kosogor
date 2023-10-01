@@ -1,6 +1,12 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 1.0.20 - 2023-10-01
+* Upgrade to Kotlin 1.9.10
+* Upgrade to gradle 8.3
+* Upgrade gradle plugin plugin-publish 1.2.1
+* Upgrade gradle plugin build-info-extractor-gradle 5.1.9
+
 # 1.0.18 - 2022-12-16
 * Upgrade gradle plugin plugin-publish 1.1.0
 * Upgrade gradle plugin build-info-extractor-gradle 4.30.0

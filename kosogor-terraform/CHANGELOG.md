@@ -1,6 +1,16 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 1.0.16 - 2023-10-01
+* Upgrade to Kotlin 1.9.10
+* Upgrade to gradle 8.3       
+* Upgrade klaxon to 5.6
+* Upgrade maven-artifact to 3.9.4
+* Upgrade plexus-utils to 4.0.0
+* Upgrade plexus-archiver to 4.8.0
+* Upgrade plexus-container-default to 2.1.1
+* Upgrade fuel to 2.3.1
+
 # 1.0.14 - 2022-10-25
 * Upgrade to Kotlin 1.7.20
 * Upgrade to gradle 7.5.1
