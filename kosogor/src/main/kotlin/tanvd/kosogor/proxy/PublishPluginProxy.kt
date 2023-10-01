@@ -1,7 +1,6 @@
 package tanvd.kosogor.proxy
 
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.invoke
 import tanvd.kosogor.utils.*
 
 /** Configuration of `publishPlugin` facade */
@@ -10,8 +9,6 @@ data class PublishPluginConfig(
         var id: String? = null,
         /** Name that will be displayed on Gradle plugins portal */
         var displayName: String? = null,
-        /** Version of plugin. By default, equals to version of project. */
-        var version: String? = null,
         /** Class implementing plugin interface */
         var implementationClass: String? = null,
         /** Additional information on package */
@@ -27,22 +24,24 @@ data class PublishPluginConfig(
 /**
  * Provides a simple interface to Gradle plugin publishing
  *
- * Will apply `java-gradle-plugin` and `com.gradle.plugin-publish` if it is not already applied
+ * Will apply `com.gradle.plugin-publish` if it is not already applied
  */
 fun Project.publishPlugin(configure: PublishPluginConfig.() -> Unit) {
     val config = PublishPluginConfig().apply(configure)
-    applyPluginSafely("java-gradle-plugin")
-
+    applyPluginSafely("com.gradle.plugin-publish")
+    
     _gradlePlugin {
-        plugins.create(config.id!!).apply {
-            id = config.id!!
-            displayName = config.displayName!!
-            description = config.info.description
-            version = config.version ?: project.version.toString()
-            implementationClass = config.implementationClass!!
-            website.set(config.info.website)
-            vcsUrl.set(config.info.vcsUrl)
-            tags.set(config.info.tags)
+        website.set(config.info.website)
+        vcsUrl.set(config.info.vcsUrl)
+        plugins {
+            it.create(config.id!!) { plugin ->
+                plugin.id = config.id!!
+                plugin.displayName = config.displayName!!
+                plugin.description = config.info.description
+
+                plugin.implementationClass = config.implementationClass!!
+                plugin.tags.set(config.info.tags)
+            }
         }
     }
 }

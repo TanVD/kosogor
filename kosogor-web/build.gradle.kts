@@ -19,7 +19,6 @@ publishPlugin {
     id = "tanvd.kosogor.web"
     displayName = "kosogor-web"
     implementationClass = "tanvd.kosogor.web.KosogorWebPlugin"
-    version = project.version.toString()
 
     info {
         website = "https://github.com/TanVD/kosogor"

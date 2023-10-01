@@ -27,7 +27,6 @@ publishPlugin {
     id = "tanvd.kosogor.terraform"
     displayName = "kosogor-terraform"
     implementationClass = "tanvd.kosogor.terraform.KosogorTerraformPlugin"
-    version = project.version.toString()
 
     info {
         website = "https://github.com/TanVD/kosogor"

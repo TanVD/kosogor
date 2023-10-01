@@ -19,7 +19,6 @@ publishPlugin {
     id = "tanvd.kosogor.zkm"
     displayName = "kosogor-zkm"
     implementationClass = "tanvd.kosogor.zkm.KosogorZkmPlugin"
-    version = project.version.toString()
 
     info {
         website = "https://github.com/TanVD/kosogor"
