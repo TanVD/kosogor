@@ -1,27 +1,12 @@
 package tanvd.kosogor.web.deps
 
-import org.gradle.api.DefaultTask
 import org.gradle.api.Project
-import org.gradle.api.internal.DocumentationRegistry
-import org.gradle.api.internal.file.DefaultFileCollectionFactory
-import org.gradle.api.internal.file.FileResolver
-import org.gradle.api.internal.file.archive.ZipCopyAction
-import org.gradle.api.internal.file.collections.DefaultDirectoryFileTreeFactory
-import org.gradle.api.internal.file.copy.*
-import org.gradle.api.internal.provider.PropertyHost
-import org.gradle.api.internal.tasks.DefaultTaskDependencyFactory
-import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.*
-import org.gradle.api.tasks.util.internal.PatternSets
-import org.gradle.api.tasks.util.internal.PatternSpecFactory
-import org.gradle.internal.nativeintegration.filesystem.FileSystem
-import org.gradle.internal.reflect.Instantiator
+import org.gradle.api.tasks.bundling.Zip
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.task
 import tanvd.kosogor.web.utils.*
 import java.io.File
-import java.util.zip.ZipOutputStream
-import javax.inject.Inject
 
 /**
  * CollectDependencies task collects dependencies from specified configurations across all projects.
@@ -35,119 +20,66 @@ import javax.inject.Inject
  * classloader and per-webapp classloader.
  *
  */
-open class CollectDependencies : DefaultTask() {
+abstract class CollectDependencies : Zip() {
     init {
         group = "deps"
     }
 
-    /** Archive with collected dependencies */
-    @get:OutputFile
-    lateinit var archiveFile: File
-
-    private val setName: String
-        get() = "${name}MemoizationSet"
-
     /** Collected dependencies across all projects (with exclusions applied) */
-    @get:InputFiles
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    val dependencySet: Set<File>
-        get() {
-            initializeGlobalSet()
-            return project.rootProject.ext(setName)
+    fun allDependencies(): Set<File> {
+        project.subprojects.flatMap { sub ->
+            includeConfigs.map { sub.configurations[it] }
         }
-
-    private val exclude = LinkedHashSet<CollectDependencies>()
-    /** Dependency sets to exclude from this */
-    fun exclude(vararg tasks: CollectDependencies) {
-        exclude += tasks
-        dependsOn(tasks)
+        val allExcluded = exclude.flatMapTo(hashSetOf()) {
+            project.configurations[it].files
+        }
+        val currentSet = project.subprojects.flatMapTo(hashSetOf()) { sub ->
+            includeConfigs.flatMap { sub.configurations[it].files }
+        }
+        return currentSet - allExcluded
     }
 
-    private val includeConfs = LinkedHashSet<String>()
+    @get:Input
+    internal val exclude = mutableSetOf<String>()
+    /** Dependency sets to exclude from this */
+    fun exclude(vararg tasks: CollectDependencies) {
+        exclude += tasks.flatMap { it.includeConfigs }
+    }
+
+    @get:Input
+    internal val includeConfigs = LinkedHashSet<String>()
     /**
-     * Include a configuration into this dependencySet
      *
      * Note, configuration will be searched across all projects
      */
-    fun include(vararg configuration: String) {
-        includeConfs += configuration
+    fun includeConfigs(vararg configuration: String) {
+        includeConfigs += configuration
     }
 
-    private val includeFiles = ArrayList<FilesConfig>()
+    @get:Internal
+    internal val includeFiles = ArrayList<FilesConfig>()
     /** Include files into this dependencySet */
     fun include(configure: FilesConfig.() -> Unit) {
         includeFiles += FilesConfig(project).apply(configure)
     }
-
-    @Inject
-    open fun getInstantiator(): Instantiator {
-        throw NotImplementedError()
-    }
-
-    @Inject
-    open fun getFileSystem(): FileSystem {
-        throw NotImplementedError()
-    }
-
-    @Inject
-    open fun getFileResolver(): FileResolver {
-        throw NotImplementedError()
-    }
-
-    @Inject
-    open fun getObjectFactory(): ObjectFactory {
-        throw NotImplementedError()
-    }
-
-    private var initialized: Boolean = false
-    private fun initializeGlobalSet() {
-        if (initialized) return
-
-        exclude.forEach { it.initializeGlobalSet() }
-
-        with(project) {
-            if (!rootProject.hasProperty(setName)) {
-                rootProject._ext[setName] = HashSet<File>()
-            }
-            val set = rootProject._ext.get(setName) as HashSet<File>
-
-            set.addAll(subprojects.flatMap { sub -> includeConfs.flatMap { sub.configurations[it].resolvedConfiguration.resolvedArtifacts.map { it.file } } })
-            set.removeAll(exclude.flatMapTo(hashSetOf()) { rootProject._ext[it.setName] as HashSet<File> })
-        }
-
-        initialized = true
-    }
-
-    @TaskAction
-    fun archiveDependencies() {
-        archiveFile.parentFile.mkdirs()
-        initializeGlobalSet()
-
-        val copyAction = ZipCopyAction(
-            archiveFile, DefaultZipCompressor(false, ZipOutputStream.DEFLATED),
-            services.get(DocumentationRegistry::class.java), "UTF-8", true
-        )
-
-        val patterFactory = PatternSets.getPatternSetFactory(PatternSpecFactory.INSTANCE)
-        val fileSystem = getFileSystem()
-
-        val taskFactory = DefaultTaskDependencyFactory.forProject({ path -> project.getTasksByName(path, true).firstOrNull() ?: project.task(path) }, null)
-
-        val fileFactory = DefaultDirectoryFileTreeFactory(patterFactory, fileSystem)
-
-        val fileCollectionFactory = DefaultFileCollectionFactory(getFileResolver(), taskFactory, fileFactory, patterFactory, PropertyHost.NO_OP, fileSystem)
-        DefaultCopySpec(fileCollectionFactory, project.objects, getInstantiator(), patterFactory)
-
-        val rootSpec = DefaultCopySpec(fileCollectionFactory, project.objects, getInstantiator(), patterFactory).apply {
-            from(dependencySet)
-            includeFiles.forEach { config ->
-                config.apply(this)
-            }
-        }
-        CopyActionExecuter(getInstantiator(), getObjectFactory(), fileSystem, false, DocumentationRegistry()).execute(rootSpec, copyAction)
-    }
 }
 
 fun Project.collectDependencies(name: String = "collectDependencies", configure: CollectDependencies.() -> Unit): CollectDependencies {
-    return task(name, CollectDependencies::class) { configure() }
+    return task(name, CollectDependencies::class) {
+        configure()
+        from(project.subprojects.flatMap { sub ->
+            includeConfigs.map { sub.configurations[it] }
+        })
+        var excludedFiles: Set<File>? = null
+        exclude {
+            if (excludedFiles == null) {
+                excludedFiles = exclude.flatMapTo(hashSetOf()) { configurations[it].files }
+            }
+            it.file in excludedFiles!!
+        }
+//        from(dependencySet) // init lazy
+        includeFiles.forEach { config ->
+            config.apply(this)
+        }
+    }
 }

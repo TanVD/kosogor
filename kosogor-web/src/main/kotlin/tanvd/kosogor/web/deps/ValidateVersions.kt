@@ -2,6 +2,8 @@ package tanvd.kosogor.web.deps
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
+import org.gradle.api.artifacts.component.ModuleComponentIdentifier
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.get
@@ -25,7 +27,7 @@ open class ValidateVersions : DefaultTask() {
         override fun toString() = "$group:$name"
     }
 
-    private data class ArtifactVersion(val version: String, val project: Project, val configuration: String)
+    private data class ArtifactVersion(val version: String, val projectName: String, val configuration: String)
 
     internal companion object : Console("Dependencies Versions Validation>>> ", Color.RED)
 
@@ -38,40 +40,56 @@ open class ValidateVersions : DefaultTask() {
         includeConfs += configuration
     }
 
-    private val excludeSubprojects = mutableSetOf<Project>()
+    private val excludeSubprojectNames = mutableSetOf<String>()
     fun excludeSubProjects(vararg project: Project) {
-        excludeSubprojects += project
+        excludeSubprojectNames += project.map { it.fullName }
+    }
+
+    @get:Input
+    internal lateinit var subprojectNames: Set<String>
+
+    private lateinit var dependencies: List<Provider<List<Pair<ArtifactId, ArtifactVersion>>>>
+
+    internal fun initVersions(subprojects: Set<Project>) {
+        subprojectNames = subprojects.map { it.fullName }.toSet()
+        dependencies = subprojects.filter { it.fullName !in excludeSubprojectNames }.flatMap { subproject ->
+            val subprojectName = subproject.fullName
+            includeConfs.map { configuration ->
+                val artifactProvider = subproject.configurations[configuration].incoming.artifacts.resolvedArtifacts
+                artifactProvider.map { artifacts ->
+                    artifacts.mapNotNull { a ->
+                        (a.variant.owner as? ModuleComponentIdentifier)?.let {
+                            ArtifactId(it.module, it.group) to ArtifactVersion(it.version, subprojectName, configuration)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @TaskAction
     fun validate() {
-        with(project) {
-            var hasErrors = false
+        var hasErrors = false
 
-            val dependencies = subprojects.filter { it !in excludeSubprojects }.flatMap { subproject ->
-                includeConfs.flatMap { configuration ->
-                    subproject.configurations[configuration].resolvedConfiguration.resolvedArtifacts
-                            .map { it.moduleVersion.id }
-                            .map { ArtifactId(it.name, it.group) to ArtifactVersion(it.version, subproject, configuration) }
-                }
+        val groupedArtifacts = dependencies.flatMap { it.get() }.groupBy { it.first }.mapValues { it.value.map { it.second }.toSet() }
+        groupedArtifacts.filter { it.value.distinctBy { it.version }.size > 1 }.forEach { (artifact, versions) ->
+            hasErrors = true
+            ValidateVersions.println("For dependency $artifact found versions:")
+            val byVersion = versions.groupBy { it.version }.mapValues { it.value.joinToString { "(project: ${it.projectName}, configuration: ${it.configuration})" } }
+            for ((version, projects) in byVersion) {
+                ValidateVersions.println("\t version $version in: $projects")
             }
-            val groupedArtifacts = dependencies.groupBy { it.first }.mapValues { it.value.map { it.second }.toSet() }
-            groupedArtifacts.filter { it.value.distinctBy { it.version }.size > 1 }.forEach { (artifact, versions) ->
-                hasErrors = true
-                ValidateVersions.println("For dependency $artifact found versions:")
-                val byVersion = versions.groupBy { it.version }.mapValues { it.value.joinToString { "(project: ${it.project.fullName}, configuration: ${it.configuration})" } }
-                for ((version, projects) in byVersion) {
-                    ValidateVersions.println("\t version $version in: $projects")
-                }
-            }
+        }
 
-            if (hasErrors && failOnValidationError) {
-                error("Errors encountered in $name task during validation.")
-            }
+        if (hasErrors && failOnValidationError) {
+            error("Errors encountered in $name task during validation.")
         }
     }
 }
 
 fun Project.validateVersions(name: String = "validateVersions", configure: ValidateVersions.() -> Unit): ValidateVersions {
-    return task(name, ValidateVersions::class) { configure() }
+    return task(name, ValidateVersions::class) {
+        configure()
+        initVersions(subprojects)
+    }
 }

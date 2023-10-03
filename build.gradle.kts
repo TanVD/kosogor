@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 group = "tanvd.kosogor"
 
 plugins {
-    id("tanvd.kosogor") version "1.0.20" apply true
+    id("tanvd.kosogor") version "1.0.21" apply true
     id("io.gitlab.arturbosch.detekt") version "1.20.0" apply true
     kotlin("jvm") version "1.9.10" apply true
 }
