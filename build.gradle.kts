@@ -6,7 +6,6 @@ group = "tanvd.kosogor"
 
 plugins {
     id("tanvd.kosogor") version "1.0.21" apply true
-    id("io.gitlab.arturbosch.detekt") version "1.20.0" apply true
     kotlin("jvm") version "1.9.10" apply true
 }
 
@@ -17,7 +16,6 @@ repositories {
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "tanvd.kosogor")
-    apply(plugin = "io.gitlab.arturbosch.detekt")
     apply(plugin = "com.gradle.plugin-publish")
 
     tasks.withType(JavaCompile::class) {
@@ -35,20 +33,6 @@ subprojects {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-    }
-
-    detekt {
-        parallel = true
-        failFast = false
-        config = files(File(project.rootProject.projectDir, "buildScripts/detekt/detekt.yml"))
-        reports {
-            xml {
-                enabled = false
-            }
-            html {
-                enabled = false
-            }
-        }
     }
 
     afterEvaluate {

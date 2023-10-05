@@ -9,7 +9,7 @@ dependencies {
     compileOnly(gradleApi())
 
     api("org.jfrog.buildinfo", "build-info-extractor-gradle", "5.1.9")
-    api("gradle.plugin.com.github.johnrengelman", "shadow", "7.1.2")
+    api("com.github.johnrengelman", "shadow", "8.1.1")
     api("com.gradle.publish", "plugin-publish-plugin", "1.2.1")
 }
 

@@ -2,7 +2,6 @@
 
 package tanvd.kosogor.utils
 
-import com.gradle.publish.PluginBundleExtension
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtraPropertiesExtension
 import org.gradle.api.publish.PublishingExtension
