@@ -1,22 +1,15 @@
-import tanvd.kosogor.proxy.publishJar
 import tanvd.kosogor.proxy.publishPlugin
 
 group = "tanvd.kosogor"
-version = "1.0.22-SNAPSHOT"
+version = "1.0.22"
 
 dependencies {
     compileOnly(gradleKotlinDsl())
     compileOnly(gradleApi())
 
-    api("org.jfrog.buildinfo", "build-info-extractor-gradle", "5.1.9")
+    api("org.jfrog.buildinfo", "build-info-extractor-gradle", "5.1.11")
     api("com.github.johnrengelman", "shadow", "8.1.1")
     api("com.gradle.publish", "plugin-publish-plugin", "1.2.1")
-}
-
-publishJar {
-    publication {
-        artifactId = "tanvd.kosogor.gradle.plugin"
-    }
 }
 
 publishPlugin {

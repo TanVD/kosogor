@@ -9,11 +9,11 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.getByName
 import org.gradle.plugin.devel.GradlePluginDevelopmentExtension
 import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
-import org.jfrog.gradle.plugin.artifactory.utils.ConventionUtils
+import org.jfrog.gradle.plugin.artifactory.utils.ExtensionsUtils
 
 //Generated accessors to use in a plugin
 internal val Project._artifactory: ArtifactoryPluginConvention
-    get() = ConventionUtils.getArtifactoryConvention(project);
+    get() = ExtensionsUtils.getOrCreateArtifactoryExtension(project);
 
 internal fun Project._artifactory(configure: ArtifactoryPluginConvention.() -> Unit) {
     configure(_artifactory)

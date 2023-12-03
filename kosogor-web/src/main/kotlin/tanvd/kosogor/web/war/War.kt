@@ -1,6 +1,7 @@
 package tanvd.kosogor.web.war
 
 import org.gradle.api.Project
+import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.bundling.War
@@ -20,20 +21,6 @@ open class WarProxy : War() {
         group = "war"
     }
 
-
-    /** Should war name include project version */
-    @get:Input
-    var addVersion: Boolean
-        set(value) {
-            archiveVersion.set(if (value) {
-                project.version.toString()
-            } else {
-                ""
-            })
-        }
-        get() = archiveVersion.get() != ""
-
-
     class ClasspathConfig(val include: LinkedHashSet<File> = LinkedHashSet(), val exclude: LinkedHashSet<File> = LinkedHashSet())
 
     /** Configure classpath of war */
@@ -48,6 +35,7 @@ open class WarProxy : War() {
     /** Configure files in META-INF war directory */
     fun metaRoot(configure: FilesConfig.() -> Unit) {
         metaInf {
+            it.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
             FilesConfig(project).apply(configure).apply(it)
         }
     }
@@ -55,20 +43,28 @@ open class WarProxy : War() {
     /** Configure files in WEB-INF war directory */
     fun webRoot(configure: FilesConfig.() -> Unit) {
         webInf {
+            it.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
             FilesConfig(project).apply(configure).apply(it)
         }
     }
 
     /** Configure files in root war directory */
     fun static(configure: FilesConfig.() -> Unit) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         FilesConfig(project).apply(configure).apply(rootSpec)
     }
 }
 
 /** Create WarProxy task with specified name (by default `createWar`) and specified configuration */
 fun Project.createWar(name: String = "createWar", configure: WarProxy.() -> Unit): WarProxy {
-    applyPluginSafely("war")
+    if (!plugins.hasPlugin("war")) {
+        applyPluginSafely("war")
+        afterEvaluate {
+            tasks.getByPath("war").enabled = false
+        }
+    }
     return task(name, WarProxy::class) {
         configure()
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 }

@@ -1,8 +1,7 @@
-import tanvd.kosogor.proxy.publishJar
 import tanvd.kosogor.proxy.publishPlugin
 
 group = "tanvd.kosogor.terraform"
-version = "1.0.17-SNAPSHOT"
+version = "1.0.17"
 
 dependencies {
     compileOnly(gradleKotlinDsl())
@@ -14,13 +13,7 @@ dependencies {
     implementation("com.github.kittinunf.fuel", "fuel", "2.3.1")
 
     implementation("com.beust", "klaxon", "5.6")
-    implementation("org.apache.maven:maven-artifact:3.9.4")
-}
-
-publishJar {
-    publication {
-        artifactId = "tanvd.kosogor.terraform.gradle.plugin"
-    }
+    implementation("org.apache.maven:maven-artifact:3.9.6")
 }
 
 publishPlugin {

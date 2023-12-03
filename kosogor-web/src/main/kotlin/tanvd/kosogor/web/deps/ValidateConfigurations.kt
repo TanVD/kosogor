@@ -65,10 +65,11 @@ open class ValidateConfigurations : DefaultTask() {
     internal fun initConfigurations(subprojects: Set<Project>) {
         configurationsMap.clear()
         subprojectNames = subprojects.map { it.fullName }.toSet()
-        subprojects.filter { it.fullName !in excludeSubprojectNames }.forEach { sub ->
-            includeConfs.forEach { conf ->
-                val resolvedArtifacts = sub.configurations[conf].incoming.resolutionResult.rootComponent
-                configurationsMap.getOrPut(conf) { arrayListOf() }.add(resolvedArtifacts to sub.fullName)
+        subprojects.filter { it.fullName !in excludeSubprojectNames }.forEach { subproject ->
+            includeConfs.forEach { configurationName ->
+                val configuration = subproject.resolvableConfiguration(configurationName)
+                val resolvedArtifacts = configuration.incoming.resolutionResult.rootComponent
+                configurationsMap.getOrPut(configurationName) { arrayListOf() }.add(resolvedArtifacts to subproject.fullName)
             }
         }
     }

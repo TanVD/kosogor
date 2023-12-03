@@ -135,14 +135,14 @@ class TerraformDsl(var project: Project? = null) {
         }
 
         fun terraformOperation(operation: TerraformOperation.Operation, parameters: Iterable<String>?, vararg depends: Task): Task {
-            var taskName = "$name.${operation.name.toLowerCase()}"
+            var taskName = "$name.${operation.name.lowercase()}"
             if (operation == TerraformOperation.Operation.WORKSPACE) {
                 taskName += "." + parameters!!.first()
             }
             return project!!.tasks.create(taskName, TerraformOperation::class.java) { task ->
                 task.dependsOn(depends)
                 task.group = "terraform.$name"
-                task.description = "${operation.name.toLowerCase().capitalize()} root $name"
+                task.description = "${operation.name.lowercase().capitalize()} root $name"
 
                 task.operation = operation
                 if (task.operation != TerraformOperation.Operation.WORKSPACE) {

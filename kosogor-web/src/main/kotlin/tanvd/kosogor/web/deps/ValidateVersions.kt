@@ -10,6 +10,7 @@ import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.task
 import tanvd.kosogor.web.utils.Console
 import tanvd.kosogor.web.utils.fullName
+import tanvd.kosogor.web.utils.resolvableConfiguration
 
 /**
  * Task checks if there are multiple artifacts equal by name and group, but with different
@@ -54,12 +55,13 @@ open class ValidateVersions : DefaultTask() {
         subprojectNames = subprojects.map { it.fullName }.toSet()
         dependencies = subprojects.filter { it.fullName !in excludeSubprojectNames }.flatMap { subproject ->
             val subprojectName = subproject.fullName
-            includeConfs.map { configuration ->
-                val artifactProvider = subproject.configurations[configuration].incoming.artifacts.resolvedArtifacts
+            includeConfs.map { configurationName ->
+                val configuration = subproject.resolvableConfiguration(configurationName)
+                val artifactProvider = configuration.incoming.artifacts.resolvedArtifacts
                 artifactProvider.map { artifacts ->
                     artifacts.mapNotNull { a ->
                         (a.variant.owner as? ModuleComponentIdentifier)?.let {
-                            ArtifactId(it.module, it.group) to ArtifactVersion(it.version, subprojectName, configuration)
+                            ArtifactId(it.module, it.group) to ArtifactVersion(it.version, subprojectName, configurationName)
                         }
                     }
                 }
