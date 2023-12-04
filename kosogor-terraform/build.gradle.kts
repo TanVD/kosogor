@@ -1,7 +1,7 @@
 import tanvd.kosogor.proxy.publishPlugin
 
 group = "tanvd.kosogor.terraform"
-version = "1.0.17"
+version = "1.0.18-SNAPSHOT"
 
 dependencies {
     compileOnly(gradleKotlinDsl())

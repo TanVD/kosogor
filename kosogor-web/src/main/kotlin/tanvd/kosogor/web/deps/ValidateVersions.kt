@@ -3,10 +3,10 @@ package tanvd.kosogor.web.deps
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
+import org.gradle.api.internal.provider.ValueSupplier
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.task
 import tanvd.kosogor.web.utils.Console
 import tanvd.kosogor.web.utils.fullName
@@ -58,6 +58,9 @@ open class ValidateVersions : DefaultTask() {
             includeConfs.map { configurationName ->
                 val configuration = subproject.resolvableConfiguration(configurationName)
                 val artifactProvider = configuration.incoming.artifacts.resolvedArtifacts
+                (artifactProvider as ValueSupplier).producer.visitProducerTasks { task ->
+                    dependsOn(task)
+                }
                 artifactProvider.map { artifacts ->
                     artifacts.mapNotNull { a ->
                         (a.variant.owner as? ModuleComponentIdentifier)?.let {
@@ -72,14 +75,13 @@ open class ValidateVersions : DefaultTask() {
     @TaskAction
     fun validate() {
         var hasErrors = false
-
         val groupedArtifacts = dependencies.flatMap { it.get() }.groupBy { it.first }.mapValues { it.value.map { it.second }.toSet() }
         groupedArtifacts.filter { it.value.distinctBy { it.version }.size > 1 }.forEach { (artifact, versions) ->
             hasErrors = true
-            ValidateVersions.println("For dependency $artifact found versions:")
+            println("For dependency $artifact found versions:")
             val byVersion = versions.groupBy { it.version }.mapValues { it.value.joinToString { "(project: ${it.projectName}, configuration: ${it.configuration})" } }
             for ((version, projects) in byVersion) {
-                ValidateVersions.println("\t version $version in: $projects")
+                println("\t version $version in: $projects")
             }
         }
 
@@ -92,6 +94,8 @@ open class ValidateVersions : DefaultTask() {
 fun Project.validateVersions(name: String = "validateVersions", configure: ValidateVersions.() -> Unit): ValidateVersions {
     return task(name, ValidateVersions::class) {
         configure()
-        initVersions(subprojects)
+        afterEvaluate {
+            initVersions(subprojects)
+        }
     }
 }

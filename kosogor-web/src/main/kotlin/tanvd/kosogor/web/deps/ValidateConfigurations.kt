@@ -95,7 +95,7 @@ open class ValidateConfigurations : DefaultTask() {
                 val other = artifacts.filter { it.toString() == artifact.toString() }
                 if (confName != conf && other.isNotEmpty()) {
                     hasErrors = true
-                    ValidateConfigurations.println("Dependency $artifact fixed (conf: $conf, project: ${artifact.projectName}), but used " +
+                    println("Dependency $artifact fixed (conf: $conf, project: ${artifact.projectName}), but used " +
                             " (conf: ${confName}, projects: [${other.joinToString { it.projectName }}])")
                 }
             }
@@ -117,6 +117,8 @@ fun Project.validateConfigurations(name: String = "validateConfigurations",
                                    configure: ValidateConfigurations.() -> Unit): ValidateConfigurations {
     return task(name, ValidateConfigurations::class) {
         configure()
-        initConfigurations(subprojects)
+        afterEvaluate {
+            initConfigurations(subprojects)
+        }
     }
 }
