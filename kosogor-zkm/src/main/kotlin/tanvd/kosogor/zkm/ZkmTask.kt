@@ -2,16 +2,17 @@ package tanvd.kosogor.zkm
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
-import org.gradle.api.artifacts.Configuration
+import org.gradle.api.file.FileCollection
+import org.gradle.api.file.ProjectLayout
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.task
-import org.gradle.process.internal.ExecActionFactory
+import org.gradle.process.ExecOperations
 import java.io.File
 import javax.inject.Inject
 
 /** Gradle wrapper task for ZKM process */
 @CacheableTask
-open class ZkmTask : DefaultTask() {
+abstract class ZkmTask : DefaultTask() {
     init {
         group = "obfuscate"
     }
@@ -47,7 +48,7 @@ open class ZkmTask : DefaultTask() {
 
     /** Classpath, which should be used by ZKM during obfuscation */
     @get:Classpath
-    lateinit var zkmClasspath: Set<Configuration>
+    lateinit var zkmClasspath: Set<FileCollection>
 
     /** Path zkm.jar file */
     @get:InputFile
@@ -59,24 +60,24 @@ open class ZkmTask : DefaultTask() {
     @get:PathSensitive(PathSensitivity.RELATIVE)
     lateinit var zkmScript: File
 
-    @Inject
-    open fun getExecActionFactory(): ExecActionFactory = throw NotImplementedError()
+    @get:Inject
+    abstract val execOperations: ExecOperations
+
+    @get:Inject
+    abstract val projectLayout: ProjectLayout
 
     @TaskAction
     fun obfuscate() {
-        with(project) {
-            outputDir.mkdirs()
-            val processedKmpScript = File(zkmScript.absolutePath + ".tmp")
-            zkmScript.copyTo(processedKmpScript, overwrite = true)
-            extendFileWithParameters(processedKmpScript)
-
-            getExecActionFactory().newJavaExecAction().apply {
-                args = listOf("-v", "-l", zkmLogFile.absolutePath, processedKmpScript.absolutePath)
-                classpath = fileTree(zkmJar)
-                mainClass.set("com.zelix.ZKM")
-            }.execute()
-            processedKmpScript.delete()
+        outputDir.mkdirs()
+        val processedKmpScript = File(zkmScript.absolutePath + ".tmp")
+        zkmScript.copyTo(processedKmpScript, overwrite = true)
+        extendFileWithParameters(processedKmpScript)
+        execOperations.javaexec {
+            it.args = listOf("-v", "-l", zkmLogFile.absolutePath, processedKmpScript.absolutePath)
+            it.classpath = projectLayout.files(zkmJar)
+            it.mainClass.set("com.zelix.ZKM")
         }
+        processedKmpScript.delete()
     }
 
     private fun Collection<File>.joinFilesToString(prefix: String) : String =
@@ -84,10 +85,11 @@ open class ZkmTask : DefaultTask() {
             "\"${it.absolutePath}\""
         }
 
-    private fun Project.extendFileWithParameters(fileToProcess: File) {
+    private fun extendFileWithParameters(fileToProcess: File) {
         var content = fileToProcess.readText()
         content = content.replace("__INPUT_JARS__", inputJars.joinFilesToString("open "))
-        val classpath = zkmClasspath.flatMap { it.files } + fileTree(zkmJar).files
+        println(zkmClasspath)
+        val classpath = zkmClasspath.flatMap { it.files } + zkmJar
         content = content.replace("__CLASSPATH__", classpath.joinFilesToString("classpath "))
         content = content.replace("__OUTPUT_DIR__", "\"${outputDir.absolutePath}\"")
         content = content.replace("__CHANGELOG_FILE__", "\"${changeLogFile.absolutePath}\"")

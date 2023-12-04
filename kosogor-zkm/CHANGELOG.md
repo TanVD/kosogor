@@ -1,9 +1,12 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 1.0.12 2023-12-05
+* Fixes for gradle 8.5
+
 # 1.0.11 - 2023-12-03
-* Upgrade to Kotlin 1.9.10
-* Upgrade to gradle 8.3
+* Upgrade to Kotlin 1.9.21
+* Upgrade to gradle 8.5
 
 # 1.0.10 - 2023-10-01
 * Upgrade to Kotlin 1.9.10
