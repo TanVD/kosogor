@@ -65,6 +65,7 @@ fun Project.createWar(name: String = "createWar", configure: WarProxy.() -> Unit
     }
     return task(name, WarProxy::class) {
         configure()
+        archiveVersion.set("")
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 }

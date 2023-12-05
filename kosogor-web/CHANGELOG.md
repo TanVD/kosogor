@@ -1,6 +1,9 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 1.0.18 - 2023-12-05
+* Fix for War task archive name: don't include version
+
 # 1.0.17 - 2023-12-04
 * Another fixes for collectDependencies, validateConfigurations, validateVersions tasks
 
