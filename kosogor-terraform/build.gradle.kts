@@ -1,19 +1,19 @@
 import tanvd.kosogor.proxy.publishPlugin
 
 group = "tanvd.kosogor.terraform"
-version = "1.0.18-SNAPSHOT"
+version = "1.0.18"
 
 dependencies {
     compileOnly(gradleKotlinDsl())
     compileOnly(gradleApi())
 
-    implementation("org.codehaus.plexus", "plexus-utils", "4.0.0")
-    implementation("org.codehaus.plexus", "plexus-archiver", "4.8.0")
+    implementation("org.codehaus.plexus", "plexus-utils", "4.0.2")
+    implementation("org.codehaus.plexus", "plexus-archiver", "4.10.0")
     implementation("org.codehaus.plexus", "plexus-container-default", "2.1.1")
     implementation("com.github.kittinunf.fuel", "fuel", "2.3.1")
 
     implementation("com.beust", "klaxon", "5.6")
-    implementation("org.apache.maven:maven-artifact:3.9.6")
+    implementation("org.apache.maven", "maven-artifact", "3.9.9")
 }
 
 publishPlugin {

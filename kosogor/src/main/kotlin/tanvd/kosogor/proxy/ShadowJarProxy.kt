@@ -50,7 +50,7 @@ fun Project.shadowJar(name: String = "shadowJar", configure: ShadowJarProxy.() -
         configure()
     }
 
-    applyPluginSafely("com.github.johnrengelman.shadow")
+    applyPluginSafely("com.gradleup.shadow")
 
     tasks.withType<ShadowJar> {
         config.jarConfig.archiveName?.let {
