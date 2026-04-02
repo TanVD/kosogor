@@ -1,6 +1,9 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 1.0.19 - 2026-04-02
+* Make tflint repo url overridable via `tfLintBaseUrl` DSL config, default updated to upstream `terraform-linters/tflint`
+
 # 1.0.18 - 2025-01-07
 * Upgrade to Kotlin 2.1.0
 * Upgrade to gradle 8.12
