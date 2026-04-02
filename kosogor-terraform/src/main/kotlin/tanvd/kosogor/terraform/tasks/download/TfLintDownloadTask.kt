@@ -18,6 +18,10 @@ open class TfLintDownloadTask : DefaultTask() {
     val version: String
         get() = terraformDsl.config.tfLintVersion
 
+    @get:Input
+    val baseUrl: String
+        get() = terraformDsl.config.tfLintBaseUrl
+
     @get:OutputFile
     val file: File
         get() = GlobalFile.tfLintBin
@@ -26,7 +30,7 @@ open class TfLintDownloadTask : DefaultTask() {
     fun download() {
         logger.lifecycle("Downloading TfLint version $version for OS $os")
 
-        Downloads.download(URL("https://github.com/wata727/tflint/releases/download/v$version/tflint_$os.zip"), file.parentFile, Archive.ZIP)
+        Downloads.download(URL("$baseUrl/v$version/tflint_$os.zip"), file.parentFile, Archive.ZIP)
 
         CommandLine.execute("chmod", listOf("+x", file.absolutePath), file.parentFile, false)
 

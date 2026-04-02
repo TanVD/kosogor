@@ -19,6 +19,7 @@ class TerraformDsl(var project: Project? = null) {
     data class Config(
             var tfVersion: String = "0.11.11",
             var tfLintVersion: String = "0.17.0",
+            var tfLintBaseUrl: String = "https://github.com/terraform-linters/tflint/releases/download",
             var tfLintConfigPath: String? = null,
             var awsProvider: String = "1.60.0",
             var awsRegion: String? = null,
