@@ -2,6 +2,7 @@ package tanvd.kosogor.terraform.tasks.download
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
+import org.gradle.work.DisableCachingByDefault
 import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.*
 import tanvd.kosogor.terraform.utils.CommandLine.os
@@ -13,6 +14,7 @@ import java.net.URL
  *
  * Note: OS for binary is determined automatically and assumed to be `amd64`.
  */
+@DisableCachingByDefault(because = "Downloads external Terraform binaries")
 open class TerraformDownloadTask : DefaultTask() {
     @get:Input
     val version: String

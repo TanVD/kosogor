@@ -5,6 +5,7 @@ import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.core.extensions.authentication
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import tanvd.kosogor.terraform.PackageInfo
 import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.GlobalFile
@@ -20,6 +21,7 @@ import tanvd.kosogor.terraform.utils.GlobalFile
  * If `ignoreExisting` set to true in a publisher config,
  * then task will not fail on `201` status.
  */
+@DisableCachingByDefault(because = "Publishes modules to an external HTTP repository")
 open class PublishModulesTask : DefaultTask() {
     init {
         outputs.upToDateWhen { false }

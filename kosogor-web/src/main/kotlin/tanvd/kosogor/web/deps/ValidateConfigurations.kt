@@ -10,6 +10,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.task
+import org.gradle.work.DisableCachingByDefault
 import tanvd.kosogor.web.utils.*
 
 /**
@@ -22,6 +23,7 @@ import tanvd.kosogor.web.utils.*
  * Use fixFor to fix dependency in some configuration and ValidateConfigurations task
  * will make sure this dependency presenter only in this configuration.
  */
+@DisableCachingByDefault(because = "Validates resolved dependency state")
 open class ValidateConfigurations : DefaultTask() {
     init {
         group = "deps"

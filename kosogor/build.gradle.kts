@@ -9,7 +9,7 @@ dependencies {
 
     api("org.jfrog.buildinfo", "build-info-extractor-gradle", "5.2.5")
     api("com.gradleup.shadow", "shadow-gradle-plugin", "8.3.5")
-    api("com.gradle.publish", "plugin-publish-plugin", "1.3.0")
+    api("com.gradle.publish", "plugin-publish-plugin", "1.3.1")
 }
 
 publishPlugin {

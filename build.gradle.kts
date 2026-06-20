@@ -8,7 +8,8 @@ group = "tanvd.kosogor"
 
 plugins {
     id("tanvd.kosogor") version "1.0.22" apply false
-    kotlin("jvm") version "2.1.0" apply true
+    id("com.gradle.plugin-publish") version "1.3.1" apply false
+    kotlin("jvm") version "2.3.21" apply true
 }
 
 repositories {
@@ -24,7 +25,7 @@ subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "tanvd.kosogor")
     apply(plugin = "com.gradle.plugin-publish")
-    
+
     java {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of("17"))
@@ -59,4 +60,3 @@ subprojects {
         System.setProperty("gradle.publish.secret", System.getenv("gradle_publish_secret") ?: "")
     }
 }
-

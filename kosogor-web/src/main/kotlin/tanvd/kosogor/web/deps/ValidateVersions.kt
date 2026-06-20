@@ -8,6 +8,7 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.task
+import org.gradle.work.DisableCachingByDefault
 import tanvd.kosogor.web.utils.Console
 import tanvd.kosogor.web.utils.fullName
 import tanvd.kosogor.web.utils.resolvableConfiguration
@@ -19,6 +20,7 @@ import tanvd.kosogor.web.utils.resolvableConfiguration
  * The main purpose of this task is to validate dependencies prepared for classloaders of
  * web container and be sure, that no dependencies are overridden
  */
+@DisableCachingByDefault(because = "Validates resolved dependency state")
 open class ValidateVersions : DefaultTask() {
     init {
         group = "deps"

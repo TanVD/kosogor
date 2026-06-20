@@ -16,7 +16,7 @@ import java.io.File
  * It offers simple Kotlin-DSL facade based on FilesConfig extensions
  */
 @CacheableTask
-open class WarProxy : War() {
+abstract class WarProxy : War() {
     init {
         group = "war"
     }

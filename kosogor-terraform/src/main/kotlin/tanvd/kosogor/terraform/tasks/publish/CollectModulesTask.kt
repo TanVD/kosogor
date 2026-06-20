@@ -4,11 +4,13 @@ package tanvd.kosogor.terraform.tasks.publish
 import com.beust.klaxon.Klaxon
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.support.zipTo
+import org.gradle.work.DisableCachingByDefault
 import tanvd.kosogor.terraform.PackageInfo
 import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.GlobalFile
 import java.io.File
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 /**
  * Task creates zip archives per package for following publishing.
@@ -16,6 +18,7 @@ import java.io.File
  * It will find packages automatically in project sources — just will
  * find all directories with `package.json`
  */
+@DisableCachingByDefault(because = "Packages module files from mutable project directories")
 open class CollectModulesTask : DefaultTask() {
     @TaskAction
     fun collectModules() {
@@ -39,7 +42,13 @@ open class CollectModulesTask : DefaultTask() {
                             .map { Pair(it.relativeTo(currentDir).toString(), it.readBytes()) }
 
                     archivePath.parentFile.mkdirs()
-                    zipTo(archivePath, files)
+                    ZipOutputStream(archivePath.outputStream()).use { zip ->
+                        files.forEach { (path, bytes) ->
+                            zip.putNextEntry(ZipEntry(path.replace(File.separatorChar, '/')))
+                            zip.write(bytes)
+                            zip.closeEntry()
+                        }
+                    }
                 }
     }
 }

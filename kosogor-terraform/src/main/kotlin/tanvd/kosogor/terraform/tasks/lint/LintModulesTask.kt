@@ -3,6 +3,7 @@ package tanvd.kosogor.terraform.tasks.lint
 import com.beust.klaxon.Klaxon
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import tanvd.kosogor.terraform.PackageInfo
 import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.CommandLine
@@ -11,6 +12,7 @@ import tanvd.kosogor.terraform.utils.GlobalTask
 import tanvd.kosogor.terraform.utils.TFLint
 import java.io.File
 
+@DisableCachingByDefault(because = "Executes TFLint against mutable module directories")
 open class LintModulesTask : DefaultTask() {
     init {
         outputs.upToDateWhen { false }

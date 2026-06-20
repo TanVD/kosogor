@@ -2,6 +2,7 @@ package tanvd.kosogor.terraform.tasks.operation
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
+import org.gradle.work.DisableCachingByDefault
 import tanvd.kosogor.terraform.utils.*
 import java.io.File
 
@@ -12,6 +13,7 @@ import java.io.File
  * Note: Apply and destroy will not require approve in a console,
  * terraform plugin passes to it `-auto-approve`
  */
+@DisableCachingByDefault(because = "Executes Terraform operations against mutable working directories")
 open class TerraformOperation : DefaultTask() {
     init {
         outputs.upToDateWhen { false }
@@ -41,6 +43,7 @@ open class TerraformOperation : DefaultTask() {
     val parameters = ArrayList<String>()
 
     @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     lateinit var root: File
 
     @TaskAction

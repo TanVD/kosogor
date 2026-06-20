@@ -2,6 +2,7 @@ package tanvd.kosogor.terraform.tasks.lint
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
+import org.gradle.work.DisableCachingByDefault
 import tanvd.kosogor.terraform.TerraformDsl.Linter.LinterType
 import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.*
@@ -24,6 +25,7 @@ import java.io.File
  * cause author of `tflint` does not recommend using its latest
  * version.
  */
+@DisableCachingByDefault(because = "Executes Terraform or TFLint against mutable working directories")
 open class LintRootTask : DefaultTask() {
     init {
         outputs.upToDateWhen { false }
@@ -33,6 +35,7 @@ open class LintRootTask : DefaultTask() {
     }
 
     @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     lateinit var root: File
 
     @TaskAction

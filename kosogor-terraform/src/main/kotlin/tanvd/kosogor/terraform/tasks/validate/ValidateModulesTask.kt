@@ -4,6 +4,7 @@ import com.beust.klaxon.Klaxon
 import org.apache.maven.artifact.versioning.ComparableVersion
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import tanvd.kosogor.terraform.PackageInfo
 import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.*
@@ -23,6 +24,7 @@ import java.nio.file.StandardCopyOption.COPY_ATTRIBUTES
  * Task guarantees syntax correctness of module, and it's
  * compliance to specified version of aws provider.
  */
+@DisableCachingByDefault(because = "Executes Terraform validation against mutable module directories")
 open class ValidateModulesTask : DefaultTask() {
     init {
         outputs.upToDateWhen { false }

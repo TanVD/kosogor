@@ -2,6 +2,7 @@ package tanvd.kosogor.terraform.tasks.prepare
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
+import org.gradle.work.DisableCachingByDefault
 import tanvd.kosogor.terraform.TerraformDsl
 import tanvd.kosogor.terraform.terraformDsl
 import tanvd.kosogor.terraform.utils.Downloads
@@ -9,6 +10,7 @@ import java.io.File
 import java.net.URL
 
 /** Task downloads remote artifacts configured in DSL */
+@DisableCachingByDefault(because = "Downloads external artifacts configured by the build")
 open class DownloadArtifactsTask : DefaultTask() {
     @get:Internal
     val toDownload: LinkedHashSet<TerraformDsl.Artifacts.Remote>

@@ -10,6 +10,7 @@ import org.gradle.api.tasks.*
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.task
+import org.gradle.work.DisableCachingByDefault
 import tanvd.kosogor.web.utils.*
 import java.io.File
 
@@ -25,6 +26,7 @@ import java.io.File
  * classloader and per-webapp classloader.
  *
  */
+@DisableCachingByDefault(because = "Resolves and packages dependency state from configured projects")
 abstract class CollectDependencies : Zip() {
     init {
         group = "deps"
